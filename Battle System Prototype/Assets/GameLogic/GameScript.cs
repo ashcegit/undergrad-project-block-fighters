@@ -70,8 +70,7 @@ public class GameScript : MonoBehaviour
                               60f);
         opponentLoaded=true;
         enabled=true;
-    }
-    void OnGUI(){
+
         Vector3 playerPosition=new Vector3((Screen.width-Screen.width/10)/2,Screen.height/6);
         playerSpriteRenderer.transform.position=Camera.main.ScreenToWorldPoint(playerPosition);
         playerSpriteRenderer.transform.position+=transform.forward*1;
@@ -95,6 +94,11 @@ public class GameScript : MonoBehaviour
         opponentHUDSpriteRenderer.transform.position+=transform.forward*1;
         Vector3 opponentHUDScale=new Vector3(10f,10f);
         opponentHUDSpriteRenderer.transform.localScale=opponentHUDScale;
+
+        StopAllCoroutines();
+    }
+    void OnGUI(){
+        
     }
 
     public Player getPlayer(){return player;}
@@ -148,13 +152,27 @@ public class GameScript : MonoBehaviour
         return player.GetType().GetMethods();
     }
 
+    private IEnumerator shakeSprite(SpriteRenderer spriteRenderer,
+                                    float shakeTime,
+                                    float shakeDistance){
+        Vector3 initialPosition=spriteRenderer.transform.position;
+        float elapsedShakeTime=0f;
+        while(elapsedShakeTime<shakeTime){
+            elapsedShakeTime+=Time.deltaTime;
+            spriteRenderer.transform.position=initialPosition+Random.insideUnitSphere*shakeDistance;
+            yield return null;
+        }
+        spriteRenderer.transform.position=initialPosition;
+    }
+
     public void dealDamage(Character target,float damage){
         target.decreaseHealth(damage);
         if(target==player){
-            //add damage animation using playerSpriteRenderer
+            StartCoroutine(shakeSprite(playerSpriteRenderer,0.2f,1f));
         }else if(target==opponent){
-            //add damage animation using opponentSpriteRenderer
+            StartCoroutine(shakeSprite(opponentSpriteRenderer,0.2f,1f));
         }
+        StopAllCoroutines();
     }
     
     public void heal(Character target,float healingAmount){
