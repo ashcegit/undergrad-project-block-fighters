@@ -18,8 +18,12 @@ public class Main : MonoBehaviour
 
     private InteractionHandler interactionHandler;
 
+    private bool loopDone;
+
     void Start(){
         enabled=false;
+
+        StopAllCoroutines();
 
         game=new GameObject();
         game.transform.parent=GameObject.FindGameObjectWithTag("Main").transform;
@@ -42,11 +46,14 @@ public class Main : MonoBehaviour
 
         terminalScript.initShell(player,opponent,gameScript);
 
+        loopDone=true;
+
         enabled=true;
     }
 
     void Update(){
-        if(!gameScript.isGameOver()){
+        if(!gameScript.isGameOver()&&loopDone){
+            StopAllCoroutines();
             Player player=gameScript.getPlayer();
             Opponent opponent=gameScript.getOpponent();
             if(!gameScript.getOpponentChosen()){
@@ -54,6 +61,7 @@ public class Main : MonoBehaviour
                 gameScript.setOpponentChosen(true);
                 terminalScript.setState(TerminalState.Write);
             }else if(gameScript.getPlayerChosen()&&gameScript.getOpponentChosen()){
+                loopDone=false;
                 Debug.Log("player health: "+player.getHealth().ToString());
                 Debug.Log("opponent health: "+opponent.getHealth().ToString());
                 terminalScript.setState(TerminalState.ReadOnly);
@@ -63,21 +71,33 @@ public class Main : MonoBehaviour
                 Interaction opponentInteraction=interactionHandler.getOpponentInteraction();
                 if(interactionHandler.getPlayerFirst()){
                     playInteraction(playerInteraction,player);
+                    Debug.Log("First interaction");
                     if(!gameScript.isGameOver()){
-                        playInteraction(opponentInteraction,opponent);
+                        StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
                     }
                 }else{
                     playInteraction(opponentInteraction,opponent);
+                    Debug.Log("First interaction");
                     if(!gameScript.isGameOver()){
-                        playInteraction(playerInteraction,player);
+                        StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
                     }
                 }
                 gameScript.setPlayerChosen(false);
                 gameScript.setOpponentChosen(false);
             }
-        }else{
+        }else if(gameScript.isGameOver()){
             Debug.Log("Game Over yay");
         }
+    }
+
+    IEnumerator playInteractionAfterDelay(float seconds,Interaction interaction,Character character){
+        float elapsedSeconds=0f;
+        while(elapsedSeconds<seconds){
+            elapsedSeconds+=Time.deltaTime;
+            yield return null;
+        }
+        playInteraction(interaction,character);
+        loopDone=true;        
     }
 
     //add results of interactions
