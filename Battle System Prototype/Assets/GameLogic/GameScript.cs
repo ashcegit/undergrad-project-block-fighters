@@ -27,6 +27,8 @@ public class GameScript : MonoBehaviour
     private bool opponentChosen;
     private bool opponentWon;
 
+    private Vector2 resolution;
+
     public void initGameScript(){
         enabled=false;
         playerObject=new GameObject();
@@ -69,8 +71,17 @@ public class GameScript : MonoBehaviour
                               45f,
                               60f);
         opponentLoaded=true;
+
+        positionSprites();
+
+        resolution=new Vector2(Screen.width,Screen.height);
+
         enabled=true;
 
+        StopAllCoroutines();
+    }
+
+    void positionSprites(){
         Vector3 playerPosition=new Vector3((Screen.width-Screen.width/10)/2,Screen.height/6);
         playerSpriteRenderer.transform.position=Camera.main.ScreenToWorldPoint(playerPosition);
         playerSpriteRenderer.transform.position+=transform.forward*1;
@@ -94,11 +105,14 @@ public class GameScript : MonoBehaviour
         opponentHUDSpriteRenderer.transform.position+=transform.forward*1;
         Vector3 opponentHUDScale=new Vector3(10f,10f);
         opponentHUDSpriteRenderer.transform.localScale=opponentHUDScale;
-
-        StopAllCoroutines();
     }
+
     void OnGUI(){
-        
+        if(resolution.x!=Screen.width||resolution.y!=Screen.height){
+            resolution.x=Screen.width;
+            resolution.y=Screen.height;
+            positionSprites();
+        }
     }
 
     public Player getPlayer(){return player;}
@@ -166,13 +180,13 @@ public class GameScript : MonoBehaviour
     }
 
     public void dealDamage(Character target,float damage){
+        StopAllCoroutines();
         target.decreaseHealth(damage);
         if(target==player){
             StartCoroutine(shakeSprite(playerSpriteRenderer,0.2f,1f));
         }else if(target==opponent){
             StartCoroutine(shakeSprite(opponentSpriteRenderer,0.2f,1f));
         }
-        StopAllCoroutines();
     }
     
     public void heal(Character target,float healingAmount){
