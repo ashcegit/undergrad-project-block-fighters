@@ -183,8 +183,8 @@ public class GameScript : MonoBehaviour
 
         playerHealthTMPContainerObject.transform.localPosition=new Vector3(playerHUDSpriteRenderer.size.x/4,
                                                                            -playerHUDSpriteRenderer.size.y/4);
-        playerHealthTMPObject.transform.localPosition+=Vector3.left*playerHUDSpriteRenderer.size.x/4;
-        playerMaxHealthTMPObject.transform.localPosition+=Vector3.right*playerHUDSpriteRenderer.size.x/10;
+        playerHealthTMPObject.transform.localPosition=Vector3.left*playerHUDSpriteRenderer.size.x/4;
+        playerMaxHealthTMPObject.transform.localPosition=Vector3.right*playerHUDSpriteRenderer.size.x/10;
 
         Vector3 opponentPosition=new Vector3(Screen.width/10,Screen.height-Screen.height/5);
         opponentObject.transform.position=Camera.main.ScreenToWorldPoint(opponentPosition);
@@ -205,8 +205,8 @@ public class GameScript : MonoBehaviour
 
         opponentHealthTMPContainerObject.transform.localPosition=new Vector3(opponentHUDSpriteRenderer.size.x/4,
                                                                            -opponentHUDSpriteRenderer.size.y/4);
-        opponentHealthTMPObject.transform.localPosition+=Vector3.left*opponentHUDSpriteRenderer.size.x/4;
-        opponentMaxHealthTMPObject.transform.localPosition+=Vector3.right*opponentHUDSpriteRenderer.size.x/10;
+        opponentHealthTMPObject.transform.localPosition=Vector3.left*opponentHUDSpriteRenderer.size.x/4;
+        opponentMaxHealthTMPObject.transform.localPosition=Vector3.right*opponentHUDSpriteRenderer.size.x/10;
     }
 
     void updateHUD(){
@@ -291,17 +291,17 @@ public class GameScript : MonoBehaviour
         return player.GetType().GetMethods();
     }
 
-    private IEnumerator shakeSprite(SpriteRenderer spriteRenderer,
+    private IEnumerator shakeObject(GameObject gameObject,
                                     float shakeTime,
                                     float shakeDistance){
-        Vector3 initialPosition=spriteRenderer.transform.position;
+        Vector3 initialPosition=gameObject.transform.position;
         float elapsedShakeTime=0f;
         while(elapsedShakeTime<shakeTime){
             elapsedShakeTime+=Time.deltaTime;
-            spriteRenderer.transform.position=initialPosition+Random.insideUnitSphere*shakeDistance;
+            gameObject.transform.position=initialPosition+Random.insideUnitSphere*shakeDistance;
             yield return null;
         }
-        spriteRenderer.transform.position=initialPosition;
+        gameObject.transform.position=initialPosition;
     }
 
     public void dealDamage(Character target,float damage){
@@ -309,9 +309,11 @@ public class GameScript : MonoBehaviour
         target.decreaseHealth(damage);
         updateHUD();
         if(target==player){
-            StartCoroutine(shakeSprite(playerSpriteRenderer,0.2f,1f));
+            StartCoroutine(shakeObject(playerObject,0.2f,1f));
+            StartCoroutine(shakeObject(playerHealthTMPObject,0.1f,1f));
         }else if(target==opponent){
-            StartCoroutine(shakeSprite(opponentSpriteRenderer,0.2f,1f));
+            StartCoroutine(shakeObject(opponentObject,0.2f,1f));
+            StartCoroutine(shakeObject(opponentHealthTMPObject,0.1f,1f));
         }
     }
     
@@ -333,5 +335,10 @@ public class GameScript : MonoBehaviour
         }else if(target==opponent){
             //add healing animation using opponentSpriteRenderer
         }
+    }
+
+    public void endTurn(){
+        player.endTurn();
+        opponent.endTurn();
     }
 }

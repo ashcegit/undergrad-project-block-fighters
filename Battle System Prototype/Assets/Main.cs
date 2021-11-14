@@ -81,6 +81,7 @@ public class Main : MonoBehaviour
                 }
                 gameScript.setPlayerChosen(false);
                 gameScript.setOpponentChosen(false);
+                gameScript.endTurn();
             }
         }else if(gameScript.isGameOver()){
             Debug.Log("Game Over yay");

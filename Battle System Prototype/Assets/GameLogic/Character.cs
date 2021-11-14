@@ -109,7 +109,7 @@ public class Character
     }
 
     ///<summary>Method </c>turnHasPassed</c> removes all buffs/debuffs that have expired
-    public void turnHasPassed(){
+    public void endTurn(){
         for(int i=0;i<healthModifiers.Count;i++){
             healthModifiers[i].turnHasPassed();
             if(healthModifiers[i].isFinished()){
