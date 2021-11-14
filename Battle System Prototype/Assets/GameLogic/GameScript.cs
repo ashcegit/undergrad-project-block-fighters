@@ -9,30 +9,57 @@ public class GameScript : MonoBehaviour
     private Player player;
     private GameObject playerObject;
     private SpriteRenderer playerSpriteRenderer;
+
     private GameObject playerHUDObject;
     private SpriteRenderer playerHUDSpriteRenderer;
+
     private GameObject playerNameTMPObject;
     private TextMeshPro playerNameTMP;
+    private float playerNameTMPFontSize=0.5f;
+    private Color32 playerNameTMPColour=new Color32(0,0,0,255);
+
+    private GameObject playerHealthTMPContainerObject;
+
     private GameObject playerHealthTMPObject;
     private TextMeshPro playerHealthTMP;
+    private float playerHealthTMPFontSize=0.5f;
+    private Color32 playerHealthTMPColour=new Color32(0,0,0,255);
+
     private GameObject playerMaxHealthTMPObject;
     private TextMeshPro playerMaxHealthTMP;
+    private float playerMaxHealthTMPFontSize=0.5f;
+    private Color32 playerMaxHealthTMPColour=new Color32(0,0,0,255);
+
     private GameAction playerGameAction;
     private bool playerLoaded;
     private bool playerChosen;
     private bool playerWon;
 
+
     private Opponent opponent;
     private GameObject opponentObject;
+
     private SpriteRenderer opponentSpriteRenderer;
     private GameObject opponentHUDObject;
     private SpriteRenderer opponentHUDSpriteRenderer;
+
     private GameObject opponentNameTMPObject;
     private TextMeshPro opponentNameTMP;
+    private float opponentNameTMPFontSize=0.5f;
+    private Color32 opponentNameTMPColour=new Color32(0,0,0,255);
+
+    private GameObject opponentHealthTMPContainerObject;
+
     private GameObject opponentHealthTMPObject;
     private TextMeshPro opponentHealthTMP;
+    private float opponentHealthTMPFontSize=0.5f;
+    private Color32 opponentHealthTMPColour=new Color32(0,0,0,255);
+
     private GameObject opponentMaxHealthTMPObject;
     private TextMeshPro opponentMaxHealthTMP;
+    private float opponentMaxHealthTMPFontSize=0.5f;
+    private Color32 opponentMaxHealthTMPColour=new Color32(0,0,0,255);
+
     private GameAction opponentGameAction;
     private bool opponentLoaded;
     private bool opponentChosen;
@@ -66,16 +93,23 @@ public class GameScript : MonoBehaviour
         playerNameTMPObject.name="Player Name TMP Object";
         playerNameTMPObject.transform.SetParent(playerHUDObject.transform);
         playerNameTMP=playerNameTMPObject.AddComponent<TextMeshPro>();
+        playerNameTMP.alignment=TextAlignmentOptions.Center;
+
+        playerHealthTMPContainerObject=new GameObject();
+        playerHealthTMPContainerObject.name="Player Health TMP Object Container";
+        playerHealthTMPContainerObject.transform.SetParent(playerHUDObject.transform);
 
         playerHealthTMPObject=new GameObject();
         playerHealthTMPObject.name="Player Health TMP Object";
-        playerHealthTMPObject.transform.SetParent(playerHUDObject.transform);
+        playerHealthTMPObject.transform.SetParent(playerHealthTMPContainerObject.transform);
         playerHealthTMP=playerHealthTMPObject.AddComponent<TextMeshPro>();
+        playerHealthTMP.alignment=TextAlignmentOptions.Center;
 
         playerMaxHealthTMPObject=new GameObject();
         playerMaxHealthTMPObject.name="Player Max Health TMP Object";
-        playerMaxHealthTMPObject.transform.SetParent(playerHUDObject.transform);
-        playerMaxHealthTMP=playerMaxHealthTMPObject.AddComponent<TextMeshPro>();        
+        playerMaxHealthTMPObject.transform.SetParent(playerHealthTMPContainerObject.transform);
+        playerMaxHealthTMP=playerMaxHealthTMPObject.AddComponent<TextMeshPro>();
+        playerMaxHealthTMP.alignment=TextAlignmentOptions.Center;       
 
         opponentObject=new GameObject();
         opponentObject.transform.parent=GameObject.FindGameObjectWithTag("GameController").transform;
@@ -98,23 +132,29 @@ public class GameScript : MonoBehaviour
         opponentHUDSpriteRenderer.sprite=Resources.Load<Sprite>("GameSprites/HUDbox");
 
         opponentNameTMPObject=new GameObject();
-        opponentNameTMPObject.name="Player Name TMP Object";
+        opponentNameTMPObject.name="Opponent Name TMP Object";
         opponentNameTMPObject.transform.SetParent(opponentHUDObject.transform);
         opponentNameTMP=opponentNameTMPObject.AddComponent<TextMeshPro>();
+        opponentNameTMP.alignment=TextAlignmentOptions.Center;
+
+        opponentHealthTMPContainerObject=new GameObject();
+        opponentHealthTMPContainerObject.name="Opponent Health TMP Object Container";
+        opponentHealthTMPContainerObject.transform.SetParent(opponentHUDObject.transform);
 
         opponentHealthTMPObject=new GameObject();
-        opponentHealthTMPObject.name="Player Health TMP Object";
-        opponentHealthTMPObject.transform.SetParent(opponentHUDObject.transform);
+        opponentHealthTMPObject.name="Opponent Health TMP Object";
+        opponentHealthTMPObject.transform.SetParent(opponentHealthTMPContainerObject.transform);
         opponentHealthTMP=opponentHealthTMPObject.AddComponent<TextMeshPro>();
+        opponentHealthTMP.alignment=TextAlignmentOptions.Center;
 
         opponentMaxHealthTMPObject=new GameObject();
-        opponentMaxHealthTMPObject.name="Player Max Health TMP Object";
-        opponentMaxHealthTMPObject.transform.SetParent(opponentHUDObject.transform);
+        opponentMaxHealthTMPObject.name="Opponent Max Health TMP Object";
+        opponentMaxHealthTMPObject.transform.SetParent(opponentHealthTMPContainerObject.transform);
         opponentMaxHealthTMP=opponentMaxHealthTMPObject.AddComponent<TextMeshPro>();
-
-        
+        opponentMaxHealthTMP.alignment=TextAlignmentOptions.Center;
 
         positionSprites();
+        updateHUD();
 
         resolution=new Vector2(Screen.width,Screen.height);
 
@@ -125,28 +165,70 @@ public class GameScript : MonoBehaviour
 
     void positionSprites(){
         Vector3 playerPosition=new Vector3((Screen.width-Screen.width/10)/2,Screen.height/6);
-        playerSpriteRenderer.transform.position=Camera.main.ScreenToWorldPoint(playerPosition);
-        playerSpriteRenderer.transform.position+=transform.forward*1;
-        Vector3 playerScale=new Vector3(8f,8f);
-        playerSpriteRenderer.transform.localScale=playerScale;
+        playerObject.transform.position=Camera.main.ScreenToWorldPoint(playerPosition);
+        playerObject.transform.position+=transform.forward;
+        float playerScale=8f;
+        Vector3 playerScaleVector=new Vector3(playerScale,playerScale);
+        playerObject.transform.localScale=playerScaleVector;
 
         Vector3 playerHUDPosition=new Vector3(Screen.width/4,Screen.height/6);
-        playerHUDSpriteRenderer.transform.position=Camera.main.ScreenToWorldPoint(playerHUDPosition);
-        playerHUDSpriteRenderer.transform.position+=transform.forward*1;
-        Vector3 playerHUDScale=new Vector3(10f,10f);
-        playerHUDSpriteRenderer.transform.localScale=playerHUDScale;
+        playerHUDObject.transform.position=Camera.main.ScreenToWorldPoint(playerHUDPosition);
+        playerHUDObject.transform.position+=transform.forward;
+        float playerHUDScale=10f;
+        Vector3 playerHUDScaleVector=new Vector3(playerHUDScale,playerHUDScale);
+        playerHUDObject.transform.localScale=playerHUDScaleVector;
+
+        playerNameTMPObject.transform.localPosition=new Vector3(-playerHUDSpriteRenderer.size.x/4,
+                                                                 playerHUDSpriteRenderer.size.y/4);
+
+        playerHealthTMPContainerObject.transform.localPosition=new Vector3(playerHUDSpriteRenderer.size.x/4,
+                                                                           -playerHUDSpriteRenderer.size.y/4);
+        playerHealthTMPObject.transform.localPosition+=Vector3.left*playerHUDSpriteRenderer.size.x/4;
+        playerMaxHealthTMPObject.transform.localPosition+=Vector3.right*playerHUDSpriteRenderer.size.x/10;
 
         Vector3 opponentPosition=new Vector3(Screen.width/10,Screen.height-Screen.height/5);
-        opponentSpriteRenderer.transform.position=Camera.main.ScreenToWorldPoint(opponentPosition);
-        opponentSpriteRenderer.transform.position+=transform.forward*1;
-        Vector3 opponentScale=new Vector3(8f,8f);
-        opponentSpriteRenderer.transform.localScale=opponentScale;
+        opponentObject.transform.position=Camera.main.ScreenToWorldPoint(opponentPosition);
+        opponentObject.transform.position+=transform.forward;
+        float opponentScale=8f;
+        Vector3 opponentScaleVector=new Vector3(opponentScale,opponentScale);
+        opponentObject.transform.localScale=opponentScaleVector;
 
         Vector3 opponentHUDPosition=new Vector3((Screen.width-Screen.width/4)/2,Screen.height-Screen.height/5);
-        opponentHUDSpriteRenderer.transform.position=Camera.main.ScreenToWorldPoint(opponentHUDPosition);
-        opponentHUDSpriteRenderer.transform.position+=transform.forward*1;
-        Vector3 opponentHUDScale=new Vector3(10f,10f);
-        opponentHUDSpriteRenderer.transform.localScale=opponentHUDScale;
+        opponentHUDObject.transform.position=Camera.main.ScreenToWorldPoint(opponentHUDPosition);
+        opponentHUDObject.transform.position+=transform.forward;
+        float opponentHUDScale=10f;
+        Vector3 opponentHUDScaleVector=new Vector3(opponentHUDScale,opponentHUDScale);
+        opponentHUDObject.transform.localScale=opponentHUDScaleVector;
+
+        opponentNameTMPObject.transform.localPosition=new Vector3(-opponentHUDSpriteRenderer.size.x/4,
+                                                                 opponentHUDSpriteRenderer.size.y/4);
+
+        opponentHealthTMPContainerObject.transform.localPosition=new Vector3(opponentHUDSpriteRenderer.size.x/4,
+                                                                           -opponentHUDSpriteRenderer.size.y/4);
+        opponentHealthTMPObject.transform.localPosition+=Vector3.left*opponentHUDSpriteRenderer.size.x/4;
+        opponentMaxHealthTMPObject.transform.localPosition+=Vector3.right*opponentHUDSpriteRenderer.size.x/10;
+    }
+
+    void updateHUD(){
+        playerNameTMP.text=player.getCharacterName();
+        playerNameTMP.fontSize=playerNameTMPFontSize;
+        playerNameTMP.color=playerNameTMPColour;
+        playerHealthTMP.text=player.getHealth().ToString();
+        playerHealthTMP.fontSize=playerHealthTMPFontSize;
+        playerHealthTMP.color=playerHealthTMPColour;
+        playerMaxHealthTMP.text=player.getMaxHealth().ToString();
+        playerMaxHealthTMP.fontSize=playerMaxHealthTMPFontSize;
+        playerMaxHealthTMP.color=playerMaxHealthTMPColour;
+
+        opponentNameTMP.text=opponent.getCharacterName();
+        opponentNameTMP.fontSize=opponentNameTMPFontSize;
+        opponentNameTMP.color=opponentNameTMPColour;
+        opponentHealthTMP.text=opponent.getHealth().ToString();
+        opponentHealthTMP.fontSize=opponentHealthTMPFontSize;
+        opponentHealthTMP.color=opponentHealthTMPColour;
+        opponentMaxHealthTMP.text=opponent.getMaxHealth().ToString();
+        opponentMaxHealthTMP.fontSize=opponentMaxHealthTMPFontSize;
+        opponentMaxHealthTMP.color=opponentMaxHealthTMPColour;
     }
 
     void OnGUI(){
@@ -154,6 +236,7 @@ public class GameScript : MonoBehaviour
             resolution.x=Screen.width;
             resolution.y=Screen.height;
             positionSprites();
+            updateHUD();
         }
     }
 
@@ -224,6 +307,7 @@ public class GameScript : MonoBehaviour
     public void dealDamage(Character target,float damage){
         StopAllCoroutines();
         target.decreaseHealth(damage);
+        updateHUD();
         if(target==player){
             StartCoroutine(shakeSprite(playerSpriteRenderer,0.2f,1f));
         }else if(target==opponent){
@@ -233,6 +317,7 @@ public class GameScript : MonoBehaviour
     
     public void heal(Character target,float healingAmount){
         target.increaseHealth(healingAmount);
+        updateHUD();
         if(target==player){
             //add healing animation using playerSpriteRenderer
         }else if(target==opponent){
@@ -242,6 +327,7 @@ public class GameScript : MonoBehaviour
 
     public void addModifier(Character target,AttributeModifier attributeModifier){
         target.addModifier(attributeModifier);
+        updateHUD();
         if(target==player){
             //add healing animation using playerSpriteRenderer
         }else if(target==opponent){

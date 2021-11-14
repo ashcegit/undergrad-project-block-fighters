@@ -62,8 +62,6 @@ public class Main : MonoBehaviour
                 terminalScript.setState(TerminalState.Write);
             }else if(gameScript.getPlayerChosen()&&gameScript.getOpponentChosen()){
                 loopDone=false;
-                Debug.Log("player health: "+player.getHealth().ToString());
-                Debug.Log("opponent health: "+opponent.getHealth().ToString());
                 terminalScript.setState(TerminalState.ReadOnly);
                 playerGameAction=gameScript.getPlayerGameAction();
                 interactionHandler.runInteractions(playerGameAction,opponentGameAction,player.getSpeed(),opponent.getSpeed());
@@ -77,7 +75,6 @@ public class Main : MonoBehaviour
                     }
                 }else{
                     playInteraction(opponentInteraction,opponent);
-                    Debug.Log("First interaction");
                     if(!gameScript.isGameOver()){
                         StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
                     }
