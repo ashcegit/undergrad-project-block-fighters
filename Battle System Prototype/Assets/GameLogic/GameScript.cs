@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using TMPro;
 using UnityEngine;
 
 public class GameScript : MonoBehaviour
@@ -10,7 +11,12 @@ public class GameScript : MonoBehaviour
     private SpriteRenderer playerSpriteRenderer;
     private GameObject playerHUDObject;
     private SpriteRenderer playerHUDSpriteRenderer;
-    //private Text playerHUDText;
+    private GameObject playerNameTMPObject;
+    private TextMeshPro playerNameTMP;
+    private GameObject playerHealthTMPObject;
+    private TextMeshPro playerHealthTMP;
+    private GameObject playerMaxHealthTMPObject;
+    private TextMeshPro playerMaxHealthTMP;
     private GameAction playerGameAction;
     private bool playerLoaded;
     private bool playerChosen;
@@ -21,7 +27,12 @@ public class GameScript : MonoBehaviour
     private SpriteRenderer opponentSpriteRenderer;
     private GameObject opponentHUDObject;
     private SpriteRenderer opponentHUDSpriteRenderer;
-    //private Text opponentHUDText;
+    private GameObject opponentNameTMPObject;
+    private TextMeshPro opponentNameTMP;
+    private GameObject opponentHealthTMPObject;
+    private TextMeshPro opponentHealthTMP;
+    private GameObject opponentMaxHealthTMPObject;
+    private TextMeshPro opponentMaxHealthTMP;
     private GameAction opponentGameAction;
     private bool opponentLoaded;
     private bool opponentChosen;
@@ -37,13 +48,6 @@ public class GameScript : MonoBehaviour
         playerObject.tag="Player";
         playerSpriteRenderer=playerObject.AddComponent<SpriteRenderer>();
         playerSpriteRenderer.sprite=Resources.Load<Sprite>("GameSprites/stickman");
-        
-        playerHUDObject=new GameObject();
-        playerHUDObject.transform.parent=GameObject.FindGameObjectWithTag("GameController").transform;
-        playerHUDObject.name="Player HUD";
-        playerHUDSpriteRenderer=playerHUDObject.AddComponent<SpriteRenderer>();
-        playerHUDSpriteRenderer.sprite=Resources.Load<Sprite>("GameSprites/HUDbox");
-        //playerHUDText=playerHUDObject.AddComponent<Text>();
 
         player=new Player("Player",
                           100f,
@@ -51,6 +55,27 @@ public class GameScript : MonoBehaviour
                           45f,
                           60f);
         playerLoaded=true;
+        
+        playerHUDObject=new GameObject();
+        playerHUDObject.transform.parent=GameObject.FindGameObjectWithTag("GameController").transform;
+        playerHUDObject.name="Player HUD";
+        playerHUDSpriteRenderer=playerHUDObject.AddComponent<SpriteRenderer>();
+        playerHUDSpriteRenderer.sprite=Resources.Load<Sprite>("GameSprites/HUDbox");
+
+        playerNameTMPObject=new GameObject();
+        playerNameTMPObject.name="Player Name TMP Object";
+        playerNameTMPObject.transform.SetParent(playerHUDObject.transform);
+        playerNameTMP=playerNameTMPObject.AddComponent<TextMeshPro>();
+
+        playerHealthTMPObject=new GameObject();
+        playerHealthTMPObject.name="Player Health TMP Object";
+        playerHealthTMPObject.transform.SetParent(playerHUDObject.transform);
+        playerHealthTMP=playerHealthTMPObject.AddComponent<TextMeshPro>();
+
+        playerMaxHealthTMPObject=new GameObject();
+        playerMaxHealthTMPObject.name="Player Max Health TMP Object";
+        playerMaxHealthTMPObject.transform.SetParent(playerHUDObject.transform);
+        playerMaxHealthTMP=playerMaxHealthTMPObject.AddComponent<TextMeshPro>();        
 
         opponentObject=new GameObject();
         opponentObject.transform.parent=GameObject.FindGameObjectWithTag("GameController").transform;
@@ -58,19 +83,36 @@ public class GameScript : MonoBehaviour
         opponentSpriteRenderer=opponentObject.AddComponent<SpriteRenderer>();
         opponentSpriteRenderer.sprite=Resources.Load<Sprite>("GameSprites/stickman");
 
-        opponentHUDObject=new GameObject();
-        opponentHUDObject.transform.parent=GameObject.FindGameObjectWithTag("GameController").transform;
-        opponentHUDObject.name="Opponent HUD";
-        opponentHUDSpriteRenderer=opponentHUDObject.AddComponent<SpriteRenderer>();
-        opponentHUDSpriteRenderer.sprite=Resources.Load<Sprite>("GameSprites/HUDbox");
-        //playerHUDText=playerHUDObject.AddComponent<Text>();
-
         opponent=new Opponent("Opponent",
                               100f,
                               15f,
                               45f,
                               60f);
         opponentLoaded=true;
+
+        opponentHUDObject=new GameObject();
+        opponentHUDObject.transform.parent=GameObject.FindGameObjectWithTag("GameController").transform;
+        opponentHUDObject.name="Opponent HUD";
+
+        opponentHUDSpriteRenderer=opponentHUDObject.AddComponent<SpriteRenderer>();
+        opponentHUDSpriteRenderer.sprite=Resources.Load<Sprite>("GameSprites/HUDbox");
+
+        opponentNameTMPObject=new GameObject();
+        opponentNameTMPObject.name="Player Name TMP Object";
+        opponentNameTMPObject.transform.SetParent(opponentHUDObject.transform);
+        opponentNameTMP=opponentNameTMPObject.AddComponent<TextMeshPro>();
+
+        opponentHealthTMPObject=new GameObject();
+        opponentHealthTMPObject.name="Player Health TMP Object";
+        opponentHealthTMPObject.transform.SetParent(opponentHUDObject.transform);
+        opponentHealthTMP=opponentHealthTMPObject.AddComponent<TextMeshPro>();
+
+        opponentMaxHealthTMPObject=new GameObject();
+        opponentMaxHealthTMPObject.name="Player Max Health TMP Object";
+        opponentMaxHealthTMPObject.transform.SetParent(opponentHUDObject.transform);
+        opponentMaxHealthTMP=opponentMaxHealthTMPObject.AddComponent<TextMeshPro>();
+
+        
 
         positionSprites();
 
