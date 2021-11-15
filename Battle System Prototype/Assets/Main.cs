@@ -81,11 +81,11 @@ public class Main : MonoBehaviour
                 if(i>playerGameActions.Count-1){
                     //Only perform Opponent Game Actions
                     interactionHandler.runInteractions(playerGameActions[0],opponentGameActions[i],player.getSpeed(),opponent.getSpeed());
-                    yield return playInteractionAfterDelay(0.5f,interactionHandler.getOpponentInteraction(),opponent);
+                    yield return StartCoroutine(playInteractionAfterDelay(0.5f,interactionHandler.getOpponentInteraction(),opponent));
                 }else if(i>opponentGameActions.Count-1){
                     //Only perform Player Game Actions
                     interactionHandler.runInteractions(playerGameActions[i],opponentGameActions[0],player.getSpeed(),opponent.getSpeed());
-                    yield return playInteractionAfterDelay(0.5f,interactionHandler.getPlayerInteraction(),player);
+                    yield return StartCoroutine(playInteractionAfterDelay(0.5f,interactionHandler.getPlayerInteraction(),player));
                 }else{
                     interactionHandler.runInteractions(playerGameActions[i],opponentGameActions[i],player.getSpeed(),opponent.getSpeed());
                     Interaction playerInteraction=interactionHandler.getPlayerInteraction();
@@ -93,12 +93,12 @@ public class Main : MonoBehaviour
                     if(interactionHandler.getPlayerFirst()){
                         playInteraction(playerInteraction,player);
                         if(!gameScript.isGameOver()){
-                            yield return playInteractionAfterDelay(0.5f,opponentInteraction,opponent);
+                            yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
                         }
                     }else{
                         playInteraction(opponentInteraction,opponent);
                         if(!gameScript.isGameOver()){
-                            yield return playInteractionAfterDelay(0.5f,playerInteraction,player);
+                            yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
                         }
                     }
                 }
