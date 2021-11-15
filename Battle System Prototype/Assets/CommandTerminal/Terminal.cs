@@ -296,7 +296,7 @@ namespace CommandTerminal
             CommandWrapper commandWrapper=Shell.RunCommand(commandText);
             History.Push(commandText);
             if(commandWrapper.getIsGameAction()&&commandWrapper.getIsValid()){
-                gameScript.setPlayerGameAction(commandWrapper.getGameAction());
+                gameScript.setPlayerGameActions(commandWrapper.getGameActions());
             }else if(!commandWrapper.getIsValid()){
                 log(TerminalLogType.Error, "Error: {0}", Shell.getIssuedErrorMessage());
             }

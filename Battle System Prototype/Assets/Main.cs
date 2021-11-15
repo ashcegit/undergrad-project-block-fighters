@@ -10,8 +10,8 @@ public class Main : MonoBehaviour
     private GameObject game;
     private GameScript gameScript;
 
-    private GameAction playerGameAction;
-    private GameAction opponentGameAction;
+    private List<GameAction> playerGameActions;
+    private List<GameAction> opponentGameActions;
 
     private GameObject terminal;
     private Terminal terminalScript;
@@ -57,28 +57,14 @@ public class Main : MonoBehaviour
             Player player=gameScript.getPlayer();
             Opponent opponent=gameScript.getOpponent();
             if(!gameScript.getOpponentChosen()){
-                opponentGameAction=gameScript.getOpponentGameAction();
+                opponentGameActions=gameScript.getOpponentGameActions();
                 gameScript.setOpponentChosen(true);
                 terminalScript.setState(TerminalState.Write);
             }else if(gameScript.getPlayerChosen()&&gameScript.getOpponentChosen()){
                 loopDone=false;
                 terminalScript.setState(TerminalState.ReadOnly);
-                playerGameAction=gameScript.getPlayerGameAction();
-                interactionHandler.runInteractions(playerGameAction,opponentGameAction,player.getSpeed(),opponent.getSpeed());
-                Interaction playerInteraction=interactionHandler.getPlayerInteraction();
-                Interaction opponentInteraction=interactionHandler.getOpponentInteraction();
-                if(interactionHandler.getPlayerFirst()){
-                    playInteraction(playerInteraction,player);
-                    Debug.Log("First interaction");
-                    if(!gameScript.isGameOver()){
-                        StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
-                    }
-                }else{
-                    playInteraction(opponentInteraction,opponent);
-                    if(!gameScript.isGameOver()){
-                        StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
-                    }
-                }
+                playerGameActions=gameScript.getPlayerGameActions();
+                StartCoroutine(playLoop(player,opponent));                
                 gameScript.setPlayerChosen(false);
                 gameScript.setOpponentChosen(false);
                 gameScript.endTurn();
@@ -88,6 +74,39 @@ public class Main : MonoBehaviour
         }
     }
 
+    IEnumerator playLoop(Player player,Opponent opponent){
+        int largestListCount=(playerGameActions.Count>=opponentGameActions.Count?playerGameActions.Count:opponentGameActions.Count);
+        for(int i=0;i<largestListCount;i++){
+            if(!gameScript.isGameOver()){
+                if(i>playerGameActions.Count-1){
+                    //Only perform Opponent Game Actions
+                    interactionHandler.runInteractions(playerGameActions[0],opponentGameActions[i],player.getSpeed(),opponent.getSpeed());
+                    yield return playInteractionAfterDelay(0.5f,interactionHandler.getOpponentInteraction(),opponent);
+                }else if(i>opponentGameActions.Count-1){
+                    //Only perform Player Game Actions
+                    interactionHandler.runInteractions(playerGameActions[i],opponentGameActions[0],player.getSpeed(),opponent.getSpeed());
+                    yield return playInteractionAfterDelay(0.5f,interactionHandler.getPlayerInteraction(),player);
+                }else{
+                    interactionHandler.runInteractions(playerGameActions[i],opponentGameActions[i],player.getSpeed(),opponent.getSpeed());
+                    Interaction playerInteraction=interactionHandler.getPlayerInteraction();
+                    Interaction opponentInteraction=interactionHandler.getOpponentInteraction();
+                    if(interactionHandler.getPlayerFirst()){
+                        playInteraction(playerInteraction,player);
+                        if(!gameScript.isGameOver()){
+                            yield return playInteractionAfterDelay(0.5f,opponentInteraction,opponent);
+                        }
+                    }else{
+                        playInteraction(opponentInteraction,opponent);
+                        if(!gameScript.isGameOver()){
+                            yield return playInteractionAfterDelay(0.5f,playerInteraction,player);
+                        }
+                    }
+                }
+            }
+        }
+        loopDone=true;
+    }
+
     IEnumerator playInteractionAfterDelay(float seconds,Interaction interaction,Character character){
         float elapsedSeconds=0f;
         while(elapsedSeconds<seconds){
@@ -95,10 +114,7 @@ public class Main : MonoBehaviour
             yield return null;
         }
         playInteraction(interaction,character);
-        loopDone=true;        
     }
-
-    //add results of interactions
 
     void playInteraction(Interaction interaction,Character instigator){
         switch(interaction){

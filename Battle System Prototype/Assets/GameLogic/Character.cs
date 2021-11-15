@@ -16,6 +16,9 @@ public class Character
     protected List<AttributeModifier> attackModifiers;
     protected List<AttributeModifier> defenceModifiers;
     protected List<AttributeModifier> speedModifiers;
+
+    protected Player player;
+    protected Opponent opponent;
     
     public Character(string characterName,
                      float baseMaxHealth,
@@ -41,6 +44,9 @@ public class Character
     public void setBaseAttack(float baseAttack){this.baseAttack=baseAttack;}
     public void setBaseDefence(float baseDefence){this.baseDefence=baseDefence;}
     public void setBaseSpeed(float baseSpeed){this.baseSpeed=baseSpeed;}
+    public void setOpponent(Opponent opponent){this.opponent=opponent;}
+    public void setPlayer(Player player){this.player=player;}
+
 
     public string getCharacterName(){return characterName;}
     public float getBaseMaxHealth(){return baseMaxHealth;}

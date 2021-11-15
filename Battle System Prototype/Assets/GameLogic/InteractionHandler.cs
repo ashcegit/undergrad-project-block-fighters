@@ -53,7 +53,7 @@ public class InteractionHandler
             default:
                 break;  
         }
-    }   
+    }
 
     public bool isPlayerFirst(){
         if(!attackTypeTieCheck()){return playerAttackTypeAdvantage();}

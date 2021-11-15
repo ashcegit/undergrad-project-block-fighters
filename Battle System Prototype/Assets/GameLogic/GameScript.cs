@@ -30,7 +30,7 @@ public class GameScript : MonoBehaviour
     private float playerMaxHealthTMPFontSize=0.5f;
     private Color32 playerMaxHealthTMPColour=new Color32(0,0,0,255);
 
-    private GameAction playerGameAction;
+    private List<GameAction> playerGameActions;
     private bool playerLoaded;
     private bool playerChosen;
     private bool playerWon;
@@ -60,7 +60,7 @@ public class GameScript : MonoBehaviour
     private float opponentMaxHealthTMPFontSize=0.5f;
     private Color32 opponentMaxHealthTMPColour=new Color32(0,0,0,255);
 
-    private GameAction opponentGameAction;
+    private List<GameAction> opponentGameActions;
     private bool opponentLoaded;
     private bool opponentChosen;
     private bool opponentWon;
@@ -152,6 +152,9 @@ public class GameScript : MonoBehaviour
         opponentMaxHealthTMPObject.transform.SetParent(opponentHealthTMPContainerObject.transform);
         opponentMaxHealthTMP=opponentMaxHealthTMPObject.AddComponent<TextMeshPro>();
         opponentMaxHealthTMP.alignment=TextAlignmentOptions.Center;
+
+        player.setOpponent(opponent);
+        opponent.setPlayer(player);
 
         positionSprites();
         updateHUD();
@@ -253,28 +256,27 @@ public class GameScript : MonoBehaviour
     public bool hasPlayerLost(){return player.getHealth()<=0;}
     public bool hasOpponentLost(){return opponent.getHealth()<=0;}
 
-    public void initOpponentGameAction(){
+    public void initOpponentGameActions(){
         MethodInfo[] opponentMethods=opponent.GetType().GetMethods(BindingFlags.DeclaredOnly|
                                                                    BindingFlags.Public|
                                                                    BindingFlags.Instance);
         MethodInfo opponentMethod=opponentMethods[UnityEngine.Random.Range(0,opponentMethods.Length)];
-        Character target=player;
-        opponentGameAction=(GameAction)opponentMethod.Invoke((Opponent)opponent,new object[]{player});
+        opponentGameActions=(List<GameAction>)opponentMethod.Invoke((Opponent)opponent,new object[]{});
         setOpponentChosen(true);
     }
 
-    public GameAction getOpponentGameAction(){
-        initOpponentGameAction();
-        return opponentGameAction;
+    public List<GameAction> getOpponentGameActions(){
+        initOpponentGameActions();
+        return opponentGameActions;
     }
 
-    public void setPlayerGameAction(GameAction playerGameAction){
-        this.playerGameAction=playerGameAction;
+    public void setPlayerGameActions(List<GameAction> playerGameActions){
+        this.playerGameActions=playerGameActions;
         playerChosen=true;
     }
 
-    public GameAction getPlayerGameAction(){
-        return playerGameAction;
+    public List<GameAction> getPlayerGameActions(){
+        return playerGameActions;
     }
 
     public void setOpponentChosen(bool opponentChosen){
@@ -302,6 +304,7 @@ public class GameScript : MonoBehaviour
             yield return null;
         }
         gameObject.transform.position=initialPosition;
+        positionSprites();
     }
 
     public void dealDamage(Character target,float damage){

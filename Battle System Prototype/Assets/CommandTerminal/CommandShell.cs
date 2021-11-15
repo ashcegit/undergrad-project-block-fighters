@@ -8,15 +8,15 @@ using UnityEngine;
 namespace CommandTerminal
 {
     public struct CommandWrapper{
-        GameAction gameAction;
+        List<GameAction> gameActions;
         bool isGameAction;
         bool isValid;
 
-        public GameAction getGameAction(){return gameAction;}
+        public List<GameAction> getGameActions(){return gameActions;}
         public bool getIsGameAction(){return isGameAction;}
         public bool getIsValid(){return isValid;}
 
-        public void setGameAction(GameAction gameAction){this.gameAction=gameAction;}
+        public void setGameActions(List<GameAction> gameActions){this.gameActions=gameActions;}
         public void setIsGameAction(bool isGameAction){this.isGameAction=isGameAction;}
         public void setIsValid(bool isValid){this.isValid=isValid;}
     }
@@ -110,9 +110,9 @@ namespace CommandTerminal
         }
         
         public Tuple<string,string[]> parseCommandText(string commandText){
-                string[] commandArray=commandText.Split('(',')');
-                if(commandArray[1]==""){return Tuple.Create(commandArray[0],new string[0]{});
-                }else{return Tuple.Create(commandArray[0],commandArray[1].Split(','));}
+            string[] commandArray=commandText.Split('(',')');
+            if(commandArray[1]==""){return Tuple.Create(commandArray[0],new string[0]{});
+            }else{return Tuple.Create(commandArray[0],commandArray[1].Split(','));}
         }
 
         public CommandWrapper RunCommand(string commandText){
@@ -123,25 +123,27 @@ namespace CommandTerminal
                 string commandName=parsedCommand.Item1;
                 string[] argStringArray=parsedCommand.Item2;
                 if(playerCommands.ContainsKey(commandName)){
-                    if(argStringArray.Length!=1){
+                    if(argStringArray.Length!=playerCommands[commandName].GetParameters().Length){
                         commandWrapper.setIsValid(false);
-                        IssueErrorMessage("Command {0} takes 1 parameter",commandName);
+                        IssueErrorMessage("Command {0} takes {1} parameter(s)",commandName,
+                                                                            playerCommands[commandName].GetParameters().Length);
                         return commandWrapper;
                     }
                     commandWrapper.setIsGameAction(true);
-                    Character target=null;
-                    if(argStringArray[0].Equals(player.getCharacterName())){target=player;}
-                    else if(argStringArray[0].Equals(opponent.getCharacterName())){target=opponent;}
-                    if(target!=null){
-                        MethodInfo selectedMethod=playerCommands[commandName];
-                        commandWrapper.setGameAction((GameAction)selectedMethod.Invoke((Player)player,new object[]{target}));
-                        commandWrapper.setIsValid(true);
-                        return commandWrapper;
-                    }else{
-                        commandWrapper.setIsValid(false);
-                        IssueErrorMessage("Target of move: {0} is invalid",argStringArray[0]);
-                        return commandWrapper;
+                    List<Character> targets=new List<Character>();
+                    foreach(string arg in argStringArray){
+                        if(arg.Equals(player.getCharacterName())){targets.Add(player);}
+                        else if(arg.Equals(player.getCharacterName())){targets.Add(opponent);}
+                        else{
+                            commandWrapper.setIsValid(false);
+                            IssueErrorMessage("Parameter {0} not recognisable target",arg);
+                            return commandWrapper;
+                        }
                     }
+                    MethodInfo selectedMethod=playerCommands[commandName];
+                    commandWrapper.setGameActions((List<GameAction>)selectedMethod.Invoke((Player)player,targets.ToArray()));
+                    commandWrapper.setIsValid(true);
+                    return commandWrapper;
                 }else if(builtInCommands.ContainsKey(commandName)){
                     if(commandName=="help"){
                         if(argStringArray.Length>1||argStringArray.Length < 0){
