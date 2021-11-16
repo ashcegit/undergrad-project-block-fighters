@@ -120,43 +120,59 @@ public class Main : MonoBehaviour
         switch(interaction){
             case AttackInteraction attackInteraction:
                 if(attackInteraction.getResult()==InteractionEnum.Hit){
-                    Debug.Log(instigator.getCharacterName()+"'s attack: "+attackInteraction.getAttack().getName()+
-                              " hits for "+attackInteraction.getDamage().ToString()+" damage!");
+                    Terminal.log(TerminalLogType.Message,
+                                        "{0}'s attack '{1}' hits for {2} damage!",
+                                        instigator.getCharacterName(),
+                                        attackInteraction.getAttack().getName(),
+                                        attackInteraction.getDamage().ToString());
                     gameScript.dealDamage(attackInteraction.getTarget(),attackInteraction.getDamage());
                 }else{
-                    Debug.Log(instigator.getCharacterName()+"'s attack: "+
-                              attackInteraction.getAttack().getName()+
-                              " misses!");
+                    Terminal.log("{0}'s attack '{1}' misses!",
+                                        instigator.getCharacterName(),
+                                        attackInteraction.getAttack().getName());
                 }
                 break;
             case StatusEffectInteraction statusEffectInteraction:
                 if(statusEffectInteraction.getResult()==InteractionEnum.Hit){
-                    Debug.Log(instigator.getCharacterName()+"'s status effect: "+
-                              statusEffectInteraction.getStatusEffect().getName()+" has "+
-                              (statusEffectInteraction.getMultiplier()>1?"raised ":"decreased ")+
-                              statusEffectInteraction.getTarget().getCharacterName()+"'s "+
-                              statusEffectInteraction.getAttribute().ToString()+
-                              " by "+(statusEffectInteraction.getMultiplier()>1?
+                    Terminal.log(TerminalLogType.Message,
+                                "{0}'s status effect '{1}' has {2} {3}'s {4} by {5}% for {6} turns!\n",
+                                //character name
+                                instigator.getCharacterName(),
+                                //status effect name
+                                statusEffectInteraction.getStatusEffect().getName(),
+                                //raised or decreased
+                                (statusEffectInteraction.getMultiplier()>1?"raised ":"decreased "),
+                                //target name
+                                statusEffectInteraction.getTarget().getCharacterName(),
+                                //attribute affected
+                                statusEffectInteraction.getAttribute().ToString(),
+                                //percentage amount - affected by whether attribute is raised or lowered
+                                (statusEffectInteraction.getMultiplier()>1?
                                      (100*statusEffectInteraction.getMultiplier()-100f).ToString():
-                                     (100*statusEffectInteraction.getMultiplier()).ToString())+"% for "+
-                                    statusEffectInteraction.getTurns().ToString()+" turns!");
+                                     (100*statusEffectInteraction.getMultiplier()).ToString()),
+                                //number of turns
+                                statusEffectInteraction.getTurns().ToString());
                     gameScript.addModifier(statusEffectInteraction.getTarget(),statusEffectInteraction.getAttributeModifier());
                 }else{
-                    Debug.Log(instigator.getCharacterName()+"'s status effect: "+
-                              statusEffectInteraction.getStatusEffect().getName()+
-                              " misses!");
+                    Terminal.log(TerminalLogType.Message,
+                                "{0}'s status effect '{1}' misses!\n",
+                                instigator.getCharacterName(),
+                                statusEffectInteraction.getStatusEffect().getName());
                 }
                 break;
             case HealInteraction healInteraction:
                 if(healInteraction.getResult()==InteractionEnum.Hit){
-                    Debug.Log(instigator.getCharacterName()+"'s heal: "+
-                              healInteraction.getHeal().getName()+
-                              " heals for "+healInteraction.getHealingAmount().ToString()+" health!");
+                    Terminal.log(TerminalLogType.Message,
+                                "{0}'s heal '{1}' heals for {2} health!\n",
+                                instigator.getCharacterName(),
+                                healInteraction.getHeal().getName(),
+                                healInteraction.getHealingAmount().ToString());
                     gameScript.heal(healInteraction.getTarget(),healInteraction.getHealingAmount());
                 }else{
-                    Debug.Log(instigator.getCharacterName()+"'s heal: "+
-                              healInteraction.getHeal().getName()+
-                              " misses!");
+                    Terminal.log(TerminalLogType.Message,
+                                "{0}'s heal '{1}' misses!\n",
+                                instigator.getCharacterName(),
+                                healInteraction.getHeal().getName());
                 }
                 break;
             default:

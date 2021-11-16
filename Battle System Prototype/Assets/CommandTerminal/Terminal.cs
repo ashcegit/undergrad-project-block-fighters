@@ -99,13 +99,6 @@ namespace CommandTerminal
             Shell = new CommandShell();
             History = new CommandHistory();
             Autocomplete = new CommandAutocomplete();
-
-            // Hook Unity log events
-            Application.logMessageReceived += handUnityLog;
-        }
-
-        void OnDisable() {
-            Application.logMessageReceived -= handUnityLog;
         }
 
         public void initShell(Player player,Opponent opponent,GameScript gameScript){
@@ -325,11 +318,6 @@ namespace CommandTerminal
                 editorState=(TextEditor)GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl);
             }
             editorState.MoveCursorToPosition(new Vector2(999, 999));
-        }
-
-        void handUnityLog(string message, string stack_trace, LogType type) {
-            Buffer.handleLog(message, stack_trace, (TerminalLogType)type);
-            scrollPosition.y = int.MaxValue;
         }
 
         Color getLogColour(TerminalLogType type) {
