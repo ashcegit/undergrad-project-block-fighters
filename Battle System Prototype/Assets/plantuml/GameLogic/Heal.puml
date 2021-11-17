@@ -1,0 +1,7 @@
+@startuml
+class Heal {
+    + Heal(name:string, target:Character, actionType:ActionType, healingAmount:float)
+    + getHealingAmount() : float
+}
+GameAction <|-- Heal
+@enduml

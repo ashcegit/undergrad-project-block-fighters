@@ -1,0 +1,13 @@
+@startuml
+class StatusEffectInteraction {
+    + StatusEffectInteraction(target:Character, statusEffect:StatusEffect)
+    + getStatusEffect() : StatusEffect
+    + <<new>> getResult() : InteractionEnum
+    + getAttributeModifier() : AttributeModifier
+    + getAttribute() : AttributeEnum
+    + getMultiplier() : float
+    + getChance() : float
+    + getTurns() : int
+}
+Interaction <|-- StatusEffectInteraction
+@enduml

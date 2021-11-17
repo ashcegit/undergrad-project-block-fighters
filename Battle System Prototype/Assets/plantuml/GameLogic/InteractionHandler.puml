@@ -1,0 +1,18 @@
+@startuml
+class InteractionHandler {
+    playerSpeed : float
+    opponentSpeed : float
+    playerFirst : bool
+    + runInteractions(playerGameAction:GameAction, opponentGameAction:GameAction, playerSpeed:float, opponentSpeed:float) : void
+    + isPlayerFirst() : bool
+    + attackTypeTieCheck() : bool
+    + playerAttackTypeAdvantage() : bool
+    + getPlayerFirst() : bool
+    + getPlayerInteraction() : Interaction
+    + getOpponentInteraction() : Interaction
+}
+InteractionHandler --> "playerGameAction" GameAction
+InteractionHandler --> "opponentGameAction" GameAction
+InteractionHandler --> "playerInteraction" Interaction
+InteractionHandler --> "opponentInteraction" Interaction
+@enduml

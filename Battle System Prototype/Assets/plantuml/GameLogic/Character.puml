@@ -1,0 +1,32 @@
+@startuml
+class Character {
+    + Character(characterName:string, baseMaxHealth:float, baseAttack:float, baseDefence:float, baseSpeed:float)
+    + setCharacterName(characterName:string) : void
+    + setHealth(health:float) : void
+    + setBaseMaxHealth(baseMaxHealth:float) : void
+    + setBaseAttack(baseAttack:float) : void
+    + setBaseDefence(baseDefence:float) : void
+    + setBaseSpeed(baseSpeed:float) : void
+    + setOpponent(opponent:Opponent) : void
+    + setPlayer(player:Player) : void
+    + getCharacterName() : string
+    + getBaseMaxHealth() : float
+    + getBaseAttack() : float
+    + getBaseDefence() : float
+    + getBaseSpeed() : float
+    + getHealthModifiers() : List<AttributeModifier>
+    + getAttackModifiers() : List<AttributeModifier>
+    + getDefenceModifiers() : List<AttributeModifier>
+    + getSpeedModifiers() : List<AttributeModifier>
+    + getHealth() : float
+    + getMaxHealth() : float
+    + getAttack() : float
+    + getDefence() : float
+    + getSpeed() : float
+    + addModifier(attributeModifier:AttributeModifier) : void
+    + endTurn() : void
+    + decreaseHealth(damage:float) : void
+    + increaseHealth(increase:float) : void
+    + fullHeal() : void
+}
+@enduml

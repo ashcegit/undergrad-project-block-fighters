@@ -1,0 +1,11 @@
+@startuml
+class CommandAutocomplete {
+    + register(word:string) : void
+    + complete(text:string) : string[]
+    eatLastWord(text:string) : string
+}
+class "List`1"<T> {
+}
+CommandAutocomplete o-> "knownWords<string>" "List`1"
+CommandAutocomplete o-> "buffer<string>" "List`1"
+@enduml

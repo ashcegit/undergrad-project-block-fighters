@@ -1,0 +1,7 @@
+@startuml
+class OpponentComponent {
+    Start() : void
+    Update() : void
+}
+MonoBehaviour <|-- OpponentComponent
+@enduml

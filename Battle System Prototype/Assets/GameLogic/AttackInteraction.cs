@@ -15,7 +15,7 @@ public class AttackInteraction:Interaction
         this.attack=attack;
         this.defenderDefence=target.getDefence();
         this.defenderSpeed=target.getSpeed();
-        damage=10*attack.getDamage()/defenderDefence;
+        damage=attack.getDamage()*(100-defenderDefence)/100;
     }
 
     public new InteractionEnum getResult(){

@@ -1,0 +1,10 @@
+@startuml
+class GameAction {
+    + GameAction(name:string, target:Character, actionType:ActionType)
+    + getName() : string
+    + getTarget() : Character
+    + setTarget(target:Character) : void
+    + getActionType() : ActionType
+    + setActionType(actionType:ActionType) : void
+}
+@enduml

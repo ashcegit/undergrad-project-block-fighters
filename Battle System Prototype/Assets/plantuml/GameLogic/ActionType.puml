@@ -1,0 +1,7 @@
+@startuml
+enum ActionType {
+    Physical,
+    Magic,
+    Science,
+}
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+class Main {
+    Start() : void
+    Update() : void
+    playLoop(player:Player, opponent:Opponent) : IEnumerator
+    playInteractionAfterDelay(seconds:float, interaction:Interaction, character:Character) : IEnumerator
+    playInteraction(interaction:Interaction, instigator:Character) : void
+    waitTime(seconds:int) : IEnumerator
+}
+MonoBehaviour <|-- Main
+@enduml

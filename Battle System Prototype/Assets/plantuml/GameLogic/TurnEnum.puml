@@ -1,0 +1,8 @@
+@startuml
+enum TurnEnum {
+    OpponentChoosing,
+    PlayerChoosing,
+    Moving,
+    GameOver,
+}
+@enduml

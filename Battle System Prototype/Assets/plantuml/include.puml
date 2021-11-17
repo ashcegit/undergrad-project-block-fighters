@@ -1,0 +1,29 @@
+@startuml
+!include .\\Main.puml
+!include .\\CommandTerminal\CommandAutocomplete.puml
+!include .\\CommandTerminal\CommandHistory.puml
+!include .\\CommandTerminal\CommandLog.puml
+!include .\\CommandTerminal\CommandShell.puml
+!include .\\CommandTerminal\Terminal.puml
+!include .\\GameLogic\ActionType.puml
+!include .\\GameLogic\Attack.puml
+!include .\\GameLogic\AttackInteraction.puml
+!include .\\GameLogic\AttributeEnum.puml
+!include .\\GameLogic\AttributeModifier.puml
+!include .\\GameLogic\Character.puml
+!include .\\GameLogic\GameAction.puml
+!include .\\GameLogic\GameScript.puml
+!include .\\GameLogic\GameStateEnum.puml
+!include .\\GameLogic\Heal.puml
+!include .\\GameLogic\HealInteraction.puml
+!include .\\GameLogic\Interaction.puml
+!include .\\GameLogic\InteractionEnum.puml
+!include .\\GameLogic\InteractionHandler.puml
+!include .\\GameLogic\Opponent.puml
+!include .\\GameLogic\OpponentComponent.puml
+!include .\\GameLogic\Player.puml
+!include .\\GameLogic\PlayerComponent.puml
+!include .\\GameLogic\StatusEffect.puml
+!include .\\GameLogic\StatusEffectInteraction.puml
+!include .\\GameLogic\TurnEnum.puml
+@enduml

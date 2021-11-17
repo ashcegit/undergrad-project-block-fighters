@@ -1,0 +1,6 @@
+@startuml
+enum InteractionEnum {
+    Hit,
+    Miss,
+}
+@enduml

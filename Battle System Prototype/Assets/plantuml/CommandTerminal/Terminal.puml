@@ -1,0 +1,65 @@
+@startuml
+enum TerminalState {
+    Close,
+    ReadOnly,
+    Write,
+}
+class Terminal {
+    ToggleSpeed : float = 360
+    BufferSize : int = 512
+    InputCaret : string = ">"
+    showGUIButtons : bool
+    RightAlignButtons : bool
+    InputContrast : float
+    inputFix : bool
+    moveCursor : bool
+    initialOpen : bool
+    currentOpenT : float
+    openTarget : float
+    commandText : string
+    cachedCommandText : string
+    terminalLoaded : bool
+    + {static} issuedError : bool <<get>>
+    + isClosed : bool <<get>>
+    + {static} log(format:string, message:object[]) : void
+    + {static} log(type:TerminalLogType, format:string, message:object[]) : void
+    + setState(newState:TerminalState) : void
+    + getState() : TerminalState
+    OnEnable() : void
+    + initShell(player:Player, opponent:Opponent, gameScript:GameScript) : void
+    Start() : void
+    + getTerminalLoaded() : bool
+    OnGUI() : void
+    setupWindow() : void
+    setupLabels() : void
+    setupInput() : void
+    drawConsole(Window2D:int) : void
+    drawLogs() : void
+    drawGUIButtons() : void
+    handleOpenness() : void
+    EnterCommand() : void
+    CompleteCommand() : void
+    CursorToEnd() : void
+    getLogColour(type:TerminalLogType) : Color
+}
+MonoBehaviour <|-- Terminal
+Terminal --> "ConsoleFont" Font
+Terminal o-> "BackgroundColor" Color
+Terminal o-> "ForegroundColor" Color
+Terminal o-> "ShellColor" Color
+Terminal o-> "InputColor" Color
+Terminal o-> "WarningColor" Color
+Terminal o-> "ErrorColor" Color
+Terminal --> "state" TerminalState
+Terminal --> "editorState" TextEditor
+Terminal --> "window" Rect
+Terminal --> "scrollPosition" Vector2
+Terminal --> "window_style" GUIStyle
+Terminal --> "labelStyle" GUIStyle
+Terminal --> "input_style" GUIStyle
+Terminal --> "gameScript" GameScript
+Terminal --> "Buffer" CommandLog
+Terminal --> "Shell" CommandShell
+Terminal --> "History" CommandHistory
+Terminal --> "Autocomplete" CommandAutocomplete
+@enduml

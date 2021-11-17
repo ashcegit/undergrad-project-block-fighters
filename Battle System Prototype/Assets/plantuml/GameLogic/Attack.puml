@@ -1,0 +1,10 @@
+@startuml
+class Attack {
+    damage : float
+    speed : float
+    + Attack(name:string, target:Character, actionType:ActionType, damage:float, speed:float)
+    + getDamage() : float
+    + getSpeed() : float
+}
+GameAction <|-- Attack
+@enduml

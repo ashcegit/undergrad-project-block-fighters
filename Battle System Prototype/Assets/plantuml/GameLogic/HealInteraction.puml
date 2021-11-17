@@ -1,0 +1,10 @@
+@startuml
+class HealInteraction {
+    healingAmount : float
+    + HealInteraction(target:Character, heal:Heal)
+    + getHeal() : Heal
+    + getHealingAmount() : float
+}
+Interaction <|-- HealInteraction
+HealInteraction --> "heal" Heal
+@enduml

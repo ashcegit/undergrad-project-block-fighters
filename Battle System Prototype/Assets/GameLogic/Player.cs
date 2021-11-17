@@ -37,7 +37,7 @@ public class Player:Character
         return gameActions;
     }
 
-    public List<GameAction> heal_and_defenc(){
+    public List<GameAction> heal_and_defend(){
         List<GameAction> gameActions=new List<GameAction>();
         gameActions.Add(new Heal("healing magic",
                                     this,

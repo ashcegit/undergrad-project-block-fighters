@@ -1,0 +1,8 @@
+@startuml
+enum AttributeEnum {
+    Max_Health,
+    Attack,
+    Defence,
+    Speed,
+}
+@enduml

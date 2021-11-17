@@ -91,12 +91,12 @@ public class Main : MonoBehaviour
                     Interaction playerInteraction=interactionHandler.getPlayerInteraction();
                     Interaction opponentInteraction=interactionHandler.getOpponentInteraction();
                     if(interactionHandler.getPlayerFirst()){
-                        playInteraction(playerInteraction,player);
+                        yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
                         if(!gameScript.isGameOver()){
                             yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
                         }
                     }else{
-                        playInteraction(opponentInteraction,opponent);
+                        yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
                         if(!gameScript.isGameOver()){
                             yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
                         }
@@ -121,13 +121,13 @@ public class Main : MonoBehaviour
             case AttackInteraction attackInteraction:
                 if(attackInteraction.getResult()==InteractionEnum.Hit){
                     Terminal.log(TerminalLogType.Message,
-                                        "{0}'s attack '{1}' hits for {2} damage!",
+                                        "{0}'s attack '{1}' hits for {2} damage!\n",
                                         instigator.getCharacterName(),
                                         attackInteraction.getAttack().getName(),
                                         attackInteraction.getDamage().ToString());
                     gameScript.dealDamage(attackInteraction.getTarget(),attackInteraction.getDamage());
                 }else{
-                    Terminal.log("{0}'s attack '{1}' misses!",
+                    Terminal.log("{0}'s attack '{1}' misses!\n",
                                         instigator.getCharacterName(),
                                         attackInteraction.getAttack().getName());
                 }

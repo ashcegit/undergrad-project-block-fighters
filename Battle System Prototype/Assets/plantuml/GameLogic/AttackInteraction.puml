@@ -1,0 +1,9 @@
+@startuml
+class AttackInteraction {
+    + AttackInteraction(target:Character, attack:Attack)
+    + <<new>> getResult() : InteractionEnum
+    + getDamage() : float
+    + getAttack() : Attack
+}
+Interaction <|-- AttackInteraction
+@enduml

@@ -308,7 +308,6 @@ public class GameScript : MonoBehaviour
     }
 
     public void dealDamage(Character target,float damage){
-        StopAllCoroutines();
         target.decreaseHealth(damage);
         updateHUD();
         if(target==player){

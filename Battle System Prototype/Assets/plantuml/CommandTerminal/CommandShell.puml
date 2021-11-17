@@ -1,0 +1,37 @@
+@startuml
+class CommandWrapper <<struct>> {
+    isGameAction : bool
+    isValid : bool
+    + getGameActions() : List<GameAction>
+    + getIsGameAction() : bool
+    + getIsValid() : bool
+    + setGameActions(gameActions:List<GameAction>) : void
+    + setIsGameAction(isGameAction:bool) : void
+    + setIsValid(isValid:bool) : void
+}
+class CommandShell {
+    IssuedErrorMessage : string
+    + CommandShell()
+    + IssueErrorMessage(format:string, message:object[]) : void
+    + getIssuedErrorMessage() : string
+    + registerOpponent(opponent:Opponent) : void
+    + registerPlayer(player:Player) : void
+    + getPlayerCommands() : Dictionary<string,MethodInfo>
+    + getBuiltInCommands() : Dictionary<string,MethodInfo>
+    + getBuiltInCommandHelp() : Dictionary<string,string>
+    + registerPlayerCommands() : void
+    + registerBuiltInCommands() : void
+    + clear() : bool
+    + help(commandNames:string[]) : bool
+    + listPlayerCommands() : bool
+    + quit() : void
+    + parseCommandText(commandText:string) : Tuple<string,string[]>
+    + RunCommand(commandText:string) : CommandWrapper
+}
+class "List`1"<T> {
+}
+CommandWrapper --> "gameActions<GameAction>" "List`1"
+CommandShell --> "commandRegex" Regex
+CommandShell --> "player" Player
+CommandShell --> "opponent" Opponent
+@enduml
