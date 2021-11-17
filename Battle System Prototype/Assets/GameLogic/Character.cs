@@ -53,14 +53,16 @@ public class Character
     public float getBaseAttack(){return baseAttack;}
     public float getBaseDefence(){return baseDefence;}
     public float getBaseSpeed(){return baseSpeed;}
-
+    public Opponent getOpponent(){return opponent;}
+    public Player getPlayer(){return player;}
     public List<AttributeModifier> getHealthModifiers(){return healthModifiers;}
     public List<AttributeModifier> getAttackModifiers(){return attackModifiers;}
     public List<AttributeModifier> getDefenceModifiers(){return defenceModifiers;}
     public List<AttributeModifier> getSpeedModifiers(){return speedModifiers;}
 
     public float getHealth(){
-        return health;
+        if(health<0f){return 0f;}
+        else{return health;}
     }
     public float getMaxHealth(){
         float tempMaxHealth=baseMaxHealth;
@@ -139,7 +141,10 @@ public class Character
         }
     }
 
-    public void decreaseHealth(float damage){health-=damage;}
+    public void decreaseHealth(float damage){
+        if(health-damage<0f){health=0;}
+        else{health-=damage;}
+    }
     public void increaseHealth(float increase){
         if(health+increase>getMaxHealth()){health=getMaxHealth();}
         else{health+=increase;}

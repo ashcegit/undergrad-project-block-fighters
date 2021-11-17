@@ -117,7 +117,7 @@ public class GameScript : MonoBehaviour
         opponentSpriteRenderer=opponentObject.AddComponent<SpriteRenderer>();
         opponentSpriteRenderer.sprite=Resources.Load<Sprite>("GameSprites/stickman");
 
-        opponent=new Opponent("Opponent",
+        opponent=new Opponent("Opponent1",
                               100f,
                               15f,
                               45f,
@@ -253,8 +253,8 @@ public class GameScript : MonoBehaviour
     public bool getCharactersLoaded(){return playerLoaded&&opponentLoaded;}
 
     public bool isGameOver(){return hasPlayerLost()||hasOpponentLost();}
-    public bool hasPlayerLost(){return player.getHealth()<=0;}
-    public bool hasOpponentLost(){return opponent.getHealth()<=0;}
+    public bool hasPlayerLost(){return player.getHealth()==0;}
+    public bool hasOpponentLost(){return opponent.getHealth()==0;}
 
     public void initOpponentGameActions(){
         MethodInfo[] opponentMethods=opponent.GetType().GetMethods(BindingFlags.DeclaredOnly|
@@ -309,7 +309,7 @@ public class GameScript : MonoBehaviour
 
     public void dealDamage(Character target,float damage){
         target.decreaseHealth(damage);
-        updateHUD();
+        updateHUD();    
         if(target==player){
             StartCoroutine(shakeObject(playerObject,0.2f,1f));
             StartCoroutine(shakeObject(playerHealthTMPObject,0.1f,1f));
@@ -342,5 +342,33 @@ public class GameScript : MonoBehaviour
     public void endTurn(){
         player.endTurn();
         opponent.endTurn();
+    }
+
+    public void resetGame(){
+        playerLoaded=false;
+        opponentLoaded=false;
+        player=new Player("Player",
+                          100f,
+                          15f,
+                          45f,
+                          60f);
+
+        opponent=new Opponent("Opponent",
+                              100f,
+                              15f,
+                              45f,
+                              60f);
+
+        player.setOpponent(opponent);
+        opponent.setPlayer(player);
+
+        opponentChosen=false;
+        playerChosen=false;
+
+        positionSprites();
+        updateHUD();
+
+        playerLoaded=true;
+        opponentLoaded=true;
     }
 }

@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class InteractionHandler
 {
-    float playerSpeed;
-    float opponentSpeed;
+    Player player;
+    Opponent opponent;
 
     GameAction playerGameAction;
     GameAction opponentGameAction;
@@ -17,12 +17,12 @@ public class InteractionHandler
 
     bool playerFirst;
     
-    public void runInteractions(GameAction playerGameAction,GameAction opponentGameAction,float playerSpeed,float opponentSpeed){
+    public void runInteractions(GameAction playerGameAction,GameAction opponentGameAction,Player player,Opponent opponent){
         this.playerGameAction=playerGameAction;
         this.opponentGameAction=opponentGameAction;
 
-        this.playerSpeed=playerSpeed;
-        this.opponentSpeed=opponentSpeed;
+        this.player=player;
+        this.opponent=opponent;
 
         playerFirst=isPlayerFirst();
 
@@ -62,9 +62,9 @@ public class InteractionHandler
             float opponentGameActionSpeed;
 
             if(playerGameAction is Attack){playerGameActionSpeed=((Attack)playerGameAction).getSpeed();}
-            else{playerGameActionSpeed=playerSpeed;}
+            else{playerGameActionSpeed=player.getSpeed();}
             if(opponentGameAction is Attack){opponentGameActionSpeed=((Attack)opponentGameAction).getSpeed();}
-            else{opponentGameActionSpeed=opponentSpeed;}
+            else{opponentGameActionSpeed=opponent.getSpeed();}
 
             if(playerGameActionSpeed>opponentGameActionSpeed){return true;}
             else if(playerGameActionSpeed<opponentGameActionSpeed){return false;}

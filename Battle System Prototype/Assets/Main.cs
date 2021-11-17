@@ -50,12 +50,28 @@ public class Main : MonoBehaviour
 
         enabled=true;
     }
+    
+    void resetGame(){
+        enabled=false;
+        Terminal.Buffer.Clear();
+        gameScript.resetGame();
+
+        Player player=gameScript.getPlayer();
+        Opponent opponent=gameScript.getOpponent();
+
+        gameScript.getPlayer().setOpponent(opponent);
+        gameScript.getOpponent().setPlayer(player);
+
+        loopDone=true;
+        enabled=true;
+    }
 
     void Update(){
-        if(!gameScript.isGameOver()&&loopDone){
+        if(gameScript.getCharactersLoaded()&&!gameScript.isGameOver()&&loopDone){
             StopAllCoroutines();
             Player player=gameScript.getPlayer();
             Opponent opponent=gameScript.getOpponent();
+
             if(!gameScript.getOpponentChosen()){
                 opponentGameActions=gameScript.getOpponentGameActions();
                 gameScript.setOpponentChosen(true);
@@ -70,7 +86,7 @@ public class Main : MonoBehaviour
                 gameScript.endTurn();
             }
         }else if(gameScript.isGameOver()){
-            Debug.Log("Game Over yay");
+            resetGame();
         }
     }
 
@@ -80,14 +96,14 @@ public class Main : MonoBehaviour
             if(!gameScript.isGameOver()){
                 if(i>playerGameActions.Count-1){
                     //Only perform Opponent Game Actions
-                    interactionHandler.runInteractions(playerGameActions[0],opponentGameActions[i],player.getSpeed(),opponent.getSpeed());
+                    interactionHandler.runInteractions(playerGameActions[0],opponentGameActions[i],player,opponent);
                     yield return StartCoroutine(playInteractionAfterDelay(0.5f,interactionHandler.getOpponentInteraction(),opponent));
                 }else if(i>opponentGameActions.Count-1){
                     //Only perform Player Game Actions
-                    interactionHandler.runInteractions(playerGameActions[i],opponentGameActions[0],player.getSpeed(),opponent.getSpeed());
+                    interactionHandler.runInteractions(playerGameActions[i],opponentGameActions[0],player,opponent);
                     yield return StartCoroutine(playInteractionAfterDelay(0.5f,interactionHandler.getPlayerInteraction(),player));
                 }else{
-                    interactionHandler.runInteractions(playerGameActions[i],opponentGameActions[i],player.getSpeed(),opponent.getSpeed());
+                    interactionHandler.runInteractions(playerGameActions[i],opponentGameActions[i],player,opponent);
                     Interaction playerInteraction=interactionHandler.getPlayerInteraction();
                     Interaction opponentInteraction=interactionHandler.getOpponentInteraction();
                     if(interactionHandler.getPlayerFirst()){
