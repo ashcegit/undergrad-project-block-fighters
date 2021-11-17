@@ -43,7 +43,7 @@ namespace CommandTerminal
         float openTarget;
         string commandText;
         string cachedCommandText;
-        Vector2 scrollPosition;
+        static Vector2 scrollPosition;
         GUIStyle window_style;
         GUIStyle labelStyle;
         GUIStyle input_style;
@@ -70,6 +70,7 @@ namespace CommandTerminal
 
         public static void log(TerminalLogType type, string format, params object[] message) {
             Buffer.handleLog(string.Format(format, message), type);
+            scrollPosition.y=int.MaxValue;
         }
 
         public void setState(TerminalState newState) {
@@ -197,7 +198,6 @@ namespace CommandTerminal
 
         void drawConsole(int Window2D) {
             GUILayout.BeginVertical();
-
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, false, GUIStyle.none, GUIStyle.none);
             GUILayout.FlexibleSpace();
             drawLogs();
