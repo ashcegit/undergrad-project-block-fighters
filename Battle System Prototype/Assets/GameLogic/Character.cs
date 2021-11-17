@@ -79,10 +79,10 @@ public class Character
     }
     public float getDefence(){
         float tempDefence=baseDefence;
-            foreach(AttributeModifier attributeModifier in defenceModifiers){
-                tempDefence*=attributeModifier.getMultiplier();
-            }
-        
+        foreach(AttributeModifier attributeModifier in defenceModifiers){
+            tempDefence*=attributeModifier.getMultiplier();
+        }
+        if(tempDefence>100f){return 100f;}
         return tempDefence;
     }
     public float getSpeed(){
