@@ -55,12 +55,7 @@ public class Main : MonoBehaviour
         enabled=false;
         Terminal.Buffer.Clear();
         gameScript.resetGame();
-
-        Player player=gameScript.getPlayer();
-        Opponent opponent=gameScript.getOpponent();
-
-        gameScript.getPlayer().setOpponent(opponent);
-        gameScript.getOpponent().setPlayer(player);
+        terminalScript.initShell(gameScript.getPlayer(),gameScript.getOpponent(),gameScript);
 
         loopDone=true;
         enabled=true;
@@ -96,17 +91,17 @@ public class Main : MonoBehaviour
             if(!gameScript.isGameOver()){
                 if(i>playerGameActions.Count-1){
                     //Only perform Opponent Game Actions
-                    interactionHandler.runInteractions(playerGameActions[0],opponentGameActions[i],player,opponent);
+                    gameScript.initInteractions(playerGameActions[0],opponentGameActions[i]);
                     yield return StartCoroutine(playInteractionAfterDelay(0.5f,interactionHandler.getOpponentInteraction(),opponent));
                 }else if(i>opponentGameActions.Count-1){
                     //Only perform Player Game Actions
-                    interactionHandler.runInteractions(playerGameActions[i],opponentGameActions[0],player,opponent);
+                    gameScript.initInteractions(playerGameActions[i],opponentGameActions[0]);
                     yield return StartCoroutine(playInteractionAfterDelay(0.5f,interactionHandler.getPlayerInteraction(),player));
                 }else{
-                    interactionHandler.runInteractions(playerGameActions[i],opponentGameActions[i],player,opponent);
-                    Interaction playerInteraction=interactionHandler.getPlayerInteraction();
-                    Interaction opponentInteraction=interactionHandler.getOpponentInteraction();
-                    if(interactionHandler.getPlayerFirst()){
+                    gameScript.initInteractions(playerGameActions[i],opponentGameActions[i]);
+                    Interaction playerInteraction=gameScript.getPlayerInteraction();
+                    Interaction opponentInteraction=gameScript.getOpponentInteraction();
+                    if(gameScript.getPlayerFirst()){
                         yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
                         if(!gameScript.isGameOver()){
                             yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));

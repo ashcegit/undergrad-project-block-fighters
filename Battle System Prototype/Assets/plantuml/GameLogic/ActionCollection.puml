@@ -1,0 +1,8 @@
+@startuml
+class ActionCollection <<static>> {
+    + {static} punch(target:Character, instigator:Character) : Attack
+    + {static} kick(target:Character, instigator:Character) : Attack
+    + {static} guard(target:Character) : StatusEffect
+    + {static} healingMagic(target:Character) : Heal
+}
+@enduml

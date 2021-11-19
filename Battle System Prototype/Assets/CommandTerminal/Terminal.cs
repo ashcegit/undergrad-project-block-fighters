@@ -103,6 +103,8 @@ namespace CommandTerminal
         }
 
         public void initShell(Player player,Opponent opponent,GameScript gameScript){
+            Shell = new CommandShell();
+            Autocomplete = new CommandAutocomplete();
             this.gameScript=gameScript;
             Shell.registerPlayer(player);
             Shell.registerOpponent(opponent);

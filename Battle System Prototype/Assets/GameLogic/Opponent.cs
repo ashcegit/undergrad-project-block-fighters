@@ -19,9 +19,9 @@ public class Opponent:Character
 
     public List<GameAction> punch_and_kick(){
         List<GameAction> gameActions=new List<GameAction>();
-        gameActions.Add(ActionCollection.punch(getPlayer(),this));
-        gameActions.Add(ActionCollection.kick(getPlayer(),this));
-        gameActions.Add(ActionCollection.punch(getPlayer(),this));
+        gameActions.Add(ActionCollection.punch(player,this));
+        gameActions.Add(ActionCollection.kick(player,this));
+        gameActions.Add(ActionCollection.punch(player,this));
         return gameActions;
     }
 

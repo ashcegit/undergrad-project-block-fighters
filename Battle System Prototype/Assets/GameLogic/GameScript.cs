@@ -66,6 +66,7 @@ public class GameScript : MonoBehaviour
     private bool opponentWon;
 
     private Vector2 resolution;
+    private InteractionHandler interactionHandler;
 
     public void initGameScript(){
         enabled=false;
@@ -76,7 +77,7 @@ public class GameScript : MonoBehaviour
         playerSpriteRenderer=playerObject.AddComponent<SpriteRenderer>();
         playerSpriteRenderer.sprite=Resources.Load<Sprite>("GameSprites/stickman");
 
-        player=new Player("Player",
+        player=new Player("Player1",
                           100f,
                           15f,
                           45f,
@@ -155,6 +156,8 @@ public class GameScript : MonoBehaviour
 
         player.setOpponent(opponent);
         opponent.setPlayer(player);
+
+        interactionHandler=new InteractionHandler();
 
         positionSprites();
         updateHUD();
@@ -307,6 +310,18 @@ public class GameScript : MonoBehaviour
         positionSprites();
     }
 
+    public void initInteractions(GameAction playerGameAction,GameAction opponentGameAction){
+        interactionHandler.initnteractions(playerGameAction,
+                                            opponentGameAction,
+                                            player,
+                                            opponent);
+    }
+
+    public Interaction getPlayerInteraction(){return interactionHandler.getPlayerInteraction();}
+    public Interaction getOpponentInteraction(){return interactionHandler.getOpponentInteraction();}
+
+    public bool getPlayerFirst(){return interactionHandler.getPlayerFirst();}
+
     public void dealDamage(Character target,float damage){
         target.decreaseHealth(damage);
         updateHUD();    
@@ -347,13 +362,14 @@ public class GameScript : MonoBehaviour
     public void resetGame(){
         playerLoaded=false;
         opponentLoaded=false;
-        player=new Player("Player",
+        
+        player=new Player("Player2",
                           100f,
                           15f,
                           45f,
                           60f);
 
-        opponent=new Opponent("Opponent",
+        opponent=new Opponent("Opponent2",
                               100f,
                               15f,
                               45f,

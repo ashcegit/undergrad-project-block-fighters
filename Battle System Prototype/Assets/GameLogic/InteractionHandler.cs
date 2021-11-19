@@ -17,7 +17,7 @@ public class InteractionHandler
 
     bool playerFirst;
     
-    public void runInteractions(GameAction playerGameAction,GameAction opponentGameAction,Player player,Opponent opponent){
+    public void initnteractions(GameAction playerGameAction,GameAction opponentGameAction,Player player,Opponent opponent){
         this.playerGameAction=playerGameAction;
         this.opponentGameAction=opponentGameAction;
 

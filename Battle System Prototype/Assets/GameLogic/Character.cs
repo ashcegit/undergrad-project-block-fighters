@@ -54,7 +54,7 @@ public class Character
     public float getBaseDefence(){return baseDefence;}
     public float getBaseSpeed(){return baseSpeed;}
     public Opponent getOpponent(){return opponent;}
-    public Player getPlayer(){return player;}
+    public Player getPlayer(){return player;}    
     public List<AttributeModifier> getHealthModifiers(){return healthModifiers;}
     public List<AttributeModifier> getAttackModifiers(){return attackModifiers;}
     public List<AttributeModifier> getDefenceModifiers(){return defenceModifiers;}
