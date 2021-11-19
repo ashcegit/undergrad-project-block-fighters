@@ -91,17 +91,16 @@ public class Main : MonoBehaviour
             if(!gameScript.isGameOver()){
                 if(i>playerGameActions.Count-1){
                     //Only perform Opponent Game Actions
-                    gameScript.initInteractions(playerGameActions[0],opponentGameActions[i]);
-                    yield return StartCoroutine(playInteractionAfterDelay(0.5f,interactionHandler.getOpponentInteraction(),opponent));
+                    Interaction opponentInteraction=gameScript.getInteraction(opponentGameActions[i]);
+                    yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
                 }else if(i>opponentGameActions.Count-1){
                     //Only perform Player Game Actions
-                    gameScript.initInteractions(playerGameActions[i],opponentGameActions[0]);
-                    yield return StartCoroutine(playInteractionAfterDelay(0.5f,interactionHandler.getPlayerInteraction(),player));
+                    Interaction playerInteraction=gameScript.getInteraction(playerGameActions[i]);
+                    yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
                 }else{
-                    gameScript.initInteractions(playerGameActions[i],opponentGameActions[i]);
-                    Interaction playerInteraction=gameScript.getPlayerInteraction();
-                    Interaction opponentInteraction=gameScript.getOpponentInteraction();
-                    if(gameScript.getPlayerFirst()){
+                    Interaction playerInteraction=gameScript.getInteraction(playerGameActions[i]);
+                    Interaction opponentInteraction=gameScript.getInteraction(opponentGameActions[i]);
+                    if(gameScript.getPlayerFirst(playerGameActions[i],opponentGameActions[i])){
                         yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
                         if(!gameScript.isGameOver()){
                             yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));

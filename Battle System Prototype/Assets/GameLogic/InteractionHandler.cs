@@ -5,66 +5,38 @@ using UnityEngine;
 //takes game actions and outputs interactions
 
 public class InteractionHandler
-{
-    Player player;
-    Opponent opponent;
+{    
+    public Interaction getInteraction(GameAction gameAction){
+        Interaction interaction=null;
 
-    GameAction playerGameAction;
-    GameAction opponentGameAction;
-
-    Interaction playerInteraction;
-    Interaction opponentInteraction;
-
-    bool playerFirst;
-    
-    public void initnteractions(GameAction playerGameAction,GameAction opponentGameAction,Player player,Opponent opponent){
-        this.playerGameAction=playerGameAction;
-        this.opponentGameAction=opponentGameAction;
-
-        this.player=player;
-        this.opponent=opponent;
-
-        playerFirst=isPlayerFirst();
-
-        switch(playerGameAction){
+        switch(gameAction){
             case Attack attack:
-                playerInteraction=(Interaction) new AttackInteraction(attack.getTarget(),attack);
+                interaction=(Interaction) new AttackInteraction(attack.getTarget(),attack);
                 break;
             case StatusEffect statusEffect:
-                playerInteraction=(Interaction) new StatusEffectInteraction(statusEffect.getTarget(),statusEffect);
+                interaction=(Interaction) new StatusEffectInteraction(statusEffect.getTarget(),statusEffect);
                 break;
             case Heal heal:
-                playerInteraction=(Interaction) new HealInteraction(heal.getTarget(),heal);
+                interaction=(Interaction) new HealInteraction(heal.getTarget(),heal);
                 break;
             default:
                 break;  
         }
 
-        switch(opponentGameAction){
-            case Attack attack:
-                opponentInteraction=(Interaction) new AttackInteraction(attack.getTarget(),attack);
-                break;
-            case StatusEffect statusEffect:
-                opponentInteraction=(Interaction) new StatusEffectInteraction(statusEffect.getTarget(),statusEffect);
-                break;
-            case Heal heal:
-                opponentInteraction=(Interaction) new HealInteraction(heal.getTarget(),heal);
-                break;
-            default:
-                break;  
-        }
+        return interaction;
     }
 
-    public bool isPlayerFirst(){
-        if(!attackTypeTieCheck()){return playerAttackTypeAdvantage();}
-        else{
+    public bool getPlayerFirst(GameAction playerGameAction,GameAction opponentGameAction,float playerSpeed,float opponentSpeed){
+        if(!attackTypeTieCheck(playerGameAction,opponentGameAction)){
+            return playerAttackTypeAdvantage(playerGameAction,opponentGameAction);
+        }else{
             float playerGameActionSpeed;
             float opponentGameActionSpeed;
 
             if(playerGameAction is Attack){playerGameActionSpeed=((Attack)playerGameAction).getSpeed();}
-            else{playerGameActionSpeed=player.getSpeed();}
+            else{playerGameActionSpeed=playerSpeed;}
             if(opponentGameAction is Attack){opponentGameActionSpeed=((Attack)opponentGameAction).getSpeed();}
-            else{opponentGameActionSpeed=opponent.getSpeed();}
+            else{opponentGameActionSpeed=opponentSpeed;}
 
             if(playerGameActionSpeed>opponentGameActionSpeed){return true;}
             else if(playerGameActionSpeed<opponentGameActionSpeed){return false;}
@@ -75,11 +47,11 @@ public class InteractionHandler
         }
     }
 
-    public bool attackTypeTieCheck(){
+    public bool attackTypeTieCheck(GameAction playerGameAction,GameAction opponentGameAction){
         return playerGameAction.getActionType()==opponentGameAction.getActionType();
     }
 
-    public bool playerAttackTypeAdvantage(){
+    public bool playerAttackTypeAdvantage(GameAction playerGameAction,GameAction opponentGameAction){
         if(playerGameAction.getActionType()==ActionType.Physical){
             if(opponentGameAction.getActionType()==ActionType.Magic){return true;}
             else{return false;}
@@ -91,9 +63,4 @@ public class InteractionHandler
             else{return false;}
         }
     }
-
-    public bool getPlayerFirst(){return playerFirst;}
-
-    public Interaction getPlayerInteraction(){return playerInteraction;}
-    public Interaction getOpponentInteraction(){return opponentInteraction;}
 }

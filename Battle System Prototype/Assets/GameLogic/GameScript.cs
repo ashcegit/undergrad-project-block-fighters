@@ -310,17 +310,13 @@ public class GameScript : MonoBehaviour
         positionSprites();
     }
 
-    public void initInteractions(GameAction playerGameAction,GameAction opponentGameAction){
-        interactionHandler.initnteractions(playerGameAction,
-                                            opponentGameAction,
-                                            player,
-                                            opponent);
+    public Interaction getInteraction(GameAction gameAction){
+        return interactionHandler.getInteraction(gameAction);
     }
 
-    public Interaction getPlayerInteraction(){return interactionHandler.getPlayerInteraction();}
-    public Interaction getOpponentInteraction(){return interactionHandler.getOpponentInteraction();}
-
-    public bool getPlayerFirst(){return interactionHandler.getPlayerFirst();}
+    public bool getPlayerFirst(GameAction playerGameAction,GameAction opponentGameAction){
+        return interactionHandler.getPlayerFirst(playerGameAction,opponentGameAction,player.getSpeed(),opponent.getSpeed());
+    }
 
     public void dealDamage(Character target,float damage){
         target.decreaseHealth(damage);
