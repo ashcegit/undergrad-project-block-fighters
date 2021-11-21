@@ -16,13 +16,10 @@ public class AttackInteraction:Interaction
         this.defenderDefence=target.getDefence();
         this.defenderSpeed=target.getSpeed();
         damage=attack.getDamage()*(100-defenderDefence)/100;
-    }
-
-    public new InteractionEnum getResult(){
-        if(Random.Range(0,attack.getSpeed())<defenderSpeed){
-            return InteractionEnum.Hit;
+        if(Random.Range(0.0f,attack.getSpeed())<defenderSpeed){
+            result=InteractionEnum.Hit;
         }else{
-            return InteractionEnum.Miss;
+            result=InteractionEnum.Miss;
         }
     }
     public float getDamage(){return damage;}

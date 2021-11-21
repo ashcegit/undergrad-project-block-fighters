@@ -71,7 +71,7 @@ public class Main : MonoBehaviour
                 opponentGameActions=gameScript.getOpponentGameActions();
                 gameScript.setOpponentChosen(true);
                 terminalScript.setState(TerminalState.Write);
-            }else if(gameScript.getPlayerChosen()&&gameScript.getOpponentChosen()){
+            }else if(gameScript.getPlayerChosen()){
                 loopDone=false;
                 terminalScript.setState(TerminalState.ReadOnly);
                 playerGameActions=gameScript.getPlayerGameActions();

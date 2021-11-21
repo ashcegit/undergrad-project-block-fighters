@@ -1,0 +1,6 @@
+@startuml
+!include .\\GameLogic\Character.puml
+!include .\\GameLogic\GameScript.puml
+!include .\\GameLogic\Opponent.puml
+!include .\\GameLogic\Player.puml
+@enduml

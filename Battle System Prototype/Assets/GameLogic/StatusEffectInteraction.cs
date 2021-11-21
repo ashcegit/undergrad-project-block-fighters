@@ -9,13 +9,11 @@ public class StatusEffectInteraction:Interaction
 
     public StatusEffectInteraction(Character target,StatusEffect statusEffect):base(target){
         this.statusEffect=statusEffect;
+        if(Random.Range(0.0f,1.0f)<=statusEffect.getChance()){result=InteractionEnum.Hit;}
+        else{result=InteractionEnum.Miss;}
     }
 
     public StatusEffect getStatusEffect(){return statusEffect;}
-    public new InteractionEnum getResult(){
-        if(Random.Range(0,1)<statusEffect.getChance()){return InteractionEnum.Hit;}
-        else{return InteractionEnum.Miss;}
-    }
     public AttributeModifier getAttributeModifier(){
         return new AttributeModifier(statusEffect.getTurns(),
                                      statusEffect.getAttribute(),
