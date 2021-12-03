@@ -1,0 +1,21 @@
+v2.0
+- Major Upgrade
+- Full redesign and code
+
+v2.1
+# Needed action to update from v2.0: Remove the "Scripts/EngineCore/Core" folder before importing the new version
+
+- moved blocks LayoutUpdate from Update to LateUpdate to avoid glitch on resizing 
+- "Type" property of the I_BE2_Block made settable to fix and facilitate build of custom blocks
+- detection of spot on drag of Block moved to coroutine and performed on end of frame to avoid glith on detecting new spot
+- blocksStack array of the ExecutionManager made public
+- BE2_EventsManager refactored to enable event types that pass I_BE2_Block when triggered
+- previous BE2EtenvTypes misspell fixed to BE2EventTypes
+- added new event types: OnBlocksStackArrayUpdate, OnStackExecutionStart, OnStackExecutionEnd
+- Loops are now executed "in frame" instead of mandatorily "in update". Faster loop execution and nested loops without delay
+- BE2_Text class added to enable the use of either Text or Text Mesh Pro (TMP) component to display text in the Blocks.
+- bugfix: fixed detection of spots between child blocks before first block is dropped 
+- bugfix: fixed destroying operations placed as inputs causing error 
+- bugfix: fixed assigned wrong Type when building Loop Blocks
+- bugfix: fixed variable blocks not updating dropdown when new variables were crated
+

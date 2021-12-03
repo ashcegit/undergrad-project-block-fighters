@@ -137,7 +137,6 @@ namespace CommandTerminal
             setupLabels();
 
             terminalLoaded=true;
-            setState(TerminalState.Write);
         }
 
         public bool getTerminalLoaded(){return terminalLoaded;}
@@ -283,7 +282,7 @@ namespace CommandTerminal
                 return; // Already at target
             }
 
-            window = new Rect(Screen.width/2, 0, Screen.width/2,Screen.height);
+            window = new Rect(Screen.width/2, 0, Screen.width/2,currentOpenT);
         }
 
         void EnterCommand() {

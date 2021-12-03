@@ -71,7 +71,7 @@ public class GameScript : MonoBehaviour
     public void initGameScript(){
         enabled=false;
         playerObject=new GameObject();
-        playerObject.transform.parent=GameObject.FindGameObjectWithTag("GameController").transform;
+        playerObject.transform.SetParent(GameObject.FindGameObjectWithTag("GameController").transform);
         playerObject.name="Player";
         playerObject.tag="Player";
         playerSpriteRenderer=playerObject.AddComponent<SpriteRenderer>();
@@ -85,10 +85,11 @@ public class GameScript : MonoBehaviour
         playerLoaded=true;
         
         playerHUDObject=new GameObject();
-        playerHUDObject.transform.parent=GameObject.FindGameObjectWithTag("GameController").transform;
+        playerHUDObject.transform.SetParent(GameObject.FindGameObjectWithTag("GameController").transform);
         playerHUDObject.name="Player HUD";
         playerHUDSpriteRenderer=playerHUDObject.AddComponent<SpriteRenderer>();
         playerHUDSpriteRenderer.sprite=Resources.Load<Sprite>("GameSprites/HUDbox");
+        
 
         playerNameTMPObject=new GameObject();
         playerNameTMPObject.name="Player Name TMP Object";
@@ -243,6 +244,20 @@ public class GameScript : MonoBehaviour
             resolution.y=Screen.height;
             positionSprites();
             updateHUD();
+        }
+    }
+
+    void OnEnable(){
+        SpriteRenderer[] spriteRenderers=(SpriteRenderer[])GetComponentsInChildren<SpriteRenderer>();
+        foreach(SpriteRenderer spriteRenderer in spriteRenderers){
+            spriteRenderer.enabled=true;
+        }
+    }
+
+    void OnDisable(){
+        SpriteRenderer[] spriteRenderers=(SpriteRenderer[])GetComponentsInChildren<SpriteRenderer>();
+        foreach(SpriteRenderer spriteRenderer in spriteRenderers){
+            spriteRenderer.enabled=false;
         }
     }
 
