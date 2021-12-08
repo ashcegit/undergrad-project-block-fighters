@@ -4,9 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Main
-  - Terminal
+  - BlockSelection
+  - BlockEnvironment
   - BlockProgrammer
+  - BlockCategories
+  - Terminal
+  - Main
+  - ClearButton
+  - GhostBlock
   layers:
   - Default
   - TransparentFX

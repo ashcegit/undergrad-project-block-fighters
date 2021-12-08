@@ -8,7 +8,7 @@ using CommandTerminal;
 public class Main : MonoBehaviour
 {
     private GameObject blockProgrammer;
-    private BlockScript blockScript;
+    private BlockProgrammerScript blockProgrammerScript;
 
     private GameObject game;
     private GameScript gameScript;
@@ -28,7 +28,7 @@ public class Main : MonoBehaviour
 
         StopAllCoroutines();
         blockProgrammer=GameObject.FindGameObjectWithTag("BlockProgrammer");
-        blockScript=(BlockScript)blockProgrammer.GetComponent<BlockScript>();
+        blockProgrammerScript=(BlockProgrammerScript)blockProgrammer.GetComponent<BlockProgrammerScript>();
 
         game=new GameObject();
         game.transform.parent=GameObject.FindGameObjectWithTag("Main").transform;
@@ -53,7 +53,7 @@ public class Main : MonoBehaviour
         terminalScript.initShell(player,opponent,gameScript);
 
         loopDone=true;
-        terminalScript.setState(TerminalState.Close);
+        terminalScript.setState(TerminalState.ReadOnly);
         gameScript.enabled=false;
         //blockScript.enabled=false;
         //enabled=true;
