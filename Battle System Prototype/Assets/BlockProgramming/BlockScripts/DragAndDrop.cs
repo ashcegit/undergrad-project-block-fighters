@@ -7,31 +7,33 @@ using UnityEngine.UI;
 
 public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPointerUpHandler
 {
+    BlockProgrammerScript blockProgrammerScript;
     PointerInSelectionArea pointerInSelectionArea;
     GameObject currentlyDraggedObject;
     Raycaster raycaster;
+    BlockSpace nearestBlockSpace;
     GameObject ghostBlock;
-    Vector2 pointerPosition;
-    Vector2 lastPosition;
+    Vector2 offset;
     GameObject environment;
     ScrollRect selectionScrollRect;
-    float snapDistance;
+    const float SNAPDISTANCE=30f;
     bool dragging;
-    Vector2 offset;
+    bool ghostBlockActive;
 
     void Awake(){
+        blockProgrammerScript=GameObject.FindGameObjectWithTag("BlockProgrammer").GetComponent<BlockProgrammerScript>();
         pointerInSelectionArea=GameObject.FindGameObjectWithTag("BlockSelection").GetComponent<PointerInSelectionArea>();
         selectionScrollRect=GameObject.FindGameObjectWithTag("BlockSelection").GetComponentInParent<ScrollRect>();
         raycaster=GetComponent<Raycaster>();
         ghostBlock=GameObject.FindGameObjectWithTag("GhostBlock");
         environment=GameObject.FindGameObjectWithTag("BlockEnvironment");
-        snapDistance=30;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        ghostBlock.SetActive(false);
+        ghostBlock.transform.SetParent(null);
     }
 
     public void OnPointerDown(PointerEventData data){
@@ -45,41 +47,59 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
             selectionScrollRect.enabled=false;
             currentlyDraggedObject=Instantiate(draggedExisingSelectionBlock.GetComponent<SelectionBlock>().prefabBlock);
             currentlyDraggedObject.transform.SetParent(environment.transform);
+            blockProgrammerScript.addBlockObject(currentlyDraggedObject);
             offset=(Vector2)data.position;
         }
     }
 
     public void OnDrag(PointerEventData data){
         if(currentlyDraggedObject!=null){
-            Debug.Log("Dragging");
             Vector2 cursorPosition = (Vector2)data.position;
-            currentlyDraggedObject.transform.position = cursorPosition;
+            currentlyDraggedObject.GetComponent<Block>().setPosition(cursorPosition);
+            currentlyDraggedObject.GetComponent<Block>().setBlockSpacesActive(false);
 
-            //add ghostBlock stuff;
+            if(currentlyDraggedObject.GetComponent<Block>().getBlockType()!=BlockType.Method){
+                nearestBlockSpace=raycaster.getNearestBlockSpaceToPosition(data.position,SNAPDISTANCE);
+                if(nearestBlockSpace.getParentBody()!=null){
+                    addGhostBlockToBlockAtSiblingIndex(nearestBlockSpace.getParentBody(),nearestBlockSpace.getIndex());
+                }else{
+                    removeGhostBlock();
+                }
+            }
         }
     }
 
     public void OnPointerUp(PointerEventData data){
-        ghostBlock.transform.SetParent(null);
-        ghostBlock.SetActive(false);
         if(currentlyDraggedObject!=null){
             selectionScrollRect.enabled=true;
             if(pointerInSelectionArea.getPointerIn()){
-                Destroy(currentlyDraggedObject);
+                blockProgrammerScript.removeBlockObject(currentlyDraggedObject);
+            }else{
+                if(ghostBlockActive){
+                    nearestBlockSpace.getParentBody().GetComponent<Body>().insertBlock(currentlyDraggedObject,nearestBlockSpace.getIndex());
+                }
+                currentlyDraggedObject.GetComponent<Block>().updateBlockSpacePositions();
+                currentlyDraggedObject.GetComponent<Block>().setBlockSpacesActive(true);
             }
+            nearestBlockSpace=null;
             currentlyDraggedObject=null;
+            removeGhostBlock();
         }
     }
 
-    // public void addGhostBlockToBlock(GameObject blockObject){
-    //     ghostBlock.gameObject.SetActive(true);
-    //     ghostBlock.transform.SetParent(blockObject.transform);
+    public void addGhostBlockToBlockAtSiblingIndex(GameObject blockObject,int siblingIndex){
+        ghostBlockActive=true;
+        ghostBlock.SetActive(true);
+        ghostBlock.transform.SetParent(blockObject.transform);
+        ghostBlock.transform.SetSiblingIndex(siblingIndex);
+        Debug.Log((Vector2)blockObject.transform.position);
+        Debug.Log((Vector2)ghostBlock.transform.position);
 
-    // }
+    }
 
-    // public void removeGhostBlock(){
-    //     ghostBlock.gameObject.SetActive(false);
-    //     ghostBlock.transform.SetParent(GameObject.FindGameObjectWithTag("BlockEnvironment")
-    //                                                 .transform.parent.parent.parent.transform);
-    // }
+    public void removeGhostBlock(){
+        ghostBlockActive=false;
+        ghostBlock.SetActive(false);
+        ghostBlock.transform.SetParent(null);
+    }
 }

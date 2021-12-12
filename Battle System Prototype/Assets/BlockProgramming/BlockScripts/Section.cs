@@ -7,7 +7,7 @@ public class Section : MonoBehaviour
     Header header;
     Body body;
 
-    void OnAwake(){
+    void Awake(){
         header=transform.Find("Header").GetComponent<Header>();
         body=transform.Find("Body").GetComponent<Body>();
     }
@@ -26,4 +26,12 @@ public class Section : MonoBehaviour
 
     public Header getHeader(){return header;}
     public Body getBody(){return body;}
+
+    public void updateBlockSpacePositions(){
+        body.updateBlockSpacePositions();
+    }
+
+    public void blockSpacesActive(bool active){
+        body.blockSpacesActive(active);
+    }
 }

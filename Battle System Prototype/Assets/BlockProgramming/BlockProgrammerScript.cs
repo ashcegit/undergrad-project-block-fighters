@@ -8,12 +8,15 @@ public class BlockProgrammerScript : MonoBehaviour
     Raycaster raycaster;
     GameObject environment;
     GhostBlock ghostBlock;
-    List<GameObject> blockObjects;
-    List<Transform> availableSpaces;
     List<GameObject> methodBlockObjects;
+    List<GameObject> blockObjects;
+    List<BlockSpace> blockSpaces;
     int maxMethodBlocks;
 
     void Awake(){
+        methodBlockObjects=new List<GameObject>();
+        blockObjects=new List<GameObject>();
+        blockSpaces=new List<BlockSpace>();
         environment=GameObject.FindGameObjectWithTag("BlockEnvironment");
         maxMethodBlocks=4;
     }   
@@ -36,12 +39,30 @@ public class BlockProgrammerScript : MonoBehaviour
         
     }
 
-    public void addMethodBlock(GameObject methodBlockObject){
-        methodBlockObjects.Add(methodBlockObject);
+
+    public void addBlockObject(GameObject blockObject){
+        if(blockObject.GetComponent<Block>().getBlockType()==BlockType.Method){
+            methodBlockObjects.Add(blockObject);
+        }else{
+            blockObjects.Add(blockObject);
+        }
     }
 
-    public void removeMethodBlock(GameObject methodBlockObject){
-        methodBlockObjects.Remove(methodBlockObject);
+    public void removeBlockObject(GameObject blockObject){
+        if(blockObject.GetComponent<Block>().getBlockType()==BlockType.Method){
+            methodBlockObjects.Remove(blockObject);
+        }else{
+            blockObjects.Remove(blockObject);
+        }
+        Destroy(blockObject);
+    }
+
+    public void addBlockSpace(BlockSpace blockSpace){
+        blockSpaces.Add(blockSpace);
+    }
+
+    public void removeBlockSpace(BlockSpace blockSpace){
+        blockSpaces.Remove(blockSpace);
     }
 
     public List<GameObject> getMethodBlockObjects(){return methodBlockObjects;}
@@ -54,5 +75,5 @@ public class BlockProgrammerScript : MonoBehaviour
 
     public bool moreMethodBlocksAllowed(){return getMethodBlockObjectLength()<maxMethodBlocks;}
 
-    
+    public List<BlockSpace> getBlockSpaces(){return blockSpaces;}    
 }

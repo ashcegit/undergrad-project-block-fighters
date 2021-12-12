@@ -8,9 +8,12 @@ public class Raycaster : MonoBehaviour
 {
 
     BlockProgrammerScript blockProgrammerScript;
-
     public GraphicRaycaster[] raycasters;
     public EventSystem eventSystem;
+
+    void Awake(){
+        blockProgrammerScript=GameObject.FindGameObjectWithTag("BlockProgrammer").GetComponent<BlockProgrammerScript>();
+    }
 
     public GameObject getObjectAtPosition(Vector2 position){
         PointerEventData pointerEventData=new PointerEventData(eventSystem);
@@ -55,5 +58,20 @@ public class Raycaster : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public BlockSpace getNearestBlockSpaceToPosition(Vector2 position,float maxDistance){
+        List<BlockSpace> blockSpaces=blockProgrammerScript.getBlockSpaces();
+        BlockSpace nearestBlockSpace=new BlockSpace();
+        float minDistance=Mathf.Infinity;
+        int blockSpaceCount=blockSpaces.Count;
+        foreach(BlockSpace blockSpace in blockSpaces){
+            float distance=Vector2.Distance(position,blockSpace.getPosition());
+            if(distance<=maxDistance&&distance<minDistance&&blockSpace.getActive()){
+                nearestBlockSpace=blockSpace;
+                minDistance=distance;
+            }
+        }
+        return nearestBlockSpace;
     }
 }

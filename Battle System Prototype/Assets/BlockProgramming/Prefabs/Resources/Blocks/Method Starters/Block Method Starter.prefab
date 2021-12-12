@@ -635,6 +635,7 @@ GameObject:
   - component: {fileID: 2405106079856364617}
   - component: {fileID: 7788465449541013276}
   - component: {fileID: 1564586691535625077}
+  - component: {fileID: 900742970548356120}
   m_Layer: 5
   m_Name: OuterArea
   m_TagString: Untagged
@@ -699,6 +700,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 2
+--- !u!114 &900742970548356120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7832906351311661731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2c7ad26bfdced4da4ee3115f2c8a6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8810354784455523268
 GameObject:
   m_ObjectHideFlags: 0
