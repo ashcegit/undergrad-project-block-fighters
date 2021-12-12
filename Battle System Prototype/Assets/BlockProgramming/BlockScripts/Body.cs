@@ -22,7 +22,6 @@ public class Body : MonoBehaviour
                                                 .GetComponentInChildren<Header>().gameObject.transform.position);
         startingBlockSpace.setActive(false);
         startingBlockSpace.setIndex(0);
-        Debug.Log(startingBlockSpace.getPosition());
         blockSpaces.Add(startingBlockSpace);
         blockProgrammerScript.addBlockSpace(startingBlockSpace);
     }
@@ -33,32 +32,33 @@ public class Body : MonoBehaviour
         BlockSpace newBlockSpace=new BlockSpace();
         newBlockSpace.setParentBody(gameObject);
         newBlockSpace.setActive(true);
-        blockSpaces.Insert(index,newBlockSpace);
+        blockSpaces.Add(newBlockSpace);
         blockProgrammerScript.addBlockSpace(newBlockSpace);
         for(int i=index+1;i<blockSpaces.Count;i++){
             blockSpaces[i].setIndex(i);
         }
-        updateBlockSpacePositions();
     }
 
-    public void removeBlock(BlockSpace blockSpace){
-        int blockSpaceIndex=blockSpace.getIndex();
+    public void removeBlockSpaceByIndex(int index){
+        BlockSpace blockSpace=blockSpaces[index+1];
         blockSpaces.Remove(blockSpace);
         blockProgrammerScript.removeBlockSpace(blockSpace);
-        for(int i=blockSpaceIndex-1;i<blockSpaces.Count;i++){
+        for(int i=index+1;i<blockSpaces.Count;i++){
             blockSpaces[i].setIndex(i);
         }
     }
 
     public void updateBlockSpacePositions(){
+        Debug.Log("test");
         blockSpaces[0].setPosition((Vector2)GetComponentInParent<Section>().gameObject
                                             .GetComponentInChildren<Header>().gameObject.transform.position);
-        for(int i=1;i<blockSpaces.Count-1;i++){
+        for(int i=1;i<transform.childCount;i++){
             blockSpaces[i].setPosition((Vector2)transform.GetChild(i).transform.position);
         }
-        if(blockSpaces.Count>1){
-            blockSpaces[blockSpaces.Count-1].setPosition((Vector2)GetComponentInParent<Block>().gameObject
-                                                            .GetComponentInChildren<OuterArea>().gameObject.transform.position);
+        foreach(Transform child in transform){
+            if(child.GetComponent<Block>()!=null){
+                child.GetComponent<Block>().updateBlockSpacePositions();
+            }
         }
     }
 

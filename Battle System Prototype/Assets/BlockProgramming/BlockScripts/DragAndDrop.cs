@@ -16,7 +16,7 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
     Vector2 offset;
     GameObject environment;
     ScrollRect selectionScrollRect;
-    const float SNAPDISTANCE=30f;
+    const float SNAPDISTANCE=50f;
     bool dragging;
     bool ghostBlockActive;
 
@@ -46,8 +46,8 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
             selectionScrollRect.StopMovement();
             selectionScrollRect.enabled=false;
             currentlyDraggedObject=Instantiate(draggedExisingSelectionBlock.GetComponent<SelectionBlock>().prefabBlock);
-            currentlyDraggedObject.transform.SetParent(environment.transform);
             blockProgrammerScript.addBlockObject(currentlyDraggedObject);
+            currentlyDraggedObject.transform.SetParent(environment.transform);
             offset=(Vector2)data.position;
         }
     }
@@ -55,6 +55,12 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
     public void OnDrag(PointerEventData data){
         if(currentlyDraggedObject!=null){
             Vector2 cursorPosition = (Vector2)data.position;
+            if(currentlyDraggedObject.transform.parent.gameObject!=environment){
+                int currentlyDraggedSiblingIndex=currentlyDraggedObject.transform.GetSiblingIndex();
+                Body parentBody=currentlyDraggedObject.GetComponentInParent<Body>();
+                parentBody.removeBlockSpaceByIndex(currentlyDraggedSiblingIndex);
+            }
+            currentlyDraggedObject.transform.SetParent(environment.transform);
             currentlyDraggedObject.GetComponent<Block>().setPosition(cursorPosition);
             currentlyDraggedObject.GetComponent<Block>().setBlockSpacesActive(false);
 
@@ -76,9 +82,13 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                 blockProgrammerScript.removeBlockObject(currentlyDraggedObject);
             }else{
                 if(ghostBlockActive){
-                    nearestBlockSpace.getParentBody().GetComponent<Body>().insertBlock(currentlyDraggedObject,nearestBlockSpace.getIndex());
+                    // Debug.Log(nearestBlockSpace.getIndex());
+                    GameObject nearestBlockSpaceBody=nearestBlockSpace.getParentBody();
+                    nearestBlockSpaceBody.GetComponent<Body>().insertBlock(currentlyDraggedObject,nearestBlockSpace.getIndex());
+                    nearestBlockSpaceBody.GetComponentInParent<Block>().updateBlockSpacePositions();
+                }else{
+                    currentlyDraggedObject.GetComponent<Block>().updateBlockSpacePositions();
                 }
-                currentlyDraggedObject.GetComponent<Block>().updateBlockSpacePositions();
                 currentlyDraggedObject.GetComponent<Block>().setBlockSpacesActive(true);
             }
             nearestBlockSpace=null;
@@ -92,8 +102,8 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
         ghostBlock.SetActive(true);
         ghostBlock.transform.SetParent(blockObject.transform);
         ghostBlock.transform.SetSiblingIndex(siblingIndex);
-        Debug.Log((Vector2)blockObject.transform.position);
-        Debug.Log((Vector2)ghostBlock.transform.position);
+        // Debug.Log((Vector2)blockObject.transform.position);
+        // Debug.Log((Vector2)ghostBlock.transform.position);
 
     }
 
