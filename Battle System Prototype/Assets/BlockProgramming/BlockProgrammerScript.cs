@@ -57,6 +57,15 @@ public class BlockProgrammerScript : MonoBehaviour
         Destroy(blockObject);
     }
 
+    public void clearEnvironment(){
+        foreach(GameObject blockObject in blockObjects){
+            Destroy(blockObject);
+        }
+        foreach(GameObject methodBlockObject in methodBlockObjects){
+            Destroy(methodBlockObject);
+        }
+    }
+
     public void addBlockSpace(BlockSpace blockSpace){
         blockSpaces.Add(blockSpace);
     }
