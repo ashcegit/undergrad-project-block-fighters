@@ -7,6 +7,7 @@ public class Block : MonoBehaviour
     public BlockType blockType;
     List<Section> sections;
     BlockProgrammerScript blockProgrammerScript;
+    int pointer;
 
     public void Awake(){
         blockProgrammerScript=GameObject.FindGameObjectWithTag("BlockProgrammer").GetComponent<BlockProgrammerScript>();
@@ -47,6 +48,10 @@ public class Block : MonoBehaviour
         foreach(Section section in sections){
             section.blockSpacesActive(active);
         }
+    }
+
+    public void execute(){
+
     }
 
 }

@@ -43,7 +43,7 @@ public class Body : MonoBehaviour
         BlockSpace blockSpace=blockSpaces[index+1];
         blockSpaces.Remove(blockSpace);
         blockProgrammerScript.removeBlockSpace(blockSpace);
-        for(int i=index+1;i<blockSpaces.Count;i++){
+        for(int i=index;i<blockSpaces.Count;i++){
             blockSpaces[i].setIndex(i);
         }
     }

@@ -35,10 +35,6 @@ public class BlockProgrammerScript : MonoBehaviour
 
     }
 
-    void execute(){
-        
-    }
-
 
     public void addBlockObject(GameObject blockObject){
         if(blockObject.GetComponent<Block>().getBlockType()==BlockType.Method){
