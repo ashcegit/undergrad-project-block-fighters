@@ -4,8 +4,9 @@ using UnityEngine;
 
 public enum BlockType{
     Method,
-    Attack,
+    Action,
     Control,
     Operator,
-    Logic
+    Logic,
+    EndOfSection
 }

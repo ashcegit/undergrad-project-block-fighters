@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class GameScript : MonoBehaviour
 {
-    private Player player;
+    private Character player;
     private GameObject playerObject;
     private SpriteRenderer playerSpriteRenderer;
 
@@ -30,14 +30,14 @@ public class GameScript : MonoBehaviour
     private float playerMaxHealthTMPFontSize=0.5f;
     private Color32 playerMaxHealthTMPColour=new Color32(0,0,0,255);
 
-    private List<GameAction> playerGameActions;
+    private GameObject playerMethod;
     private bool playerLoaded;
     private bool playerChosen;
     private bool playerWon;
 
-
-    private Opponent opponent;
+    private Character opponent;
     private GameObject opponentObject;
+    private ComputerPlayer computerPlayer;
 
     private SpriteRenderer opponentSpriteRenderer;
     private GameObject opponentHUDObject;
@@ -60,7 +60,6 @@ public class GameScript : MonoBehaviour
     private float opponentMaxHealthTMPFontSize=0.5f;
     private Color32 opponentMaxHealthTMPColour=new Color32(0,0,0,255);
 
-    private List<GameAction> opponentGameActions;
     private bool opponentLoaded;
     private bool opponentChosen;
     private bool opponentWon;
@@ -77,11 +76,12 @@ public class GameScript : MonoBehaviour
         playerSpriteRenderer=playerObject.AddComponent<SpriteRenderer>();
         playerSpriteRenderer.sprite=Resources.Load<Sprite>("GameSprites/stickman");
 
-        player=new Player("Player1",
+        player=new Character("Player1",
                           100f,
                           15f,
                           45f,
-                          60f);
+                          60f,
+                          5);
         playerLoaded=true;
         
         playerHUDObject=new GameObject();
@@ -119,12 +119,14 @@ public class GameScript : MonoBehaviour
         opponentSpriteRenderer=opponentObject.AddComponent<SpriteRenderer>();
         opponentSpriteRenderer.sprite=Resources.Load<Sprite>("GameSprites/stickman");
 
-        opponent=new Opponent("Opponent1",
+        opponent=new Character("Opponent1",
                               100f,
                               15f,
                               45f,
-                              60f);
+                              60f,
+                              5);
         opponentLoaded=true;
+        computerPlayer=new ComputerPlayer();
 
         opponentHUDObject=new GameObject();
         opponentHUDObject.transform.parent=GameObject.FindGameObjectWithTag("GameController").transform;
@@ -154,10 +156,7 @@ public class GameScript : MonoBehaviour
         opponentMaxHealthTMPObject.transform.SetParent(opponentHealthTMPContainerObject.transform);
         opponentMaxHealthTMP=opponentMaxHealthTMPObject.AddComponent<TextMeshPro>();
         opponentMaxHealthTMP.alignment=TextAlignmentOptions.Center;
-
-        player.setOpponent(opponent);
-        opponent.setPlayer(player);
-
+        
         interactionHandler=new InteractionHandler();
 
         positionSprites();
@@ -261,8 +260,8 @@ public class GameScript : MonoBehaviour
         }
     }
 
-    public Player getPlayer(){return player;}
-    public Opponent getOpponent(){return opponent;}
+    public Character getPlayer(){return player;}
+    public Character getOpponent(){return opponent;}
 
     public void setPlayerLoaded(bool playerLoaded){this.playerLoaded=playerLoaded;}
     public bool getPlayerLoaded(){return playerLoaded;}
@@ -274,27 +273,17 @@ public class GameScript : MonoBehaviour
     public bool hasPlayerLost(){return player.getHealth()==0;}
     public bool hasOpponentLost(){return opponent.getHealth()==0;}
 
-    public void initOpponentGameActions(){
-        MethodInfo[] opponentMethods=opponent.GetType().GetMethods(BindingFlags.DeclaredOnly|
-                                                                   BindingFlags.Public|
-                                                                   BindingFlags.Instance);
-        MethodInfo opponentMethod=opponentMethods[UnityEngine.Random.Range(0,opponentMethods.Length)];
-        opponentGameActions=(List<GameAction>)opponentMethod.Invoke((Opponent)opponent,new object[]{});
-        setOpponentChosen(true);
+    public ComputerPlayer getComputerPlayer(){
+        return computerPlayer;
     }
 
-    public List<GameAction> getOpponentGameActions(){
-        initOpponentGameActions();
-        return opponentGameActions;
-    }
-
-    public void setPlayerGameActions(List<GameAction> playerGameActions){
-        this.playerGameActions=playerGameActions;
+    public void setPlayerMethod(GameObject methodBlockObject){
+        this.playerMethod=playerMethod;
         playerChosen=true;
     }
 
-    public List<GameAction> getPlayerGameActions(){
-        return playerGameActions;
+    public GameObject getPlayerMethod(){
+        return playerMethod;
     }
 
     public void setOpponentChosen(bool opponentChosen){
@@ -306,10 +295,6 @@ public class GameScript : MonoBehaviour
 
     public bool getOpponentChosen(){return opponentChosen;}
     public bool getPlayerChosen(){return playerChosen;}
-
-    public MethodInfo[] getPlayerMethods(){
-        return player.GetType().GetMethods();
-    }
 
     private IEnumerator shakeObject(GameObject gameObject,
                                     float shakeTime,
@@ -374,20 +359,20 @@ public class GameScript : MonoBehaviour
         playerLoaded=false;
         opponentLoaded=false;
         
-        player=new Player("Player2",
+        player=new Character("Player",
                           100f,
                           15f,
                           45f,
-                          60f);
+                          60f,
+                          5);
 
-        opponent=new Opponent("Opponent2",
+        opponent=new Character("Opponent",
                               100f,
                               15f,
                               45f,
-                              60f);
-
-        player.setOpponent(opponent);
-        opponent.setPlayer(player);
+                              60f,
+                              5);
+        computerPlayer=new ComputerPlayer();
 
         opponentChosen=false;
         playerChosen=false;

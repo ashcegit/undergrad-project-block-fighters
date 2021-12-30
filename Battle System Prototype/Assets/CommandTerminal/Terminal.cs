@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Text;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine.Assertions;
 
@@ -101,20 +102,22 @@ namespace CommandTerminal
             History = new CommandHistory();
             Autocomplete = new CommandAutocomplete();
         }
-
-        public void initShell(Player player,Opponent opponent,GameScript gameScript){
+        public void initShell(GameScript gameScript){
             Shell = new CommandShell();
             Autocomplete = new CommandAutocomplete();
             this.gameScript=gameScript;
+            
+            Shell.registerBuiltInCommands();           
+        }
+
+        public void registerCharacterCommands(Character player,
+                                                Character opponent,
+                                                List<GameObject> methodBlockObjects){
+
             Shell.registerPlayer(player);
             Shell.registerOpponent(opponent);
-            Shell.registerPlayerCommands();
-            Shell.registerBuiltInCommands();
-
-            if (issuedError) {
-                log(TerminalLogType.Error, "Error: {0}", Shell.getIssuedErrorMessage());
-            }
-
+            Shell.registerPlayerCommands(methodBlockObjects);        
+                                            
             Autocomplete.register(player.getCharacterName());
             Autocomplete.register(opponent.getCharacterName());
 
@@ -290,7 +293,7 @@ namespace CommandTerminal
             CommandWrapper commandWrapper=Shell.RunCommand(commandText);
             History.Push(commandText);
             if(commandWrapper.getIsGameAction()&&commandWrapper.getIsValid()){
-                gameScript.setPlayerGameActions(commandWrapper.getGameActions());
+                gameScript.setPlayerMethod(commandWrapper.getMethodBlockObject());
             }else if(!commandWrapper.getIsValid()){
                 log(TerminalLogType.Error, "Error: {0}", Shell.getIssuedErrorMessage());
             }

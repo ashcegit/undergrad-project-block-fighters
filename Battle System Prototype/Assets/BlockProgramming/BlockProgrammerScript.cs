@@ -7,7 +7,6 @@ public class BlockProgrammerScript : MonoBehaviour
     Vector2 lastPosition;
     Raycaster raycaster;
     GameObject environment;
-    GhostBlock ghostBlock;
     List<GameObject> methodBlockObjects;
     List<GameObject> blockObjects;
     List<BlockSpace> blockSpaces;
@@ -28,11 +27,15 @@ public class BlockProgrammerScript : MonoBehaviour
     }
 
     void OnEnable(){
-
+        foreach(Transform childTransform in transform){
+            childTransform.gameObject.SetActive(true);
+        }
     }
 
     void OnDisable(){
-
+        foreach(Transform childTransform in transform){
+            childTransform.gameObject.SetActive(false);
+        }
     }
 
 

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Section : MonoBehaviour
 {
-    Header header;
-    Body body;
+    private Header header;
+    private Body body;
 
     void Awake(){
         header=transform.Find("Header").GetComponent<Header>();

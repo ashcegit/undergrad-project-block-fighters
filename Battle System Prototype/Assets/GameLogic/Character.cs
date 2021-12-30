@@ -5,37 +5,39 @@ using UnityEngine;
 ///<summary>Class <c>Character</c> is the base class for player and opponent logic </summary>
 public class Character
 {   
-    protected string characterName;
-    protected float health;
-    protected float baseMaxHealth;
-    protected float baseAttack;
-    protected float baseDefence;
-    protected float baseSpeed;
+    private string characterName;
+    private float health;
+    private float baseMaxHealth;
+    private float baseAttack;
+    private float baseDefence;
+    private float baseSpeed;
+    private int baseStamina;
 
-    protected List<AttributeModifier> healthModifiers;
-    protected List<AttributeModifier> attackModifiers;
-    protected List<AttributeModifier> defenceModifiers;
-    protected List<AttributeModifier> speedModifiers;
-
-    protected Player player;
-    protected Opponent opponent;
+    private List<AttributeModifier> healthModifiers;
+    private List<AttributeModifier> attackModifiers;
+    private List<AttributeModifier> defenceModifiers;
+    private List<AttributeModifier> speedModifiers;
+    private List<AttributeModifier> staminaModifiers;
     
     public Character(string characterName,
                      float baseMaxHealth,
                      float baseAttack,
                      float baseDefence,
-                     float baseSpeed){
+                     float baseSpeed,
+                     int baseStamina){
         this.characterName=characterName;
         this.health=baseMaxHealth;
         this.baseMaxHealth=baseMaxHealth;
         this.baseAttack=baseAttack;
         this.baseDefence=baseDefence;
         this.baseSpeed=baseSpeed;
+        this.baseStamina=baseStamina;
 
         this.healthModifiers=new List<AttributeModifier>();
         this.attackModifiers=new List<AttributeModifier>();
         this.defenceModifiers=new List<AttributeModifier>();
         this.speedModifiers=new List<AttributeModifier>();
+        this.staminaModifiers=new List<AttributeModifier>();
     }
 
     public void setCharacterName(string characterName){this.characterName=characterName;}
@@ -44,8 +46,7 @@ public class Character
     public void setBaseAttack(float baseAttack){this.baseAttack=baseAttack;}
     public void setBaseDefence(float baseDefence){this.baseDefence=baseDefence;}
     public void setBaseSpeed(float baseSpeed){this.baseSpeed=baseSpeed;}
-    public void setOpponent(Opponent opponent){this.opponent=opponent;}
-    public void setPlayer(Player player){this.player=player;}
+    public void setBaseStamina(int baseStamina){this.baseStamina=baseStamina;}
 
 
     public string getCharacterName(){return characterName;}
@@ -53,12 +54,12 @@ public class Character
     public float getBaseAttack(){return baseAttack;}
     public float getBaseDefence(){return baseDefence;}
     public float getBaseSpeed(){return baseSpeed;}
-    public Opponent getOpponent(){return opponent;}
-    public Player getPlayer(){return player;}    
+    public int getBaseStamina(){return baseStamina;}
     public List<AttributeModifier> getHealthModifiers(){return healthModifiers;}
     public List<AttributeModifier> getAttackModifiers(){return attackModifiers;}
     public List<AttributeModifier> getDefenceModifiers(){return defenceModifiers;}
     public List<AttributeModifier> getSpeedModifiers(){return speedModifiers;}
+    public List<AttributeModifier> getStaminaModifiers(){return staminaModifiers;}
 
     public float getHealth(){
         if(health<0f){return 0f;}
@@ -95,6 +96,14 @@ public class Character
         
         return tempSpeed;
     }
+    public int getStamina(){
+        float tempStamina=baseStamina;
+            foreach(AttributeModifier attributeModifier in staminaModifiers){
+                tempStamina*=attributeModifier.getMultiplier();
+            }
+        
+        return (int)tempStamina;
+    }
 
     public void addModifier(AttributeModifier attributeModifier){
         switch(attributeModifier.getAttribute()){
@@ -111,12 +120,14 @@ public class Character
             case AttributeEnum.Speed:
                 speedModifiers.Add(attributeModifier);
                 break;
+            case AttributeEnum.Stamina:
+                staminaModifiers.Add(attributeModifier);
+                break;
             default:
                 break;
         }
     }
 
-    ///<summary>Method </c>turnHasPassed</c> removes all buffs/debuffs that have expired
     public void endTurn(){
         for(int i=0;i<healthModifiers.Count;i++){
             healthModifiers[i].turnHasPassed();
@@ -138,6 +149,10 @@ public class Character
         for(int i=0;i<speedModifiers.Count;i++){
             speedModifiers[i].turnHasPassed();
             if(speedModifiers[i].isFinished()){speedModifiers.RemoveAt(i);}
+        }
+        for(int i=0;i<staminaModifiers.Count;i++){
+            staminaModifiers[i].turnHasPassed();
+            if(staminaModifiers[i].isFinished()){staminaModifiers.RemoveAt(i);}
         }
     }
 

@@ -9,12 +9,13 @@ public class Main : MonoBehaviour
 {
     private GameObject blockProgrammer;
     private BlockProgrammerScript blockProgrammerScript;
+    private List<Block> methodBlocks;
 
     private GameObject game;
     private GameScript gameScript;
 
-    private List<GameAction> playerGameActions;
-    private List<GameAction> opponentGameActions;
+    private GameObject playerMethod;
+    private GameObject opponentMethod;
 
     private GameObject terminal;
     private Terminal terminalScript;
@@ -47,42 +48,51 @@ public class Main : MonoBehaviour
 
         interactionHandler=new InteractionHandler();
 
-        Player player=gameScript.getPlayer();
-        Opponent opponent=gameScript.getOpponent();
+        Character player=gameScript.getPlayer();
+        Character opponent=gameScript.getOpponent();
 
-        terminalScript.initShell(player,opponent,gameScript);
+        terminalScript.initShell(gameScript);
 
         loopDone=true;
-        terminalScript.setState(TerminalState.ReadOnly);
+        terminalScript.setState(TerminalState.Write);
         gameScript.enabled=false;
-        //blockScript.enabled=false;
-        //enabled=true;
     }
     
     void resetGame(){
         enabled=false;
         Terminal.Buffer.Clear();
         gameScript.resetGame();
-        terminalScript.initShell(gameScript.getPlayer(),gameScript.getOpponent(),gameScript);
+        terminalScript.registerCharacterCommands(gameScript.getPlayer(),
+                                                    gameScript.getOpponent(),
+                                                    blockProgrammerScript.getMethodBlockObjects());
 
         loopDone=true;
+        enabled=true;
+    }
+
+    public void finishProgramming(){
+        terminalScript.registerCharacterCommands(gameScript.getPlayer(),
+                                                    gameScript.getOpponent(),
+                                                    blockProgrammerScript.getMethodBlockObjects());
+        blockProgrammerScript.enabled=false;
+        gameScript.enabled=true;
         enabled=true;
     }
 
     void Update(){
         if(gameScript.getCharactersLoaded()&&!gameScript.isGameOver()&&loopDone){
             StopAllCoroutines();
-            Player player=gameScript.getPlayer();
-            Opponent opponent=gameScript.getOpponent();
+            Character player=gameScript.getPlayer();
+            Character opponent=gameScript.getOpponent();
 
             if(!gameScript.getOpponentChosen()){
-                opponentGameActions=gameScript.getOpponentGameActions();
+                gameScript.getComputerPlayer().initComputerBlockStackA();
                 gameScript.setOpponentChosen(true);
                 terminalScript.setState(TerminalState.Write);
             }else if(gameScript.getPlayerChosen()){
                 loopDone=false;
                 terminalScript.setState(TerminalState.ReadOnly);
-                playerGameActions=gameScript.getPlayerGameActions();
+                gameScript.getPlayerMethod().GetComponent<Block>().initBlockStack();
                 StartCoroutine(playLoop(player,opponent));                
                 gameScript.setPlayerChosen(false);
                 gameScript.setOpponentChosen(false);
@@ -93,34 +103,37 @@ public class Main : MonoBehaviour
         }
     }
 
-    IEnumerator playLoop(Player player,Opponent opponent){
-        int largestListCount=(playerGameActions.Count>=opponentGameActions.Count?playerGameActions.Count:opponentGameActions.Count);
-        for(int i=0;i<largestListCount;i++){
-            if(!gameScript.isGameOver()){
-                if(i>playerGameActions.Count-1){
-                    //Only perform Opponent Game Actions
-                    Interaction opponentInteraction=gameScript.getInteraction(opponentGameActions[i]);
-                    yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
-                }else if(i>opponentGameActions.Count-1){
-                    //Only perform Player Game Actions
-                    Interaction playerInteraction=gameScript.getInteraction(playerGameActions[i]);
+    IEnumerator playLoop(Character player,Character opponent){
+        Block playerMethodBlock=gameScript.getPlayerMethod().GetComponent<Block>();
+        ComputerPlayer computerPlayer=gameScript.getComputerPlayer();
+        int playerStamina=player.getStamina();
+        int opponentStamina=opponent.getStamina();
+        while(playerStamina>0||opponentStamina>0){
+            GameAction? playerGameAction=playerMethodBlock.executeCurrentBlock(opponent,player);
+            GameAction? opponentGameAction=computerPlayer.executeCurrentBlock(player,opponent);
+            if(playerGameAction!=null&&opponentGameAction!=null&&playerStamina>0&&opponentStamina>0){
+                Interaction playerInteraction=gameScript.getInteraction(playerGameAction);
+                Interaction opponentInteraction=gameScript.getInteraction(opponentGameAction);
+                if(gameScript.getPlayerFirst(playerGameAction,opponentGameAction)){
                     yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
-                }else{
-                    Interaction playerInteraction=gameScript.getInteraction(playerGameActions[i]);
-                    Interaction opponentInteraction=gameScript.getInteraction(opponentGameActions[i]);
-                    if(gameScript.getPlayerFirst(playerGameActions[i],opponentGameActions[i])){
-                        yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
-                        if(!gameScript.isGameOver()){
-                            yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
-                        }
-                    }else{
+                    if(!gameScript.isGameOver()){
                         yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
-                        if(!gameScript.isGameOver()){
-                            yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
-                        }
+                    }
+                }else{
+                    yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
+                    if(!gameScript.isGameOver()){
+                        yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
                     }
                 }
+            }else if(playerGameAction!=null&&playerStamina>0){
+                Interaction playerInteraction=gameScript.getInteraction(playerGameAction);
+                yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
+            }else if(opponentGameAction!=null&&opponentStamina>0){
+                Interaction opponentInteraction=gameScript.getInteraction(opponentGameAction);
+                yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
             }
+            playerStamina--;
+            opponentStamina--;
         }
         loopDone=true;
     }

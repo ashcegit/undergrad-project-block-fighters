@@ -8,15 +8,15 @@ using UnityEngine;
 namespace CommandTerminal
 {
     public struct CommandWrapper{
-        List<GameAction> gameActions;
+        GameObject methodBlockObject;
         bool isGameAction;
         bool isValid;
 
-        public List<GameAction> getGameActions(){return gameActions;}
+        public GameObject getMethodBlockObject(){return methodBlockObject;}
         public bool getIsGameAction(){return isGameAction;}
         public bool getIsValid(){return isValid;}
 
-        public void setGameActions(List<GameAction> gameActions){this.gameActions=gameActions;}
+        public void setMethodBlockObject(GameObject methodBlockObject){this.methodBlockObject=methodBlockObject;}
         public void setIsGameAction(bool isGameAction){this.isGameAction=isGameAction;}
         public void setIsValid(bool isValid){this.isValid=isValid;}
     }
@@ -25,10 +25,10 @@ namespace CommandTerminal
     {
         Regex commandRegex;
 
-        Player player;
-        Opponent opponent;
+        Character player;
+        Character opponent;
 
-        private Dictionary<string,MethodInfo> playerCommands=new Dictionary<string,MethodInfo>();
+        private Dictionary<string,GameObject> playerCommands=new Dictionary<string,GameObject>();
         private Dictionary<string,MethodInfo> builtInCommands=new Dictionary<string,MethodInfo>();
         private Dictionary<string,string> builtInCommandHelp=new Dictionary<string,string>();
 
@@ -44,19 +44,17 @@ namespace CommandTerminal
 
         public string getIssuedErrorMessage(){return IssuedErrorMessage;}
 
-        public void registerOpponent(Opponent opponent){this.opponent=opponent;}
-        public void registerPlayer(Player player){this.player=player;}
+        public void registerOpponent(Character opponent){this.opponent=opponent;}
+        public void registerPlayer(Character player){this.player=player;}
 
-        public Dictionary<string,MethodInfo> getPlayerCommands(){return playerCommands;}
+        public Dictionary<string,GameObject> getPlayerCommands(){return playerCommands;}
         public Dictionary<string,MethodInfo> getBuiltInCommands(){return builtInCommands;}
         public Dictionary<string,string> getBuiltInCommandHelp(){return builtInCommandHelp;}
 
-        public void registerPlayerCommands(){
-            MethodInfo[] playerMethodInfos=player.GetType().GetMethods(BindingFlags.DeclaredOnly|
-                                                                       BindingFlags.Public|
-                                                                       BindingFlags.Instance);
-            foreach(MethodInfo playerMethodInfo in playerMethodInfos){
-                playerCommands.Add(playerMethodInfo.Name,playerMethodInfo);
+        public void registerPlayerCommands(List<GameObject> methodBlockObjects){
+            foreach(GameObject methodBlockObject in methodBlockObjects){
+                Block methodBlock=methodBlockObject.GetComponent<Block>();
+                playerCommands.Add(methodBlock.getName(),methodBlockObject);
             }
         }
         public void registerBuiltInCommands(){
@@ -68,6 +66,9 @@ namespace CommandTerminal
 
             builtInCommands.Add("listPlayerCommands",this.GetType().GetMethod("listPlayerCommands"));
             builtInCommandHelp.Add("listPlayerCommands","lists player's current battle commands");
+
+            builtInCommands.Add("finish",this.GetType().GetMethod("finishProgramming"));
+            builtInCommandHelp.Add("finish","finishes programming your character's methods");
 
             builtInCommands.Add("quit",this.GetType().GetMethod("quit"));
             builtInCommandHelp.Add("quit","quits game");
@@ -81,23 +82,28 @@ namespace CommandTerminal
         public bool help(string[] commandNames) {
             if(commandNames.Length>0){
                 if(!builtInCommandHelp.ContainsKey(commandNames[0])) {
-                    IssueErrorMessage("Built in command {0} could not be found.", commandNames[0].ToLower());
+                    IssueErrorMessage("Built in command {0} could not be found.\n", commandNames[0].ToLower());
                     return false;
                 }else{
                     string commandName=commandNames[0];
-                    Terminal.log(TerminalLogType.Message,"{0}: {1}",commandName,builtInCommandHelp[commandName]);
+                    Terminal.log(TerminalLogType.Message,"{0}: {1}\n",commandName,builtInCommandHelp[commandName]);
                     return true;
                 }
             }else{
                 foreach(KeyValuePair<string,string> command in builtInCommandHelp){
-                    Terminal.log(TerminalLogType.Message,"{0}: {1}",command.Key,command.Value);
+                    Terminal.log(TerminalLogType.Message,"{0}: {1}\n",command.Key,command.Value);
                 }
                 return true;
             }
         }
 
         public bool listPlayerCommands(){
-            foreach(KeyValuePair<string,MethodInfo> command in playerCommands){Terminal.log(TerminalLogType.Message,"{0}('target')",command.Key);}
+            foreach(KeyValuePair<string,GameObject> command in playerCommands){Terminal.log(TerminalLogType.Message,"{0}('target')",command.Key);}
+            return true;
+        }
+
+        public bool finishProgramming(){
+            GameObject.FindGameObjectWithTag("Main").GetComponent<Main>().finishProgramming();
             return true;
         }
 
@@ -123,25 +129,26 @@ namespace CommandTerminal
                 string commandName=parsedCommand.Item1;
                 string[] argStringArray=parsedCommand.Item2;
                 if(playerCommands.ContainsKey(commandName)){
-                    if(argStringArray.Length!=playerCommands[commandName].GetParameters().Length){
-                        commandWrapper.setIsValid(false);
-                        IssueErrorMessage("Command {0} takes {1} parameter(s)",commandName,
-                                                                            playerCommands[commandName].GetParameters().Length);
-                        return commandWrapper;
-                    }
+                    // if(argStringArray.Length!=playerCommands[commandName].GetParameters().Length){
+                    //     commandWrapper.setIsValid(false);
+                    //     IssueErrorMessage("Command {0} takes {1} parameter(s)",commandName,
+                    //                                                         playerCommands[commandName].GetParameters().Length);
+                    //     return commandWrapper;
+                    // }
+                    
                     commandWrapper.setIsGameAction(true);
                     List<Character> targets=new List<Character>();
-                    foreach(string arg in argStringArray){
-                        if(arg.Equals(player.getCharacterName())){targets.Add(player);}
-                        else if(arg.Equals(player.getCharacterName())){targets.Add(opponent);}
-                        else{
-                            commandWrapper.setIsValid(false);
-                            IssueErrorMessage("Parameter {0} not recognisable target",arg);
-                            return commandWrapper;
-                        }
-                    }
-                    MethodInfo selectedMethod=playerCommands[commandName];
-                    commandWrapper.setGameActions((List<GameAction>)selectedMethod.Invoke((Player)player,targets.ToArray()));
+                    // foreach(string arg in argStringArray){
+                    //     if(arg.Equals(player.getCharacterName())){targets.Add(player);}
+                    //     else if(arg.Equals(player.getCharacterName())){targets.Add(opponent);}
+                    //     else{
+                    //         commandWrapper.setIsValid(false);
+                    //         IssueErrorMessage("Parameter {0} not recognisable target",arg);
+                    //         return commandWrapper;
+                    //     }
+                    // }
+                    GameObject selectedMethodBlockObject=playerCommands[commandName];
+                    commandWrapper.setMethodBlockObject(selectedMethodBlockObject);
                     commandWrapper.setIsValid(true);
                     return commandWrapper;
                 }else if(builtInCommands.ContainsKey(commandName)){
@@ -151,7 +158,7 @@ namespace CommandTerminal
                             IssueErrorMessage("Command {0} takes 0 or 1 parameters","help");
                             return commandWrapper;
                         }else{
-                            commandWrapper.setIsValid((bool)builtInCommands["help"].Invoke(this,argStringArray));
+                            commandWrapper.setIsValid((bool)builtInCommands["help"].Invoke(this,new object[]{argStringArray}));
                             return commandWrapper;
                         }
                     }
