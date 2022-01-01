@@ -9,7 +9,11 @@ public class Section : MonoBehaviour
 
     void Awake(){
         header=transform.Find("Header").GetComponent<Header>();
-        body=transform.Find("Body").GetComponent<Body>();
+        if(transform.Find("Body")!=null){
+            body=transform.Find("Body").GetComponent<Body>();
+        }else{
+            body=null;
+        }
     }
 
     // Start is called before the first frame update
@@ -28,10 +32,14 @@ public class Section : MonoBehaviour
     public Body getBody(){return body;}
 
     public void updateBlockSpacePositions(){
-        body.updateBlockSpacePositions();
+        if(body!=null){
+            body.updateBlockSpacePositions();
+        }
     }
 
     public void blockSpacesActive(bool active){
-        body.blockSpacesActive(active);
+        if(body!=null){
+            body.blockSpacesActive(active);
+        }
     }
 }

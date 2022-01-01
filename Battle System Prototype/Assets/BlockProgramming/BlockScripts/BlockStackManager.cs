@@ -2,32 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockStackManager:MonoBehaviour
+//The block stack is a linearisation of the blocks in a given method.
+//By adding endOfSection blocks, I can linearlly serach over the player's code
+//while controlling where in the code is being executed via an internal pointer variable
+public class BlockStackManager
 {
     private int pointer;
     private List<Block> blockStack;
 
-    void Awake(){
+    public BlockStackManager(){
         pointer=0;
         blockStack=new List<Block>();
     }
 
     public void initBlockStack(Block block){
+        //performs a depth search for all blocks starting from a given parent block
         List<Section> sections=block.getSections();
+        if(block.blockType!=BlockType.Method){
+            blockStack.Add(block);
+        }
         foreach(Section section in sections){
-            if(section.getBody().gameObject.transform.childCount>0){
+            if(section.getBody()!=null){
                 foreach(Transform childTransform in section.getBody().gameObject.transform){
                     Block childBlock=childTransform.gameObject.GetComponent<Block>();
                     initBlockStack(childBlock);
                 }
-                if(block.blockType!=BlockType.Method){
-                    blockStack.Add(block);
-                }
-            }
-            Block endBlock=new Block();
-            endBlock.blockType=BlockType.EndOfSection;
-            blockStack.Add(endBlock);
+                Block endBlock=new Block();
+                endBlock.blockType=BlockType.EndOfSection;
+                blockStack.Add(endBlock);
+            }            
         }
+    }
+
+    public void clearBlockStack(){
+        pointer=0;
+        blockStack=new List<Block>();
     }
 
     public void insertBlockStack(List<Block> newBlockStack){
@@ -51,32 +60,45 @@ public class BlockStackManager:MonoBehaviour
         }
     }
 
-    public GameAction? executeCurrentBlock(Character target,Character instigator){
-        Block currentBlock=blockStack[pointer];
-        switch(currentBlock.blockType){
+    public ExecutionWrapper executeCurrentBlock(Character target,Character instigator){
+        ExecutionWrapper executionWrapper=new ExecutionWrapper();
+        if(pointer>=blockStack.Count){
+            executionWrapper.setGameAction(null);
+            executionWrapper.setEndOfSection(false);
+        }else{
+            Block currentBlock=blockStack[pointer];
+            switch(currentBlock.blockType){
             case(BlockType.Action):
                 pointer++;
-                return currentBlock.gameObject.GetComponent<ActionFunction>().function(target,instigator);
+                executionWrapper.setGameAction(currentBlock.gameObject.GetComponent<ActionFunction>().function(target,instigator));
+                executionWrapper.setEndOfSection(false);
                 break;
             case(BlockType.Control):
                 pointer++;
-                return null;
+                executionWrapper.setGameAction(null);
+                executionWrapper.setEndOfSection(false);
                 break;
             case(BlockType.Operator):
                 pointer++;
-                return null;
+                executionWrapper.setGameAction(null);
+                executionWrapper.setEndOfSection(false);
                 break;
             case(BlockType.Logic):
                 pointer++;
-                return null;
+                executionWrapper.setGameAction(null);
+                executionWrapper.setEndOfSection(false);
                 break;
             case(BlockType.EndOfSection):
             default:
                 pointer++;
-                return null;
+                executionWrapper.setGameAction(null);
+                executionWrapper.setEndOfSection(true);
                 break;
+            }
         }
-        
+        return executionWrapper;
     }
+
+    public int getBlockStackCount(){return blockStack.Count;}
 
 }

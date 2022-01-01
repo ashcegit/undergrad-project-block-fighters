@@ -83,5 +83,11 @@ public class BlockProgrammerScript : MonoBehaviour
 
     public bool moreMethodBlocksAllowed(){return getMethodBlockObjectLength()<maxMethodBlocks;}
 
-    public List<BlockSpace> getBlockSpaces(){return blockSpaces;}    
+    public List<BlockSpace> getBlockSpaces(){return blockSpaces;}
+
+    public void applyMethodNames(){
+        foreach(GameObject methodBlockObject in methodBlockObjects){
+            methodBlockObject.GetComponent<Block>().setMethodNameFromHeader();
+        }
+    }
 }

@@ -107,7 +107,11 @@ namespace CommandTerminal
             Autocomplete = new CommandAutocomplete();
             this.gameScript=gameScript;
             
-            Shell.registerBuiltInCommands();           
+            Shell.registerBuiltInCommands();
+
+            foreach(var command in Shell.getBuiltInCommands()){
+                Autocomplete.register(command.Key);
+            }           
         }
 
         public void registerCharacterCommands(Character player,
@@ -122,9 +126,6 @@ namespace CommandTerminal
             Autocomplete.register(opponent.getCharacterName());
 
             foreach(var command in Shell.getPlayerCommands()) {
-                Autocomplete.register(command.Key);
-            }
-            foreach(var command in Shell.getBuiltInCommands()){
                 Autocomplete.register(command.Key);
             }
         }
@@ -243,7 +244,7 @@ namespace CommandTerminal
                 }
 
                 if (initialOpen) {
-                    GUI.FocusControl("commandText_field");
+                    //GUI.FocusControl("commandText_field");
                     initialOpen = false;
                 }
             }
@@ -309,7 +310,7 @@ namespace CommandTerminal
             int completionLength = completionBuffer.Length;
 
             if (completionLength == 1) {
-                commandText = headText + completionBuffer[0];
+                commandText = headText + completionBuffer[0]+"()";
             } else if (completionLength > 1) {
                 // Print possible completions
                 log(string.Join("    ", completionBuffer));

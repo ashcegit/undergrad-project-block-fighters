@@ -54,9 +54,10 @@ namespace CommandTerminal
         public void registerPlayerCommands(List<GameObject> methodBlockObjects){
             foreach(GameObject methodBlockObject in methodBlockObjects){
                 Block methodBlock=methodBlockObject.GetComponent<Block>();
-                playerCommands.Add(methodBlock.getName(),methodBlockObject);
+                playerCommands.Add(methodBlock.getMethodName(),methodBlockObject);
             }
         }
+
         public void registerBuiltInCommands(){
             builtInCommands.Add("help",this.GetType().GetMethod("help"));
             builtInCommandHelp.Add("help","prints this help screen");
@@ -98,13 +99,20 @@ namespace CommandTerminal
         }
 
         public bool listPlayerCommands(){
-            foreach(KeyValuePair<string,GameObject> command in playerCommands){Terminal.log(TerminalLogType.Message,"{0}('target')",command.Key);}
+            foreach(KeyValuePair<string,GameObject> command in playerCommands){Terminal.log(TerminalLogType.Message,"{0}()",command.Key);}
             return true;
         }
 
         public bool finishProgramming(){
-            GameObject.FindGameObjectWithTag("Main").GetComponent<Main>().finishProgramming();
-            return true;
+            if(!GameObject.FindGameObjectWithTag("BlockProgrammer")
+                        .GetComponent<BlockProgrammerScript>().enabled){
+                IssueErrorMessage("Command {0} cannot be called when in battle","finish");
+                return false;
+            }else{
+                GameObject.FindGameObjectWithTag("Main").GetComponent<Main>().finishProgramming();
+                return true;
+            }
+            
         }
 
         public void quit() {
@@ -137,7 +145,7 @@ namespace CommandTerminal
                     // }
                     
                     commandWrapper.setIsGameAction(true);
-                    List<Character> targets=new List<Character>();
+                    //List<Character> targets=new List<Character>();
                     // foreach(string arg in argStringArray){
                     //     if(arg.Equals(player.getCharacterName())){targets.Add(player);}
                     //     else if(arg.Equals(player.getCharacterName())){targets.Add(opponent);}

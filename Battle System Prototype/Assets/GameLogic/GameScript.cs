@@ -277,13 +277,23 @@ public class GameScript : MonoBehaviour
         return computerPlayer;
     }
 
-    public void setPlayerMethod(GameObject methodBlockObject){
+    public void clearComputerBlockStack(){
+        computerPlayer.clearBlockStack();
+        opponentChosen=false;
+    }
+
+    public void setPlayerMethod(GameObject playerMethod){
         this.playerMethod=playerMethod;
         playerChosen=true;
     }
 
     public GameObject getPlayerMethod(){
         return playerMethod;
+    }
+
+    public void clearPlayerBlockStack(){
+        playerMethod.GetComponent<Block>().clearBlockStack();
+        playerChosen=false;
     }
 
     public void setOpponentChosen(bool opponentChosen){

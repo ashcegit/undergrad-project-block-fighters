@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class Header : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    private List<string> inputStrings;
+
+    void Awake(){
+        inputStrings=new List<string>();
+        foreach(Transform childTransform in transform){
+            if(childTransform.GetComponent<InputFieldHandler>()!=null){
+                inputStrings.Add("");
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void changeValueAtIndex(string inputValue,int index){
+        inputStrings[index]=inputValue;
     }
+
+    public List<string> getInputStrings(){return inputStrings;}
 }

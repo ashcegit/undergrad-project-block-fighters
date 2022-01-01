@@ -62,15 +62,20 @@ public class Main : MonoBehaviour
         enabled=false;
         Terminal.Buffer.Clear();
         gameScript.resetGame();
-        terminalScript.registerCharacterCommands(gameScript.getPlayer(),
-                                                    gameScript.getOpponent(),
-                                                    blockProgrammerScript.getMethodBlockObjects());
-
+        terminalScript.initShell(gameScript);
+        openProgramming();
         loopDone=true;
-        enabled=true;
+    }
+
+    public void openProgramming(){
+        terminalScript.setState(TerminalState.Write);
+        blockProgrammerScript.enabled=true;
+        gameScript.enabled=false;
     }
 
     public void finishProgramming(){
+        terminalScript.setState(TerminalState.Write);
+        blockProgrammerScript.applyMethodNames();
         terminalScript.registerCharacterCommands(gameScript.getPlayer(),
                                                     gameScript.getOpponent(),
                                                     blockProgrammerScript.getMethodBlockObjects());
@@ -93,12 +98,10 @@ public class Main : MonoBehaviour
                 loopDone=false;
                 terminalScript.setState(TerminalState.ReadOnly);
                 gameScript.getPlayerMethod().GetComponent<Block>().initBlockStack();
-                StartCoroutine(playLoop(player,opponent));                
-                gameScript.setPlayerChosen(false);
-                gameScript.setOpponentChosen(false);
-                gameScript.endTurn();
+                StartCoroutine(playLoop(player,opponent));
             }
         }else if(gameScript.isGameOver()){
+            StopAllCoroutines();
             resetGame();
         }
     }
@@ -109,8 +112,10 @@ public class Main : MonoBehaviour
         int playerStamina=player.getStamina();
         int opponentStamina=opponent.getStamina();
         while(playerStamina>0||opponentStamina>0){
-            GameAction? playerGameAction=playerMethodBlock.executeCurrentBlock(opponent,player);
-            GameAction? opponentGameAction=computerPlayer.executeCurrentBlock(player,opponent);
+            ExecutionWrapper playerExecutionWrapper=playerMethodBlock.executeCurrentBlock(opponent,player);
+            ExecutionWrapper opponentExecutionWrapper=computerPlayer.executeCurrentBlock(player,opponent);
+            GameAction? playerGameAction=playerExecutionWrapper.getGameAction();
+            GameAction? opponentGameAction=opponentExecutionWrapper.getGameAction();
             if(playerGameAction!=null&&opponentGameAction!=null&&playerStamina>0&&opponentStamina>0){
                 Interaction playerInteraction=gameScript.getInteraction(playerGameAction);
                 Interaction opponentInteraction=gameScript.getInteraction(opponentGameAction);
@@ -132,9 +137,16 @@ public class Main : MonoBehaviour
                 Interaction opponentInteraction=gameScript.getInteraction(opponentGameAction);
                 yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
             }
-            playerStamina--;
-            opponentStamina--;
+            if(!playerExecutionWrapper.getEndOfSection()){
+                playerStamina--;
+            }
+            if(!opponentExecutionWrapper.getEndOfSection()){
+                opponentStamina--;
+            }
         }
+        gameScript.clearPlayerBlockStack();
+        gameScript.clearComputerBlockStack();
+        gameScript.endTurn();
         loopDone=true;
     }
 
@@ -144,10 +156,10 @@ public class Main : MonoBehaviour
             elapsedSeconds+=Time.deltaTime;
             yield return null;
         }
-        playInteraction(interaction,character);
+        yield return StartCoroutine(playInteraction(interaction,character));
     }
 
-    void playInteraction(Interaction interaction,Character instigator){
+    IEnumerator playInteraction(Interaction interaction,Character instigator){
         switch(interaction){
             case AttackInteraction attackInteraction:
                 if(attackInteraction.getResult()==InteractionEnum.Hit){
@@ -209,6 +221,7 @@ public class Main : MonoBehaviour
             default:
                 break; 
         }
+        yield return null;
     }
     
     IEnumerator waitTime(int seconds){yield return new WaitForSeconds(seconds);}

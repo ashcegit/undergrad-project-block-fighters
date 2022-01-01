@@ -7,7 +7,7 @@ public class Block : MonoBehaviour
     public BlockType blockType;
     private List<Section> sections;
     private BlockProgrammerScript blockProgrammerScript;
-    public string name;
+    public string methodName;
     private BlockStackManager blockStackManager;
 
     public void Awake(){
@@ -52,8 +52,10 @@ public class Block : MonoBehaviour
         }
     }
 
-    public string getName(){return name;}
-    public void setName(string name){this.name=name;}
+    public string getMethodName(){return methodName;}
+    public void setMethodNameFromHeader(){
+        methodName=sections[0].getHeader().getInputStrings()[0];
+    }
 
     public List<Section> getSections(){return sections;}
 
@@ -61,7 +63,13 @@ public class Block : MonoBehaviour
         blockStackManager.initBlockStack(this);
     }
 
-    public GameAction? executeCurrentBlock(Character target,Character instigator){
+    public ExecutionWrapper executeCurrentBlock(Character target,Character instigator){
         return blockStackManager.executeCurrentBlock(target,instigator);
     }
+
+    public void clearBlockStack(){
+        blockStackManager.clearBlockStack();
+    }
+
+    public int getBlockStackCount(){return blockStackManager.getBlockStackCount();}
 }

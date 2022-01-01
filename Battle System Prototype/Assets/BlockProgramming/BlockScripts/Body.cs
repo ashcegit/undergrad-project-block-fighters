@@ -49,7 +49,6 @@ public class Body : MonoBehaviour
     }
 
     public void updateBlockSpacePositions(){
-        Debug.Log("test");
         blockSpaces[0].setPosition((Vector2)GetComponentInParent<Section>().gameObject
                                             .GetComponentInChildren<Header>().gameObject.transform.position);
         for(int i=1;i<transform.childCount;i++){
