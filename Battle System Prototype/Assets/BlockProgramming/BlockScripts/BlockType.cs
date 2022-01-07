@@ -8,5 +8,6 @@ public enum BlockType{
     Control,
     Operator,
     Logic,
+    Info,
     EndOfSection
 }

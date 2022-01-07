@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockSpace : MonoBehaviour
+public class BlockSpace : MonoBehaviour,I_Space
 {
     GameObject parentBody;
     Vector2 position;
@@ -14,10 +14,6 @@ public class BlockSpace : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     public GameObject getParentBody(){return parentBody;}
 
@@ -34,5 +30,4 @@ public class BlockSpace : MonoBehaviour
     public bool getActive(){return active;}
 
     public void setActive(bool active){this.active=active;}
-
 }

@@ -60,18 +60,19 @@ public class Raycaster : MonoBehaviour
         return null;
     }
 
-    public BlockSpace getNearestBlockSpaceToPosition(Vector2 position,float maxDistance){
-        List<BlockSpace> blockSpaces=blockProgrammerScript.getBlockSpaces();
-        BlockSpace nearestBlockSpace=new BlockSpace();
+    public T getNearestSpaceToPosition<T>(List<T> spaces,
+                                                    Vector2 position,
+                                                    float maxDistance) where T: I_Space,new(){
+        T nearestSpace=new T();
         float minDistance=Mathf.Infinity;
-        int blockSpaceCount=blockSpaces.Count;
-        foreach(BlockSpace blockSpace in blockSpaces){
-            float distance=Vector2.Distance(position,blockSpace.getPosition());
-            if(distance<=maxDistance&&distance<minDistance&&blockSpace.getActive()){
-                nearestBlockSpace=blockSpace;
+        int spaceCount=spaces.Count;
+        foreach(T space in spaces){
+            float distance=Vector2.Distance(position,space.getPosition());
+            if(distance<=maxDistance&&distance<minDistance&&space.getActive()){
+                nearestSpace=space;
                 minDistance=distance;
             }
         }
-        return nearestBlockSpace;
+        return nearestSpace;
     }
 }

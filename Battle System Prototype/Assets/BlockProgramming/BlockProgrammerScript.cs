@@ -10,12 +10,14 @@ public class BlockProgrammerScript : MonoBehaviour
     List<GameObject> methodBlockObjects;
     List<GameObject> blockObjects;
     List<BlockSpace> blockSpaces;
+    List<InputSpace> inputSpaces;
     int maxMethodBlocks;
 
     void Awake(){
         methodBlockObjects=new List<GameObject>();
         blockObjects=new List<GameObject>();
         blockSpaces=new List<BlockSpace>();
+        inputSpaces=new List<InputSpace>();
         environment=GameObject.FindGameObjectWithTag("BlockEnvironment");
         maxMethodBlocks=4;
     }   
@@ -53,6 +55,7 @@ public class BlockProgrammerScript : MonoBehaviour
         }else{
             blockObjects.Remove(blockObject);
         }
+        blockObject.GetComponent<Block>().removeInputSpaces();
         Destroy(blockObject);
     }
 
@@ -69,8 +72,16 @@ public class BlockProgrammerScript : MonoBehaviour
         blockSpaces.Add(blockSpace);
     }
 
+    public void addInputSpace(InputSpace inputSpace){
+        inputSpaces.Add(inputSpace);
+    }
+
     public void removeBlockSpace(BlockSpace blockSpace){
         blockSpaces.Remove(blockSpace);
+    }
+
+    public void removeInputSpace(InputSpace inputSpace){
+        inputSpaces.Remove(inputSpace);
     }
 
     public List<GameObject> getMethodBlockObjects(){return methodBlockObjects;}
@@ -84,6 +95,7 @@ public class BlockProgrammerScript : MonoBehaviour
     public bool moreMethodBlocksAllowed(){return getMethodBlockObjectLength()<maxMethodBlocks;}
 
     public List<BlockSpace> getBlockSpaces(){return blockSpaces;}
+    public List<InputSpace> getInputSpaces(){return inputSpaces;}
 
     public void applyMethodNames(){
         foreach(GameObject methodBlockObject in methodBlockObjects){

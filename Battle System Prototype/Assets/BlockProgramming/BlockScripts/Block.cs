@@ -40,15 +40,15 @@ public class Block : MonoBehaviour
         transform.position=position;
     }
 
-    public void updateBlockSpacePositions(){
+    public void updateSpacePositions(){
         foreach(Section section in sections){
-            section.updateBlockSpacePositions();
+            section.updateSpacePositions();
         }
     }
 
-    public void setBlockSpacesActive(bool active){
+    public void setSpacesActive(bool active){
         foreach(Section section in sections){
-            section.blockSpacesActive(active);
+            section.setSpacesActive(active);
         }
     }
 
@@ -72,4 +72,10 @@ public class Block : MonoBehaviour
     }
 
     public int getBlockStackCount(){return blockStackManager.getBlockStackCount();}
+
+    public void removeInputSpaces(){
+        foreach(Section section in sections){
+            section.removeInputSpaces();
+        }
+    }
 }

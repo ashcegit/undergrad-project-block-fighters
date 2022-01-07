@@ -4,20 +4,63 @@ using UnityEngine;
 
 public class Header : MonoBehaviour
 {
-    private List<string> inputStrings;
+    private List<InputFieldHandler> inputFieldHandlers;
 
     void Awake(){
-        inputStrings=new List<string>();
+        inputFieldHandlers=new List<InputFieldHandler>();
         foreach(Transform childTransform in transform){
-            if(childTransform.GetComponent<InputFieldHandler>()!=null){
-                inputStrings.Add("");
+            InputFieldHandler inputFieldHandler=childTransform.gameObject.GetComponent<InputFieldHandler>();
+            if(inputFieldHandler!=null){
+                inputFieldHandlers.Add(inputFieldHandler);
             }
         }
     }
 
-    public void changeValueAtIndex(string inputValue,int index){
-        inputStrings[index]=inputValue;
+    public List<string> getInputStrings(){
+        List<string> inputStrings=new List<string>();
+        foreach(InputFieldHandler inputFieldHandler in inputFieldHandlers){
+            inputStrings.Add(inputFieldHandler.getText());
+        }
+        return inputStrings;
     }
 
-    public List<string> getInputStrings(){return inputStrings;}
+    public void insertInputBlock(GameObject inputBlock,InputFieldHandler inputFieldHandler){
+        int index=inputFieldHandler.transform.GetSiblingIndex();
+        inputBlock.transform.SetParent(transform);
+        inputBlock.transform.SetSiblingIndex(index+1);
+    }
+
+    public void setInputSpacesActive(bool active){
+        foreach(Transform childTransform in transform){
+            InputFieldHandler inputFieldHandler=childTransform.gameObject.GetComponent<InputFieldHandler>();
+            if(inputFieldHandler!=null){
+                inputFieldHandler.setInputSpaceActive(active);
+            }
+        }
+    }
+
+    public void updateInputSpacePositions(){
+        foreach(Transform childTransform in transform){
+            InputFieldHandler inputFieldHandler=childTransform.gameObject.GetComponent<InputFieldHandler>();
+            if(inputFieldHandler!=null){
+                inputFieldHandler.updateInputSpacePosition();
+            }
+        }
+    }
+
+    public InputFieldHandler getInputFieldHandlerForInputBlock(GameObject inputBlock){
+        InputFieldHandler rtn=null;
+        foreach(InputFieldHandler inputFieldHandler in inputFieldHandlers){
+            if(inputFieldHandler.getInputBlock()==inputBlock){
+                rtn=inputFieldHandler;
+            }
+        }
+        return rtn;
+    }
+
+    public List<InputFieldHandler> getInputFieldHandlers(){return inputFieldHandlers;}
+
+    void OnDestroy(){
+        
+    }
 }

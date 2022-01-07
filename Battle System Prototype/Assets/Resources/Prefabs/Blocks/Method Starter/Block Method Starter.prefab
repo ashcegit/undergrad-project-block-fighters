@@ -366,6 +366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputFieldNumber: 0
+  textAllowed: 1
 --- !u!1 &3464365145067656234
 GameObject:
   m_ObjectHideFlags: 0

@@ -355,6 +355,7 @@ GameObject:
   - component: {fileID: 8043367158402418048}
   - component: {fileID: 8043367158402418063}
   - component: {fileID: 8043367158402418059}
+  - component: {fileID: 3483729760458032853}
   m_Layer: 5
   m_Name: InputField
   m_TagString: Untagged
@@ -501,6 +502,19 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0.7924528, b: 0.072243445, a: 1}
   m_EffectDistance: {x: 5, y: 3}
   m_UseGraphicAlpha: 1
+--- !u!114 &3483729760458032853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8043367158402418057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputFieldNumber: 0
 --- !u!1 &8043367158531719339
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,4 +981,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e86f50bacfc96148862bf18b220637b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blockType: 0
+  blockType: 2
+  methodName: 

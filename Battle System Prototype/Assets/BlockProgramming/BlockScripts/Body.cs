@@ -43,27 +43,30 @@ public class Body : MonoBehaviour
         BlockSpace blockSpace=blockSpaces[index+1];
         blockSpaces.Remove(blockSpace);
         blockProgrammerScript.removeBlockSpace(blockSpace);
-        for(int i=index;i<blockSpaces.Count;i++){
+        for(int i=0;i<blockSpaces.Count;i++){
             blockSpaces[i].setIndex(i);
         }
     }
 
-    public void updateBlockSpacePositions(){
+    public void updateSpacePositions(){
         blockSpaces[0].setPosition((Vector2)GetComponentInParent<Section>().gameObject
                                             .GetComponentInChildren<Header>().gameObject.transform.position);
         for(int i=1;i<transform.childCount;i++){
             blockSpaces[i].setPosition((Vector2)transform.GetChild(i).transform.position);
         }
-        foreach(Transform child in transform){
-            if(child.GetComponent<Block>()!=null){
-                child.GetComponent<Block>().updateBlockSpacePositions();
+        foreach(Transform childTransform in transform){
+            if(childTransform.GetComponent<Block>()!=null){
+                childTransform.GetComponent<Block>().updateSpacePositions();
             }
         }
     }
 
-    public void blockSpacesActive(bool active){
+    public void setBlockSpacesActive(bool active){
         foreach(BlockSpace blockSpace in blockSpaces){
             blockSpace.setActive(active);
+            foreach(Transform childTransform in transform){
+                childTransform.gameObject.GetComponent<Block>().setSpacesActive(active);
+            }
         }
     }
 }
