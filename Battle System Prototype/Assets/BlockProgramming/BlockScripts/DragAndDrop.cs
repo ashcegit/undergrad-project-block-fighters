@@ -90,7 +90,6 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                                                                                     SNAPDISTANCE);
                 //Debug.Log(nearestInputSpace.getInputFieldHandler().getHeader().gameObject.GetComponentInParent<Section>().gameObject.GetComponentInParent<Block>().gameObject.name);
                 if(nearestInputSpace.getInputFieldHandler()!=null){
-                    Debug.Log(true);
                     highlightInputField(nearestInputSpace.getInputFieldHandler());
                 }else{
                     removeInputFieldHighlight();
@@ -149,6 +148,11 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
     }
 
     public void highlightInputField(InputFieldHandler inputFieldHandler){
+        if(currentInputField!=null){
+            if(currentInputField!=inputFieldHandler){
+                currentInputField.setHighlight(false);
+            }
+        }
         highlightActive=true;
         currentInputField=inputFieldHandler;
         currentInputField.setHighlight(true);

@@ -12,6 +12,4 @@ public class SelectionBlock : MonoBehaviour
     void OnEnable(){
     }
 
-    void OnDisable(){
-    }
 }
