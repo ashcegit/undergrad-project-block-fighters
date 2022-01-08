@@ -424,6 +424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputBlock: {fileID: 0}
   inputType: 3
   secondaryInputType: 5
   inputFieldNumber: 1
@@ -600,6 +601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputBlock: {fileID: 0}
   inputType: 3
   secondaryInputType: 5
   inputFieldNumber: 0
@@ -967,6 +969,7 @@ GameObject:
   - component: {fileID: 9137264511579883473}
   - component: {fileID: 9137264511579882540}
   - component: {fileID: 1092902332943926082}
+  - component: {fileID: 203411665175169042}
   m_Layer: 5
   m_Name: Block Maths Divide
   m_TagString: Untagged
@@ -1034,3 +1037,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockType: 3
   methodName: 
+--- !u!114 &203411665175169042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9137264511579883474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d617f0741130f304d89f5b4cd162161d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

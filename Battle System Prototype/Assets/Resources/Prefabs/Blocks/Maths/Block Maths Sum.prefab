@@ -251,6 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputBlock: {fileID: 0}
   inputType: 3
   secondaryInputType: 5
   inputFieldNumber: 0
@@ -266,6 +267,7 @@ GameObject:
   - component: {fileID: 3485844406080376291}
   - component: {fileID: 3485844406080376287}
   - component: {fileID: 1434836276739034176}
+  - component: {fileID: 2901248000820029922}
   m_Layer: 5
   m_Name: Block Maths Sum
   m_TagString: Untagged
@@ -333,6 +335,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockType: 3
   methodName: 
+--- !u!114 &2901248000820029922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3485844406080376292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2f62de7e198a1a4abaee66743c13d32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3485844406502001770
 GameObject:
   m_ObjectHideFlags: 0
@@ -951,6 +965,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputBlock: {fileID: 0}
   inputType: 3
   secondaryInputType: 5
   inputFieldNumber: 1
