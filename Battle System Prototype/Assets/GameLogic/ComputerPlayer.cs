@@ -73,16 +73,6 @@ public class ComputerPlayer:MonoBehaviour
                 executionWrapper.setGameAction(null);
                 executionWrapper.setEndOfSection(false);
                 break;
-            case(BlockType.Operator):
-                pointer++;
-                executionWrapper.setGameAction(null);
-                executionWrapper.setEndOfSection(false);
-                break;
-            case(BlockType.Logic):
-                pointer++;
-                executionWrapper.setGameAction(null);
-                executionWrapper.setEndOfSection(false);
-                break;
             case(BlockType.EndOfSection):
             default:
                 pointer++;

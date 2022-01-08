@@ -88,9 +88,12 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                 nearestInputSpace=raycaster.getNearestSpaceToPosition<InputSpace>(blockProgrammerScript.getInputSpaces(),
                                                                                     data.position,
                                                                                     SNAPDISTANCE);
-                //Debug.Log(nearestInputSpace.getInputFieldHandler().getHeader().gameObject.GetComponentInParent<Section>().gameObject.GetComponentInParent<Block>().gameObject.name);
-                if(nearestInputSpace.getInputFieldHandler()!=null){
-                    highlightInputField(nearestInputSpace.getInputFieldHandler());
+                InputFieldHandler inputFieldHandler=nearestInputSpace.getInputFieldHandler();
+                if(inputFieldHandler!=null){
+                    if(currentBlockType==inputFieldHandler.inputType||
+                        currentBlockType==inputFieldHandler.secondaryInputType){
+                            highlightInputField(inputFieldHandler);
+                        }
                 }else{
                     removeInputFieldHighlight();
                 }
@@ -137,8 +140,6 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
         ghostBlock.SetActive(true);
         ghostBlock.transform.SetParent(blockObject.transform);
         ghostBlock.transform.SetSiblingIndex(siblingIndex);
-        // Debug.Log((Vector2)blockObject.transform.position);
-        // Debug.Log((Vector2)ghostBlock.transform.position);
     }
 
     public void removeGhostBlock(){

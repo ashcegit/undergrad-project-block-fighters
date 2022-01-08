@@ -251,7 +251,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputType: 4
+  secondaryInputType: 4
   inputFieldNumber: 0
+  textAllowed: 0
 --- !u!1 &6075383520033986226
 GameObject:
   m_ObjectHideFlags: 0
@@ -775,7 +778,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputType: 4
+  secondaryInputType: 4
   inputFieldNumber: 1
+  textAllowed: 0
 --- !u!1 &8877538687006759230
 GameObject:
   m_ObjectHideFlags: 0

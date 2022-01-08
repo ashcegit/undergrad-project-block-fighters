@@ -172,6 +172,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputType: 4
+  secondaryInputType: 4
   inputFieldNumber: 0
   textAllowed: 0
 --- !u!1 &2622556754378258861
