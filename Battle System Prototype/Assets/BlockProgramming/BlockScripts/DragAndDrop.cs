@@ -41,16 +41,19 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
 
     public void OnPointerDown(PointerEventData data){
         GameObject draggedExistingBlock=raycaster.getObjectOfTypeAtPosition<Block>((Vector2)data.position);
-        GameObject draggedExisingSelectionBlock=raycaster.getObjectOfTypeAtPosition<SelectionBlock>((Vector2)data.position);
+        GameObject draggedSelectionBlock=raycaster.getObjectOfTypeAtPosition<SelectionBlock>((Vector2)data.position);
         if(draggedExistingBlock!=null){
             currentlyDraggedObject=draggedExistingBlock;
             offset=(Vector2)data.position;
-        }else if(draggedExisingSelectionBlock!=null){
+        }else if(draggedSelectionBlock!=null){
             selectionScrollRect.StopMovement();
             selectionScrollRect.enabled=false;
-            currentlyDraggedObject=Instantiate(draggedExisingSelectionBlock.GetComponent<SelectionBlock>().prefabBlock);
+            currentlyDraggedObject=Instantiate(draggedSelectionBlock.GetComponent<SelectionBlock>().prefabBlock);
             blockProgrammerScript.addBlockObject(currentlyDraggedObject);
             currentlyDraggedObject.transform.SetParent(environment.transform);
+            if(currentlyDraggedObject.GetComponent<Block>().getBlockType()==BlockType.Action){
+                currentlyDraggedObject.GetComponent<Block>().initActionInputFieldHandler();
+            }
             offset=(Vector2)data.position;
         }
     }
@@ -68,6 +71,7 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                     Header parentHeader=currentlyDraggedObject.GetComponentInParent<Header>();
                     InputFieldHandler inputFieldHandler=parentHeader.getInputFieldHandlerForInputBlock(currentlyDraggedObject);
                     inputFieldHandler.clearInputBlock();
+                    inputFieldHandler.setInputSpaceActive(true);
                 }
             }
             currentlyDraggedObject.transform.SetParent(environment.transform);
@@ -90,6 +94,7 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                                                                                     SNAPDISTANCE);
                 InputFieldHandler inputFieldHandler=nearestInputSpace.getInputFieldHandler();
                 if(inputFieldHandler!=null){
+                    Debug.Log("Found");
                     if(currentBlockType==inputFieldHandler.inputType||
                         currentBlockType==inputFieldHandler.secondaryInputType){
                             highlightInputField(inputFieldHandler);
@@ -124,6 +129,8 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                     }else{
                         currentlyDraggedObject.GetComponent<Block>().updateSpacePositions();
                     }
+                    currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
+                }else{
                     currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
                 }   
             }

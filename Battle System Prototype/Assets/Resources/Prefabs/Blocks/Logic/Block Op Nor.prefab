@@ -172,7 +172,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputBlock: {fileID: 0}
+  inputType: 0
+  secondaryInputType: 0
   inputFieldNumber: 1
+  textAllowed: 0
 --- !u!1 &7001472471310488266
 GameObject:
   m_ObjectHideFlags: 0
@@ -673,7 +677,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputBlock: {fileID: 0}
+  inputType: 0
+  secondaryInputType: 0
   inputFieldNumber: 0
+  textAllowed: 0
 --- !u!1 &8487412296933898012
 GameObject:
   m_ObjectHideFlags: 0
@@ -882,6 +890,7 @@ GameObject:
   - component: {fileID: 8487412297492032351}
   - component: {fileID: 8487412297492032336}
   - component: {fileID: 4097902467529442339}
+  - component: {fileID: 8094365799989849607}
   m_Layer: 5
   m_Name: Block Op Nor
   m_TagString: Untagged
@@ -949,6 +958,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockType: 4
   methodName: 
+--- !u!114 &8094365799989849607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8487412297492032350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 397e841d6196a43489d5436605d9bf89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8487412297906855802
 GameObject:
   m_ObjectHideFlags: 0

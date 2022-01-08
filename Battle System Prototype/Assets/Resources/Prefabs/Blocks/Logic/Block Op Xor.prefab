@@ -251,6 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputBlock: {fileID: 0}
   inputType: 4
   secondaryInputType: 4
   inputFieldNumber: 1
@@ -439,6 +440,7 @@ GameObject:
   - component: {fileID: 2565866853391127772}
   - component: {fileID: 2565866853391127751}
   - component: {fileID: 1578152716448200654}
+  - component: {fileID: 57840751790398156}
   m_Layer: 5
   m_Name: Block Op Xor
   m_TagString: Untagged
@@ -506,6 +508,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockType: 4
   methodName: 
+--- !u!114 &57840751790398156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2565866853391127773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cece46f6b28bea546b1159f18432a39c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2565866853854776269
 GameObject:
   m_ObjectHideFlags: 0
@@ -833,6 +847,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputBlock: {fileID: 0}
   inputType: 4
   secondaryInputType: 4
   inputFieldNumber: 0

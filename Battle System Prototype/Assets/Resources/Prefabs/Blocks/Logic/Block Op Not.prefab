@@ -444,6 +444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputBlock: {fileID: 0}
   inputType: 4
   secondaryInputType: 4
   inputFieldNumber: 0
@@ -459,6 +460,7 @@ GameObject:
   - component: {fileID: 6571991892123651250}
   - component: {fileID: 6571991892123651247}
   - component: {fileID: 558676545915161878}
+  - component: {fileID: -1309798709775558179}
   m_Layer: 5
   m_Name: Block Op Not
   m_TagString: Untagged
@@ -526,6 +528,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockType: 4
   methodName: 
+--- !u!114 &-1309798709775558179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6571991892123651249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bab3c837f2b8a5e45b26b836532702a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6571991892684253055
 GameObject:
   m_ObjectHideFlags: 0

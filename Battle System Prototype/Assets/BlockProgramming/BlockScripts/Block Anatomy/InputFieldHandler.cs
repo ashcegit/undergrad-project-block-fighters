@@ -27,10 +27,23 @@ public class InputFieldHandler : MonoBehaviour
             inputSpace=new InputSpace();
             inputSpace.setInputFieldHandler(this);
             inputSpace.setPosition((Vector2)gameObject.transform.position);
-            inputSpace.setActive(false);
+            inputSpace.setActive(true);
             blockProgrammerScript.addInputSpace(inputSpace);
-            //Debug.Log("Made input space at position: "+gameObject.transform.position.ToString());
         }
+    }
+
+    public void initActionInputFieldHandler(){
+        blockProgrammerScript=GameObject.FindGameObjectWithTag("BlockProgrammer").GetComponent<BlockProgrammerScript>();
+        inputField=GetComponent<InputField>();
+        header=transform.parent.gameObject.GetComponent<Header>();
+        header.addInputFieldHandler(this);
+        outline=GetComponent<Outline>();
+        inputField.enabled=false;
+        inputSpace=new InputSpace();
+        inputSpace.setInputFieldHandler(this);
+        inputSpace.setPosition((Vector2)gameObject.transform.position);
+        inputSpace.setActive(false);
+        blockProgrammerScript.addInputSpace(inputSpace);
     }
 
     // Start is called before the first frame update

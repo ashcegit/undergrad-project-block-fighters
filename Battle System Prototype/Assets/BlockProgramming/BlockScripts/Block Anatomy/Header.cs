@@ -16,6 +16,10 @@ public class Header : MonoBehaviour
         }
     }
 
+    public void addInputFieldHandler(InputFieldHandler inputFieldHandler){
+        inputFieldHandlers.Add(inputFieldHandler);
+    }
+
     public List<string> getInputStrings(){
         List<string> inputStrings=new List<string>();
         foreach(InputFieldHandler inputFieldHandler in inputFieldHandlers){
@@ -60,7 +64,7 @@ public class Header : MonoBehaviour
 
     public List<InputFieldHandler> getInputFieldHandlers(){return inputFieldHandlers;}
 
-    void OnDestroy(){
-        
+    public void initActionInputFieldHandler(){
+        inputFieldHandlers[0].initActionInputFieldHandler();
     }
 }

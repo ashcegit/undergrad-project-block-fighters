@@ -39,6 +39,7 @@ public class Block : MonoBehaviour
 
     public void setPosition(Vector2 position){
         transform.position=position;
+        updateSpacePositions();
     }
 
     public void updateSpacePositions(){
@@ -86,5 +87,9 @@ public class Block : MonoBehaviour
 
     public Block getStartBlock(){
         return startBlock;
+    }
+
+    public void initActionInputFieldHandler(){
+        sections[0].initActionInputFieldHandler();
     }
 }

@@ -57,4 +57,8 @@ public class Section : MonoBehaviour
             }
         }
     }
+
+    public void initActionInputFieldHandler(){
+        header.initActionInputFieldHandler();
+    }
 }
