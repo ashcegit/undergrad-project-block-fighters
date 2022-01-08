@@ -7,7 +7,7 @@ public class InputFieldHandler : MonoBehaviour
 {
 
     BlockProgrammerScript blockProgrammerScript;
-    GameObject inputBlock;
+    public GameObject inputBlock;
     public BlockType inputType;
     public BlockType secondaryInputType;
     public int inputFieldNumber;
