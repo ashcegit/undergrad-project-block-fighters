@@ -20,6 +20,7 @@ public class Block : MonoBehaviour
             }
         }
         if(blockType==BlockType.Method){blockStackManager=new BlockStackManager();}
+        startBlock=null;
     }
 
     void OnEnable(){

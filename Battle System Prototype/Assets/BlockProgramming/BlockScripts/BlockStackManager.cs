@@ -17,26 +17,24 @@ public class BlockStackManager
 
     public List<Block> initBlockStack(Block block){
         //performs a depth search for all non-header blocks starting from a given parent block
-        blockStack=new List<Block>();
+        List<Block> blocks=new List<Block>();
         List<Section> sections=block.getSections();
         if(block.blockType!=BlockType.Method){
-            blockStack.Add(block);
+            blocks.Add(block);
         }
         foreach(Section section in sections){
             if(section.getBody()!=null){
                 foreach(Transform childTransform in section.getBody().gameObject.transform){
                     Block childBlock=childTransform.gameObject.GetComponent<Block>();
-                    Debug.Log("Adding range");
-                    blockStack.AddRange(initBlockStack(childBlock));
+                    blocks.AddRange(initBlockStack(childBlock));
                 }
                 Block endBlock=new Block();
                 endBlock.blockType=BlockType.EndOfSection;
                 endBlock.setStartBlock(block);
-                blockStack.Add(endBlock);
+                blocks.Add(endBlock);
             }            
         }
-        Debug.Log(blockStack);
-        return blockStack;
+        return blocks;
     }
 
     public void setBlockStack(List<Block> blockStack){
@@ -87,7 +85,7 @@ public class BlockStackManager
                 break;
             case(BlockType.Control):
                 ControlFunction controlFunction=currentBlock.gameObject.GetComponent<ControlFunction>();
-                pointer=controlFunction.function(pointer,blockStack);
+                pointer=controlFunction.function(pointer,ref blockStack);
                 executionWrapper.setGameAction(null);
                 executionWrapper.setEndOfSection(false);
                 break;

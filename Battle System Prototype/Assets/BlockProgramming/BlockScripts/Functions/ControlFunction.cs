@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class ControlFunction : MonoBehaviour
 {
-    public abstract int function(int pointer,List<Block> blockStack);
+    public abstract int function(int pointer,ref List<Block> blockStack);
 }

@@ -575,6 +575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputBlock: {fileID: 0}
   inputType: 4
   secondaryInputType: 4
   inputFieldNumber: 0
@@ -590,6 +591,7 @@ GameObject:
   - component: {fileID: 3007205543144607365}
   - component: {fileID: 3007205543144607364}
   - component: {fileID: 3998958635279747756}
+  - component: {fileID: 7141193668902558993}
   m_Layer: 5
   m_Name: Block Ins IfElse
   m_TagString: Untagged
@@ -659,6 +661,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockType: 2
   methodName: 
+--- !u!114 &7141193668902558993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3007205543144607370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 968f76c4b9e7f3445bf32d969acf627d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3007205543384991535
 GameObject:
   m_ObjectHideFlags: 0
