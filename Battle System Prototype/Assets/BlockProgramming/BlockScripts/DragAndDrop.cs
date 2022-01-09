@@ -94,7 +94,6 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                                                                                     SNAPDISTANCE);
                 InputFieldHandler inputFieldHandler=nearestInputSpace.getInputFieldHandler();
                 if(inputFieldHandler!=null){
-                    Debug.Log("Found");
                     if(currentBlockType==inputFieldHandler.inputType||
                         currentBlockType==inputFieldHandler.secondaryInputType){
                             highlightInputField(inputFieldHandler);

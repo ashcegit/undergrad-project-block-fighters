@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ControlIfFunction : ControlFunction
 {
+    public string name="If";
     public override int function(int pointer,ref List<Block> blockStack){
         Block thisBlock=gameObject.GetComponent<Block>();
         Block inputBlock=gameObject.GetComponent<Block>().getSections()[0].getHeader().getInputFieldHandlers()[0].getInputBlock().GetComponent<Block>();
