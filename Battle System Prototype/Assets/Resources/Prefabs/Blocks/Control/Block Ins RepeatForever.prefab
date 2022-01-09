@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 2040799273993009965}
   - component: {fileID: 2040799273993009961}
   - component: {fileID: 2144898828910238810}
+  - component: {fileID: 8737291482389220309}
   m_Layer: 5
   m_Name: Block Ins RepeatForever
   m_TagString: Untagged
@@ -194,6 +195,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockType: 2
   methodName: 
+--- !u!114 &8737291482389220309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2040799273993009966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 849cd4cc9efbb5b40900933bd29913ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2040799274873639527
 GameObject:
   m_ObjectHideFlags: 0

@@ -33,9 +33,9 @@ RectTransform:
   m_Father: {fileID: 8043367158769145634}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 226.5, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 226.5, y: -35}
   m_SizeDelta: {x: 0, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6429183410240343523
@@ -281,9 +281,9 @@ RectTransform:
   m_Father: {fileID: 8043367158769145634}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 55.5, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 55.5, y: -35}
   m_SizeDelta: {x: 0, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8043367157987274537
@@ -514,6 +514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5f39494b71a0438ea6188b1c387a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputBlock: {fileID: 0}
   inputType: 3
   secondaryInputType: 5
   inputFieldNumber: 0
@@ -918,6 +919,7 @@ GameObject:
   - component: {fileID: 8043367159958692670}
   - component: {fileID: 8043367159958692658}
   - component: {fileID: 7285332852152252825}
+  - component: {fileID: 2552459619164288467}
   m_Layer: 5
   m_Name: Block Ins Repeat
   m_TagString: Untagged
@@ -986,3 +988,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockType: 2
   methodName: 
+--- !u!114 &2552459619164288467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8043367159958692669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 893438cdd582fb142b400bd252a9380b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
