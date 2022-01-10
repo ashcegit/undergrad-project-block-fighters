@@ -5,10 +5,19 @@ using UnityEngine;
 public class ControlRepeatFunction : ControlFunction
 {
     public const string NAME="Repeat";
-    public string getName(){return NAME;}
+    public override string getName(){return NAME;}
+
+    private int loggedPointer;
+
+    private int triggerCount;
 
     public override int function(int pointer,ref List<Block> blockStack){
-        Block thisBlock=gameObject.GetComponent<Block>();
+        triggerCount=0;
+        loggedPointer=++pointer;
+        return loggedPointer;
+    }
+
+    public int onRepeat(int pointer,ref List<Block> blockStack){
         List<InputFieldHandler> inputFieldHandlers=gameObject.GetComponent<Block>().getSections()[0].getHeader().getInputFieldHandlers();
         int operand=0;
         Block operandBlock=inputFieldHandlers[0].getInputBlock().GetComponent<Block>();
@@ -17,17 +26,12 @@ public class ControlRepeatFunction : ControlFunction
         }else if(operandBlock.getBlockType()==BlockType.Info){
             operand=(int)operandBlock.gameObject.GetComponent<InfoFunction>().function();
         }
-        pointer++;
-        int endPointer=pointer;
-        List<Block> subBlockStack=new List<Block>();
-        while(blockStack[endPointer].getStartBlock()!=thisBlock){
-            endPointer++;
+
+        if(triggerCount<operand){
+            triggerCount++;
+            return loggedPointer;
+        }else{
+            return ++pointer;
         }
-        subBlockStack=blockStack.GetRange(pointer,endPointer);
-        for(int i=0;i<operand;i++){
-            Debug.Log("Adding");
-            blockStack.InsertRange(pointer,subBlockStack);
-        }
-        return pointer;
     }
 }

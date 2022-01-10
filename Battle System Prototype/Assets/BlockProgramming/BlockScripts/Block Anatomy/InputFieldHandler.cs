@@ -26,7 +26,7 @@ public class InputFieldHandler : MonoBehaviour
             inputField.enabled=false;
             inputSpace=new InputSpace();
             inputSpace.setInputFieldHandler(this);
-            inputSpace.setPosition((Vector2)gameObject.transform.position);
+            inputSpace.setPosition((Vector2)gameObject.GetComponent<RectTransform>().position);
             inputSpace.setActive(true);
             blockProgrammerScript.addInputSpace(inputSpace);
         }
@@ -41,7 +41,7 @@ public class InputFieldHandler : MonoBehaviour
         inputField.enabled=false;
         inputSpace=new InputSpace();
         inputSpace.setInputFieldHandler(this);
-        inputSpace.setPosition((Vector2)gameObject.transform.position);
+        inputSpace.setPosition((Vector2)gameObject.GetComponent<RectTransform>().position);
         inputSpace.setActive(false);
         blockProgrammerScript.addInputSpace(inputSpace);
     }
@@ -63,6 +63,8 @@ public class InputFieldHandler : MonoBehaviour
     public void setInputSpaceActive(bool active){
         if(!textAllowed&&inputBlock==null){
             inputSpace.setActive(active);
+        }else if(inputBlock!=null){
+            inputSpace.setActive(false);
         }
     }
 

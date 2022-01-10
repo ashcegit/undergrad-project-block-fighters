@@ -21,6 +21,7 @@ public class ComputerPlayer:MonoBehaviour
         }
         Block endBlock=new Block();
         endBlock.blockType=BlockType.EndOfSection;
+
         blockStack.Add(endBlock);
     }
 
@@ -34,27 +35,6 @@ public class ComputerPlayer:MonoBehaviour
         pointer=0;
     }
 
-    public void insertBlockStack(List<Block> newBlockStack){
-        for(int i=0;i<newBlockStack.Count;i++){
-            blockStack.Insert(i+pointer,newBlockStack[i]);
-        }
-    }
-
-    public void removeFromBlockStackAtIndex(int index){
-        blockStack.RemoveAt(index);
-    }
-
-    public void removeBlocksUntilNextEndOfSection(){
-        for(int i=pointer;i<blockStack.Count;i++){
-            Block block=blockStack[i];
-            if(block.blockType==BlockType.EndOfSection){
-                break;
-            }else{
-                blockStack.Remove(block);
-            }
-        }
-    }
-
     public ExecutionWrapper executeCurrentBlock(Character target,Character instigator){
         ExecutionWrapper executionWrapper=new ExecutionWrapper();
         if(pointer>=blockStack.Count){
@@ -62,23 +42,43 @@ public class ComputerPlayer:MonoBehaviour
             executionWrapper.setEndOfSection(false);
         }else{
             Block currentBlock=blockStack[pointer];
+            if(currentBlock.getBlockType()==BlockType.EndOfSection){
+                Block startBlock=currentBlock.getStartBlock();
+                if(startBlock!=null){
+                    if(startBlock.getBlockType()==BlockType.Control){
+                    ControlFunction controlFunction=startBlock.gameObject.GetComponent<ControlFunction>();
+                        if(controlFunction.getName()=="Repeat"){
+                            ControlRepeatFunction controlRepeatFunction=(ControlRepeatFunction)controlFunction;
+                            pointer=controlRepeatFunction.onRepeat(pointer,ref blockStack);
+                        }else if(controlFunction.getName()=="Repeat Until"){
+                            ControlRepeatUntilFunction controlRepeatUntilFunction=(ControlRepeatUntilFunction)controlFunction;
+                            pointer=controlRepeatUntilFunction.onRepeat(pointer,ref blockStack);
+                        }else if(controlFunction.getName()=="Repeat Forever"){
+                            ControlRepeatForeverFunction controlForeverFunction=(ControlRepeatForeverFunction)controlFunction;
+                            pointer=controlForeverFunction.onRepeat(pointer,ref blockStack);
+                        }
+                    }
+                }
+            }
             switch(currentBlock.blockType){
-            case(BlockType.Action):
-                pointer++;
-                executionWrapper.setGameAction(currentBlock.gameObject.GetComponent<ActionFunction>().function(target,instigator));
-                executionWrapper.setEndOfSection(false);
-                break;
-            case(BlockType.Control):
-                pointer++;
-                executionWrapper.setGameAction(null);
-                executionWrapper.setEndOfSection(false);
-                break;
-            case(BlockType.EndOfSection):
-            default:
-                pointer++;
-                executionWrapper.setGameAction(null);
-                executionWrapper.setEndOfSection(true);
-                break;
+                case(BlockType.Action):
+                    pointer++;
+                    ActionFunction actionFunction=currentBlock.gameObject.GetComponent<ActionFunction>();
+                    executionWrapper.setGameAction(actionFunction.function(null,instigator));
+                    executionWrapper.setEndOfSection(false);
+                    break;
+                case(BlockType.Control):
+                    ControlFunction controlFunction=currentBlock.gameObject.GetComponent<ControlFunction>();
+                    pointer=controlFunction.function(pointer,ref blockStack);
+                    executionWrapper.setGameAction(null);
+                    executionWrapper.setEndOfSection(false);
+                    break;
+                case(BlockType.EndOfSection):
+                default:
+                    pointer++;
+                    executionWrapper.setGameAction(null);
+                    executionWrapper.setEndOfSection(true);
+                    break;
             }
         }
         return executionWrapper;

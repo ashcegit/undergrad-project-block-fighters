@@ -49,6 +49,7 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
             selectionScrollRect.StopMovement();
             selectionScrollRect.enabled=false;
             currentlyDraggedObject=Instantiate(draggedSelectionBlock.GetComponent<SelectionBlock>().prefabBlock);
+            currentlyDraggedObject.GetComponent<RectTransform>().localScale=new Vector3(1,1,1);
             blockProgrammerScript.addBlockObject(currentlyDraggedObject);
             currentlyDraggedObject.transform.SetParent(environment.transform);
             if(currentlyDraggedObject.GetComponent<Block>().getBlockType()==BlockType.Action){
@@ -118,20 +119,23 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                         GameObject nearestBlockSpaceBody=nearestBlockSpace.getParentBody();
                         nearestBlockSpaceBody.GetComponent<Body>().insertBlock(currentlyDraggedObject,nearestBlockSpace.getIndex());
                         nearestBlockSpaceBody.GetComponentInParent<Block>().updateSpacePositions();
+                        nearestBlockSpaceBody.GetComponentInParent<Block>().setSpacesActive(true);
                     }else{
                         currentlyDraggedObject.GetComponent<Block>().updateSpacePositions();
+                        currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
                     }
-                    currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
                 }else if(currentBlockType!=BlockType.Method){
                     if(highlightActive){
                         nearestInputSpace.getInputFieldHandler().addInputBlock(currentlyDraggedObject);
+                        nearestInputSpace.getInputFieldHandler().GetComponentInParent<Block>().updateSpacePositions();
+                        nearestInputSpace.getInputFieldHandler().GetComponentInParent<Block>().setSpacesActive(true);
                     }else{
                         currentlyDraggedObject.GetComponent<Block>().updateSpacePositions();
+                        currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
                     }
-                    currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
                 }else{
                     currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
-                }   
+                }
             }
             nearestBlockSpace=null;
             nearestInputSpace=null;

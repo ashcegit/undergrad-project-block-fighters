@@ -40,6 +40,19 @@ public class Section : MonoBehaviour
         }
     }
 
+    public Vector2 updateBlockLayouts(){
+        Vector2 sizeVector=new Vector2();
+        if(header!=null){
+            sizeVector+=header.updateBlockLayouts();
+        }
+        if(body!=null){
+            sizeVector+=body.updateBlockLayouts();
+            return sizeVector;
+        }else{
+            return GetComponentInParent<RectTransform>().sizeDelta;
+        }
+    }
+
     public void setSpacesActive(bool active){
         if(header!=null){
             header.setInputSpacesActive(active);

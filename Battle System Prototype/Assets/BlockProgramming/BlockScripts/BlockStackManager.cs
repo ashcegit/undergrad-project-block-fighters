@@ -39,6 +39,14 @@ public class BlockStackManager
 
     public void setBlockStack(List<Block> blockStack){
         this.blockStack=blockStack;
+        foreach(Block block in blockStack){
+            Debug.Log(block);
+            if(block.getBlockType()==BlockType.EndOfSection){
+                Debug.Log("END OF SECTION");
+                Debug.Log("START BLOCK:");
+                Debug.Log(block.getStartBlock().getBlockType());
+            }
+        }
     }
 
     public List<Block> getBlockStack(){return blockStack;}
@@ -46,27 +54,6 @@ public class BlockStackManager
     public void clearBlockStack(){
         pointer=0;
         blockStack=new List<Block>();
-    }
-
-    public void insertBlockStack(List<Block> newBlockStack){
-        for(int i=0;i<newBlockStack.Count;i++){
-            blockStack.Insert(i+pointer,newBlockStack[i]);
-        }
-    }
-
-    public void removeFromBlockStackAtIndex(int index){
-        blockStack.RemoveAt(index);
-    }
-
-    public void removeBlocksUntilNextEndOfSection(){
-        for(int i=pointer;i<blockStack.Count;i++){
-            Block block=blockStack[i];
-            if(block.blockType==BlockType.EndOfSection){
-                break;
-            }else{
-                blockStack.Remove(block);
-            }
-        }
     }
 
     public ExecutionWrapper executeCurrentBlock(Character target,Character instigator){
@@ -77,24 +64,50 @@ public class BlockStackManager
         }else{
             Block currentBlock=blockStack[pointer];
             switch(currentBlock.blockType){
-            case(BlockType.Action):
-                pointer++;
-                ActionFunction actionFunction=currentBlock.gameObject.GetComponent<ActionFunction>();
-                executionWrapper.setGameAction(actionFunction.function(null,instigator));
-                executionWrapper.setEndOfSection(false);
-                break;
-            case(BlockType.Control):
-                ControlFunction controlFunction=currentBlock.gameObject.GetComponent<ControlFunction>();
-                pointer=controlFunction.function(pointer,ref blockStack);
-                executionWrapper.setGameAction(null);
-                executionWrapper.setEndOfSection(false);
-                break;
-            case(BlockType.EndOfSection):
-            default:
-                pointer++;
-                executionWrapper.setGameAction(null);
-                executionWrapper.setEndOfSection(true);
-                break;
+                case(BlockType.Action):
+                    pointer++;
+                    ActionFunction actionFunction=currentBlock.gameObject.GetComponent<ActionFunction>();
+                    executionWrapper.setGameAction(actionFunction.function(null,instigator));
+                    executionWrapper.setEndOfSection(false);
+                    break;
+                case(BlockType.Control):
+                    ControlFunction controlFunction=currentBlock.gameObject.GetComponent<ControlFunction>();
+                    pointer=controlFunction.function(pointer,ref blockStack);
+                    executionWrapper.setGameAction(null);
+                    executionWrapper.setEndOfSection(false);
+                    break;
+                case(BlockType.EndOfSection):
+                    Block startBlock=currentBlock.getStartBlock();
+                    if(startBlock!=null){
+                        if(startBlock.getBlockType()==BlockType.Control){
+                            ControlFunction endControlFunction=startBlock.gameObject.GetComponent<ControlFunction>();
+                            switch(endControlFunction.getName()){
+                                case("If Else"):
+                                    ControlIfElseFunction controlIfElseFunction=(ControlIfElseFunction)endControlFunction;
+                                    pointer=controlIfElseFunction.onRepeat(pointer,ref blockStack);
+                                    break;
+                                case("Repeat"):
+                                    ControlRepeatFunction controlRepeatFunction=(ControlRepeatFunction)endControlFunction;
+                                    pointer=controlRepeatFunction.onRepeat(pointer,ref blockStack);
+                                    break;
+                                case("Repeat Until"):
+                                    ControlRepeatUntilFunction controlRepeatUntilFunction=(ControlRepeatUntilFunction)endControlFunction;
+                                    pointer=controlRepeatUntilFunction.onRepeat(pointer,ref blockStack);
+                                    break;
+                                case("Repeat Forever"):
+                                    ControlRepeatForeverFunction controlForeverFunction=(ControlRepeatForeverFunction)endControlFunction;
+                                    pointer=controlForeverFunction.onRepeat(pointer,ref blockStack);
+                                    break;
+                            }
+                            Debug.Log(pointer);
+                        }
+                    }
+                    break;
+                default:
+                    pointer++;
+                    executionWrapper.setGameAction(null);
+                    executionWrapper.setEndOfSection(true);
+                    break;
             }
         }
         return executionWrapper;

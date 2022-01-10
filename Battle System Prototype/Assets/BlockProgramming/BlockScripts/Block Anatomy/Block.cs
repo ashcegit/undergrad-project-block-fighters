@@ -36,6 +36,7 @@ public class Block : MonoBehaviour
 
     }
 
+
     public BlockType getBlockType(){return blockType;}
 
     public void setPosition(Vector2 position){
@@ -47,6 +48,14 @@ public class Block : MonoBehaviour
         foreach(Section section in sections){
             section.updateSpacePositions();
         }
+    }
+
+    public Vector2 updateBlockLayouts(){
+        Vector2 sizeSum=new Vector2();
+        foreach(Section section in sections){
+            sizeSum+=section.updateBlockLayouts();
+        }
+        return sizeSum;
     }
 
     public void setSpacesActive(bool active){
