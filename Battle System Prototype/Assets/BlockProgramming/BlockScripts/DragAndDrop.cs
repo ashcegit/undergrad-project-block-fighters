@@ -45,6 +45,7 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
         if(draggedExistingBlock!=null){
             currentlyDraggedObject=draggedExistingBlock;
             offset=(Vector2)data.position;
+            currentlyDraggedObject.GetComponent<Block>().setPosition(data.position);
         }else if(draggedSelectionBlock!=null){
             selectionScrollRect.StopMovement();
             selectionScrollRect.enabled=false;
@@ -56,7 +57,9 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                 currentlyDraggedObject.GetComponent<Block>().initActionInputFieldHandler();
             }
             offset=(Vector2)data.position;
+            currentlyDraggedObject.GetComponent<RectTransform>().position=data.position;
         }
+        
     }
 
     public void OnDrag(PointerEventData data){
@@ -67,12 +70,15 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                 int currentlyDraggedSiblingIndex=currentlyDraggedObject.transform.GetSiblingIndex();
                 if(currentBlockType==BlockType.Action||currentBlockType==BlockType.Control){
                     Body parentBody=currentlyDraggedObject.GetComponentInParent<Body>();
+                    parentBody.updateBlockLayouts();
                     parentBody.removeBlockSpaceByIndex(currentlyDraggedSiblingIndex);
+                    parentBody.updateSpacePositions();
                 }else if(currentBlockType!=BlockType.Method){
                     Header parentHeader=currentlyDraggedObject.GetComponentInParent<Header>();
                     InputFieldHandler inputFieldHandler=parentHeader.getInputFieldHandlerForInputBlock(currentlyDraggedObject);
                     inputFieldHandler.clearInputBlock();
                     inputFieldHandler.setInputSpaceActive(true);
+                    parentHeader.updateBlockLayouts();
                 }
             }
             currentlyDraggedObject.transform.SetParent(environment.transform);
@@ -118,18 +124,22 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                         // Debug.Log(nearestBlockSpace.getIndex());
                         GameObject nearestBlockSpaceBody=nearestBlockSpace.getParentBody();
                         nearestBlockSpaceBody.GetComponent<Body>().insertBlock(currentlyDraggedObject,nearestBlockSpace.getIndex());
+                        nearestBlockSpaceBody.GetComponentInParent<Block>().updateBlockLayouts();
                         nearestBlockSpaceBody.GetComponentInParent<Block>().updateSpacePositions();
                         nearestBlockSpaceBody.GetComponentInParent<Block>().setSpacesActive(true);
                     }else{
+                        currentlyDraggedObject.GetComponent<Block>().updateBlockLayouts();
                         currentlyDraggedObject.GetComponent<Block>().updateSpacePositions();
                         currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
                     }
                 }else if(currentBlockType!=BlockType.Method){
                     if(highlightActive){
                         nearestInputSpace.getInputFieldHandler().addInputBlock(currentlyDraggedObject);
+                        nearestInputSpace.getInputFieldHandler().GetComponentInParent<Block>().updateBlockLayouts();
                         nearestInputSpace.getInputFieldHandler().GetComponentInParent<Block>().updateSpacePositions();
                         nearestInputSpace.getInputFieldHandler().GetComponentInParent<Block>().setSpacesActive(true);
                     }else{
+                        currentlyDraggedObject.GetComponent<Block>().updateBlockLayouts();
                         currentlyDraggedObject.GetComponent<Block>().updateSpacePositions();
                         currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
                     }

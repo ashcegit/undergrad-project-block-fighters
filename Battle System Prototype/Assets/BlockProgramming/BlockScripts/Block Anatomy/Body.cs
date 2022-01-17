@@ -83,7 +83,6 @@ public class Body : MonoBehaviour
         foreach(Transform childTransform in transform){
             Block childBlock=childTransform.gameObject.GetComponent<Block>();
             if(childBlock!=null){
-                //Debug.Log(childBlock.updateBlockLayouts().y);
                 height+=childBlock.updateBlockLayouts().y;
             }else{
                 height+=childTransform.gameObject.GetComponent<RectTransform>().sizeDelta.y;
