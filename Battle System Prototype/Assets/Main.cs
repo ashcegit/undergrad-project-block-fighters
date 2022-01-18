@@ -31,20 +31,11 @@ public class Main : MonoBehaviour
         blockProgrammer=GameObject.FindGameObjectWithTag("BlockProgrammer");
         blockProgrammerScript=(BlockProgrammerScript)blockProgrammer.GetComponent<BlockProgrammerScript>();
 
-        game=new GameObject();
-        game.transform.parent=GameObject.FindGameObjectWithTag("Main").transform;
-        game.name="Game";
-        game.tag="GameController";
-        gameScript=(GameScript)game.AddComponent<GameScript>();
+        gameScript=GetComponentInChildren<GameScript>();
 
         gameScript.initGameScript();
-        
-        terminal=new GameObject();
-        terminal.transform.parent=GameObject.FindGameObjectWithTag("Main").transform;
-        terminal.name="Terminal";
-        terminal.tag="Terminal";
- 
-        terminalScript=(Terminal)terminal.AddComponent<Terminal>();
+
+        terminalScript=GetComponentInChildren<Terminal>();
 
         interactionHandler=new InteractionHandler();
 
@@ -80,6 +71,16 @@ public class Main : MonoBehaviour
                                                     gameScript.getOpponent(),
                                                     blockProgrammerScript.getMethodBlockObjects());
         blockProgrammerScript.enabled=false;
+
+        Character player=gameScript.getPlayer();
+        Character opponent=gameScript.getOpponent();
+
+        gameScript.updatePlayerName(player.getCharacterName());
+        gameScript.updateOpponentName(opponent.getCharacterName());
+
+        gameScript.updatePlayerHealth(player.getHealth(),player.getMaxHealth());
+        gameScript.updateOpponentHealth(opponent.getHealth(),opponent.getMaxHealth());
+
         gameScript.enabled=true;
         enabled=true;
     }
