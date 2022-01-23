@@ -87,7 +87,7 @@ namespace CommandTerminal
                 case TerminalState.ReadOnly:
                 case TerminalState.Write:
                 default: {
-                    openTarget = Screen.height;
+                    openTarget = 8*Screen.height/10;
                     break;
                 }
             }
@@ -102,6 +102,7 @@ namespace CommandTerminal
             History = new CommandHistory();
             Autocomplete = new CommandAutocomplete();
         }
+
         public void initShell(GameScript gameScript){
             Shell = new CommandShell();
             Autocomplete = new CommandAutocomplete();
@@ -131,7 +132,7 @@ namespace CommandTerminal
         }
 
         void Start() {
-            ConsoleFont = Font.CreateDynamicFontFromOSFont("Courier New", 25);
+            ConsoleFont = (Font)Resources.Load("Fonts/ThaleahFat_TTF");
 
             commandText = "";
             cachedCommandText = commandText;
@@ -148,10 +149,6 @@ namespace CommandTerminal
         void OnGUI() {
             initialOpen = true;
 
-            if (showGUIButtons) {
-                drawGUIButtons();
-            }
-
             if (isClosed) {
                 return;
             }
@@ -161,11 +158,16 @@ namespace CommandTerminal
         }
 
         void setupWindow() {
-            window = new Rect(Screen.width/2, 0, Screen.width/2, Screen.height);
+            window = new Rect(5*Screen.width/8, Screen.height/10, 5*Screen.width/16, 8*Screen.height/10);
 
             // Set background color
             Texture2D background_texture = new Texture2D(1, 1);
-            background_texture.SetPixel(0, 0, BackgroundColor);
+            var dark_background = new Color();
+            dark_background.r = BackgroundColor.r - InputContrast;
+            dark_background.g = BackgroundColor.g - InputContrast;
+            dark_background.b = BackgroundColor.b - InputContrast;
+            dark_background.a = 0.5f;
+            background_texture.SetPixel(0, 0, dark_background);
             background_texture.Apply();
 
             window_style = new GUIStyle();
@@ -189,16 +191,6 @@ namespace CommandTerminal
             input_style.fixedHeight = ConsoleFont.fontSize * 1.6f;
             input_style.normal.textColor = InputColor;
 
-            var dark_background = new Color();
-            dark_background.r = BackgroundColor.r - InputContrast;
-            dark_background.g = BackgroundColor.g - InputContrast;
-            dark_background.b = BackgroundColor.b - InputContrast;
-            dark_background.a = 0.5f;
-
-            Texture2D input_background_texture = new Texture2D(1, 1);
-            input_background_texture.SetPixel(0, 0, dark_background);
-            input_background_texture.Apply();
-            input_style.normal.background = input_background_texture;
         }
 
         void drawConsole(int Window2D) {
@@ -260,19 +252,6 @@ namespace CommandTerminal
             }
         }
 
-        void drawGUIButtons() {
-            int size = ConsoleFont.fontSize;
-            float x_position = RightAlignButtons ? Screen.width - 7 * size : 0;
-
-            // 7 is the number of chars in the button plus some padding, 2 is the line height.
-            // The layout will resize according to the font size.
-            GUILayout.BeginArea(new Rect(x_position, currentOpenT, 7 * size, size * 2));
-            GUILayout.BeginHorizontal();
-
-            GUILayout.EndHorizontal();
-            GUILayout.EndArea();
-        }
-
         void handleOpenness() {
             float dt = ToggleSpeed * Time.deltaTime;
 
@@ -286,7 +265,7 @@ namespace CommandTerminal
                 return; // Already at target
             }
 
-            window = new Rect(Screen.width/2, 0, Screen.width/2,currentOpenT);
+            window = new Rect(5*Screen.width/8, Screen.height/10, 5*Screen.width/16, currentOpenT);
         }
 
         void EnterCommand() {
@@ -306,6 +285,7 @@ namespace CommandTerminal
 
         void CompleteCommand() {
             string headText = commandText;
+            headText=headText.ToUpper();
             string[] completionBuffer = Autocomplete.complete(ref headText);
             int completionLength = completionBuffer.Length;
 

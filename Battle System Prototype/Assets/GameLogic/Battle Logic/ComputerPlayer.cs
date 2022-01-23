@@ -35,36 +35,20 @@ public class ComputerPlayer:MonoBehaviour
         pointer=0;
     }
 
-    public ExecutionWrapper executeCurrentBlock(Character target,Character instigator){
+public ExecutionWrapper executeCurrentBlock(){
         ExecutionWrapper executionWrapper=new ExecutionWrapper();
         if(pointer>=blockStack.Count){
             executionWrapper.setGameAction(null);
             executionWrapper.setEndOfSection(false);
         }else{
             Block currentBlock=blockStack[pointer];
-            if(currentBlock.getBlockType()==BlockType.EndOfSection){
-                Block startBlock=currentBlock.getStartBlock();
-                if(startBlock!=null){
-                    if(startBlock.getBlockType()==BlockType.Control){
-                    ControlFunction controlFunction=startBlock.gameObject.GetComponent<ControlFunction>();
-                        if(controlFunction.getName()=="Repeat"){
-                            ControlRepeatFunction controlRepeatFunction=(ControlRepeatFunction)controlFunction;
-                            pointer=controlRepeatFunction.onRepeat(pointer,ref blockStack);
-                        }else if(controlFunction.getName()=="Repeat Until"){
-                            ControlRepeatUntilFunction controlRepeatUntilFunction=(ControlRepeatUntilFunction)controlFunction;
-                            pointer=controlRepeatUntilFunction.onRepeat(pointer,ref blockStack);
-                        }else if(controlFunction.getName()=="Repeat Forever"){
-                            ControlRepeatForeverFunction controlForeverFunction=(ControlRepeatForeverFunction)controlFunction;
-                            pointer=controlForeverFunction.onRepeat(pointer,ref blockStack);
-                        }
-                    }
-                }
-            }
             switch(currentBlock.blockType){
                 case(BlockType.Action):
                     pointer++;
+                    GameScript gameScript=GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>();
+                    Character opponent=gameScript.getOpponent();
                     ActionFunction actionFunction=currentBlock.gameObject.GetComponent<ActionFunction>();
-                    executionWrapper.setGameAction(actionFunction.function(null,instigator));
+                    executionWrapper.setGameAction(actionFunction.function(opponent,true));
                     executionWrapper.setEndOfSection(false);
                     break;
                 case(BlockType.Control):
@@ -74,6 +58,32 @@ public class ComputerPlayer:MonoBehaviour
                     executionWrapper.setEndOfSection(false);
                     break;
                 case(BlockType.EndOfSection):
+                    Block startBlock=currentBlock.getStartBlock();
+                    if(startBlock!=null){
+                        if(startBlock.getBlockType()==BlockType.Control){
+                            ControlFunction endControlFunction=startBlock.gameObject.GetComponent<ControlFunction>();
+                            switch(endControlFunction.getName()){
+                                case("If Else"):
+                                    ControlIfElseFunction controlIfElseFunction=(ControlIfElseFunction)endControlFunction;
+                                    pointer=controlIfElseFunction.onRepeat(pointer,ref blockStack);
+                                    break;
+                                case("Repeat"):
+                                    ControlRepeatFunction controlRepeatFunction=(ControlRepeatFunction)endControlFunction;
+                                    pointer=controlRepeatFunction.onRepeat(pointer,ref blockStack);
+                                    break;
+                                case("Repeat Until"):
+                                    ControlRepeatUntilFunction controlRepeatUntilFunction=(ControlRepeatUntilFunction)endControlFunction;
+                                    pointer=controlRepeatUntilFunction.onRepeat(pointer,ref blockStack);
+                                    break;
+                                case("Repeat Forever"):
+                                    ControlRepeatForeverFunction controlForeverFunction=(ControlRepeatForeverFunction)endControlFunction;
+                                    pointer=controlForeverFunction.onRepeat(pointer,ref blockStack);
+                                    break;
+                            }
+                            Debug.Log(pointer);
+                        }
+                    }
+                    break;
                 default:
                     pointer++;
                     executionWrapper.setGameAction(null);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum AttributeEnum
 {
-    Max_Health,
+    MaxHealth,
     Attack,
     Defence,
     Speed,

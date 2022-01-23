@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7396373485065256537}
   - component: {fileID: 2669386121362509263}
+  - component: {fileID: 2677261868139671276}
   m_Layer: 0
   m_Name: GhostBlock
   m_TagString: Untagged
@@ -63,6 +64,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &2677261868139671276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 560918104256027632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e86f50bacfc96148862bf18b220637b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockType: 1
+  methodName: 
 --- !u!1 &1960739580775102545
 GameObject:
   m_ObjectHideFlags: 0

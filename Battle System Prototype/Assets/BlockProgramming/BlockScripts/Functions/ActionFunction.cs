@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class ActionFunction:MonoBehaviour
 {
-    public abstract GameAction function(Character target,Character instigator);
+    public abstract GameAction function(Character instigator,bool computerPlayer);
 }

@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class ActionAttackKickFunction : ActionFunction
 {
-    public override GameAction function(Character target,Character instigator){
-        if(target!=null){
-            return ActionCollection.punch(target,instigator);
+    public override GameAction function(Character instigator,bool computerPlayer){
+        Block inputBlock=gameObject.GetComponent<Block>().getSections()[0].getHeader().getInputFieldHandlers()[0].getInputBlock().GetComponent<Block>();
+        Character target;
+        if(computerPlayer){
+            GameScript gameScript=GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>();
+            target=gameScript.getPlayer();
         }else{
-            Block inputBlock=gameObject.GetComponent<Block>().getSections()[0].getHeader().getInputFieldHandlers()[0].getInputBlock().GetComponent<Block>();
             CharacterFunction characterFunction=inputBlock.gameObject.GetComponent<CharacterFunction>();
-            return ActionCollection.kick(characterFunction.function(),instigator);
+            target=characterFunction.function();
         }
+        return ActionCollection.kick(target,instigator);    
     }
 }

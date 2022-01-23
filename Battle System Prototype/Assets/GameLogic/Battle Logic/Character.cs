@@ -71,14 +71,14 @@ public class Character
                 tempMaxHealth*=attributeModifier.getMultiplier();
             }
         
-        return tempMaxHealth;
+        return Mathf.Round(tempMaxHealth);
     }
     public float getAttack(){
         float tempAttack=baseAttack;
         foreach(AttributeModifier attributeModifier in attackModifiers){
             tempAttack*=attributeModifier.getMultiplier();
         }
-        return tempAttack;
+        return Mathf.Round(tempAttack);
     }
     public float getDefence(){
         float tempDefence=baseDefence;
@@ -86,7 +86,7 @@ public class Character
             tempDefence*=attributeModifier.getMultiplier();
         }
         if(tempDefence>100f){return 100f;}
-        return tempDefence;
+        return Mathf.Round(tempDefence);
     }
     public float getSpeed(){
         float tempSpeed=baseSpeed;
@@ -94,7 +94,7 @@ public class Character
                 tempSpeed*=attributeModifier.getMultiplier();
             }
         
-        return tempSpeed;
+        return Mathf.Round(tempSpeed);
     }
     public int getStamina(){
         float tempStamina=baseStamina;
@@ -107,7 +107,7 @@ public class Character
 
     public void addModifier(AttributeModifier attributeModifier){
         switch(attributeModifier.getAttribute()){
-            case AttributeEnum.Max_Health:
+            case AttributeEnum.MaxHealth:
                 health*=attributeModifier.getMultiplier();
                 healthModifiers.Add(attributeModifier);
                 break;

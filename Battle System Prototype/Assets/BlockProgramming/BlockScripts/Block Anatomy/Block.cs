@@ -75,8 +75,8 @@ public class Block : MonoBehaviour
         blockStackManager.setBlockStack(blockStackManager.initBlockStack(this));
     }
 
-    public ExecutionWrapper executeCurrentBlock(Character target,Character instigator){
-        return blockStackManager.executeCurrentBlock(target,instigator);
+    public ExecutionWrapper executeCurrentBlock(){
+        return blockStackManager.executeCurrentBlock();
     }
 
     public void clearBlockStack(){

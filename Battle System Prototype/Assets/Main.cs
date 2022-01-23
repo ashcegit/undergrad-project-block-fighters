@@ -78,8 +78,8 @@ public class Main : MonoBehaviour
         gameScript.updatePlayerName(player.getCharacterName());
         gameScript.updateOpponentName(opponent.getCharacterName());
 
-        gameScript.updatePlayerHealth(player.getHealth(),player.getMaxHealth());
-        gameScript.updateOpponentHealth(opponent.getHealth(),opponent.getMaxHealth());
+        gameScript.updatePlayerHealth();
+        gameScript.updateOpponentHealth();
 
         gameScript.enabled=true;
         enabled=true;
@@ -112,34 +112,23 @@ public class Main : MonoBehaviour
         ComputerPlayer computerPlayer=gameScript.getComputerPlayer();
         int playerStamina=player.getStamina();
         int opponentStamina=opponent.getStamina();
-        while(playerStamina>0||opponentStamina>0){
-            ExecutionWrapper playerExecutionWrapper=playerMethodBlock.executeCurrentBlock(opponent,player);
-            ExecutionWrapper opponentExecutionWrapper=computerPlayer.executeCurrentBlock(player,opponent);
+        while(playerStamina>0&&!gameScript.isGameOver()){
+            ExecutionWrapper playerExecutionWrapper=playerMethodBlock.executeCurrentBlock();
             GameAction? playerGameAction=playerExecutionWrapper.getGameAction();
-            GameAction? opponentGameAction=opponentExecutionWrapper.getGameAction();
-            if(playerGameAction!=null&&opponentGameAction!=null&&playerStamina>0&&opponentStamina>0){
-                Interaction playerInteraction=gameScript.getInteraction(playerGameAction);
-                Interaction opponentInteraction=gameScript.getInteraction(opponentGameAction);
-                if(gameScript.getPlayerFirst(playerGameAction,opponentGameAction)){
-                    yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
-                    if(!gameScript.isGameOver()){
-                        yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
-                    }
-                }else{
-                    yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
-                    if(!gameScript.isGameOver()){
-                        yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
-                    }
-                }
-            }else if(playerGameAction!=null&&playerStamina>0){
+            if(playerGameAction!=null&&!gameScript.isGameOver()){
                 Interaction playerInteraction=gameScript.getInteraction(playerGameAction);
                 yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
-            }else if(opponentGameAction!=null&&opponentStamina>0){
-                Interaction opponentInteraction=gameScript.getInteraction(opponentGameAction);
-                yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
             }
             if(!playerExecutionWrapper.getEndOfSection()){
                 playerStamina--;
+            }
+        }
+        while(opponentStamina>0&&!gameScript.isGameOver()){
+            ExecutionWrapper opponentExecutionWrapper=computerPlayer.executeCurrentBlock();
+            GameAction? opponentGameAction=opponentExecutionWrapper.getGameAction();
+            if(opponentGameAction!=null&&!gameScript.isGameOver()){
+                Interaction opponentInteraction=gameScript.getInteraction(opponentGameAction);
+                yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
             }
             if(!opponentExecutionWrapper.getEndOfSection()){
                 opponentStamina--;
@@ -168,7 +157,7 @@ public class Main : MonoBehaviour
                                         "{0}'s attack '{1}' hits for {2} damage!\n",
                                         instigator.getCharacterName(),
                                         attackInteraction.getAttack().getName(),
-                                        attackInteraction.getDamage().ToString());
+                                        Mathf.Round(attackInteraction.getDamage()).ToString());
                     gameScript.dealDamage(attackInteraction.getTarget(),attackInteraction.getDamage());
                 }else{
                     Terminal.log("{0}'s attack '{1}' misses!\n",
@@ -192,8 +181,8 @@ public class Main : MonoBehaviour
                                 statusEffectInteraction.getAttribute().ToString(),
                                 //percentage amount - affected by whether attribute is raised or lowered
                                 (statusEffectInteraction.getMultiplier()>1?
-                                     (100*statusEffectInteraction.getMultiplier()-100f).ToString():
-                                     (100*statusEffectInteraction.getMultiplier()).ToString()),
+                                     (100*Mathf.Round(statusEffectInteraction.getMultiplier())-100f).ToString():
+                                     (100*Mathf.Round(statusEffectInteraction.getMultiplier())).ToString()),
                                 //number of turns
                                 statusEffectInteraction.getTurns().ToString());
                     gameScript.addModifier(statusEffectInteraction.getTarget(),statusEffectInteraction.getAttributeModifier());
@@ -210,7 +199,7 @@ public class Main : MonoBehaviour
                                 "{0}'s heal '{1}' heals for {2} health!\n",
                                 instigator.getCharacterName(),
                                 healInteraction.getHeal().getName(),
-                                healInteraction.getHealingAmount().ToString());
+                                Mathf.Round(healInteraction.getHealingAmount()).ToString());
                     gameScript.heal(healInteraction.getTarget(),healInteraction.getHealingAmount());
                 }else{
                     Terminal.log(TerminalLogType.Message,

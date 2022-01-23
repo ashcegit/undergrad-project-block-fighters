@@ -24,6 +24,20 @@ public class CharacterUI : MonoBehaviour
 
     }
 
+    public void hideUI(){
+        player.SetActive(false);
+        playerHudObject.SetActive(false);
+        opponent.SetActive(false);
+        opponentHudObject.SetActive(false);
+    }
+
+    public void showUI(){
+        player.SetActive(true);
+        playerHudObject.SetActive(true);
+        opponent.SetActive(true);
+        opponentHudObject.SetActive(true);
+    }
+
     public void updatePlayerName(string name){
         playerHud.updateName(name);
     }
@@ -41,15 +55,27 @@ public class CharacterUI : MonoBehaviour
     }
 
     public IEnumerator shakePlayer(){
-        StartCoroutine(shakeObject(player,0.2f,1f));
-        StartCoroutine(shakeObject(playerHudObject,0.1f,1f));
-        yield return null;
+        yield return StartCoroutine(shakeObject(player,0.2f,5f));
+    }
+
+    public IEnumerator shakePlayerHealth(){
+        yield return StartCoroutine(playerHud.shakeHealth());
+    }
+
+    public IEnumerator shakePlayerMaxHealth(){
+        yield return StartCoroutine(playerHud.shakeMaxHealth());
     }
 
     public IEnumerator shakeOpponent(){
-        StartCoroutine(shakeObject(opponent,0.2f,1f));
-        StartCoroutine(shakeObject(opponentHudObject,0.1f,1f));
-        yield return null;
+        yield return StartCoroutine(shakeObject(opponent,0.2f,5f));
+    }
+
+    public IEnumerator shakeOpponentHealth(){
+        yield return StartCoroutine(opponentHud.shakeHealth());
+    }
+
+    public IEnumerator shakeOpponentMaxHealth(){
+        yield return StartCoroutine(opponentHud.shakeMaxHealth());
     }
 
     private IEnumerator shakeObject(GameObject gameObject,

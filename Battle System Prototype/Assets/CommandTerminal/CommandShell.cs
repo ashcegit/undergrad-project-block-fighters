@@ -54,25 +54,25 @@ namespace CommandTerminal
         public void registerPlayerCommands(List<GameObject> methodBlockObjects){
             foreach(GameObject methodBlockObject in methodBlockObjects){
                 Block methodBlock=methodBlockObject.GetComponent<Block>();
-                playerCommands.Add(methodBlock.getMethodName(),methodBlockObject);
+                playerCommands.Add(methodBlock.getMethodName().ToUpper(),methodBlockObject);
             }
         }
 
         public void registerBuiltInCommands(){
-            builtInCommands.Add("help",this.GetType().GetMethod("help"));
-            builtInCommandHelp.Add("help","prints this help screen");
+            builtInCommands.Add("HELP",this.GetType().GetMethod("help"));
+            builtInCommandHelp.Add("HELP","prints this help screen");
 
-            builtInCommands.Add("clear",this.GetType().GetMethod("clear"));
-            builtInCommandHelp.Add("clear","clears terminal");
+            builtInCommands.Add("CLEAR",this.GetType().GetMethod("clear"));
+            builtInCommandHelp.Add("CLEAR","clears terminal");
 
-            builtInCommands.Add("listPlayerCommands",this.GetType().GetMethod("listPlayerCommands"));
-            builtInCommandHelp.Add("listPlayerCommands","lists player's current battle commands");
+            builtInCommands.Add("LISTPLAYERCOMMANDS",this.GetType().GetMethod("listPlayerCommands"));
+            builtInCommandHelp.Add("LISTPLAYERCOMMANDS","lists player's current battle commands");
 
-            builtInCommands.Add("finish",this.GetType().GetMethod("finishProgramming"));
-            builtInCommandHelp.Add("finish","finishes programming your character's methods");
+            builtInCommands.Add("FINISH",this.GetType().GetMethod("finishProgramming"));
+            builtInCommandHelp.Add("FINISH","finishes programming your character's methods");
 
-            builtInCommands.Add("quit",this.GetType().GetMethod("quit"));
-            builtInCommandHelp.Add("quit","quits game");
+            builtInCommands.Add("QUIT",this.GetType().GetMethod("quit"));
+            builtInCommandHelp.Add("QUIT","quits game");
         }
 
         public bool clear() {
@@ -130,6 +130,7 @@ namespace CommandTerminal
         }
 
         public CommandWrapper RunCommand(string commandText){
+            commandText=commandText.ToUpper();
             CommandWrapper commandWrapper=new CommandWrapper();
             commandWrapper.setIsGameAction(false);
             if(commandRegex.IsMatch(commandText)){

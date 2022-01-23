@@ -39,14 +39,6 @@ public class BlockStackManager
 
     public void setBlockStack(List<Block> blockStack){
         this.blockStack=blockStack;
-        foreach(Block block in blockStack){
-            Debug.Log(block);
-            if(block.getBlockType()==BlockType.EndOfSection){
-                Debug.Log("END OF SECTION");
-                Debug.Log("START BLOCK:");
-                Debug.Log(block.getStartBlock().getBlockType());
-            }
-        }
     }
 
     public List<Block> getBlockStack(){return blockStack;}
@@ -56,7 +48,7 @@ public class BlockStackManager
         blockStack=new List<Block>();
     }
 
-    public ExecutionWrapper executeCurrentBlock(Character target,Character instigator){
+    public ExecutionWrapper executeCurrentBlock(){
         ExecutionWrapper executionWrapper=new ExecutionWrapper();
         if(pointer>=blockStack.Count){
             executionWrapper.setGameAction(null);
@@ -66,8 +58,10 @@ public class BlockStackManager
             switch(currentBlock.blockType){
                 case(BlockType.Action):
                     pointer++;
+                    GameScript gameScript=GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>();
+                    Character player=gameScript.getPlayer();
                     ActionFunction actionFunction=currentBlock.gameObject.GetComponent<ActionFunction>();
-                    executionWrapper.setGameAction(actionFunction.function(null,instigator));
+                    executionWrapper.setGameAction(actionFunction.function(player,false));
                     executionWrapper.setEndOfSection(false);
                     break;
                 case(BlockType.Control):

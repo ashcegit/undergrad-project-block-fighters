@@ -20,6 +20,14 @@ public class GameScript : MonoBehaviour
 
     CharacterUI characterUI;
 
+    void OnEnable(){
+        characterUI.showUI();
+    }
+
+    void OnDisable(){
+        characterUI.hideUI();
+    }
+
     public void initGameScript(){
         enabled=false;
 
@@ -44,8 +52,6 @@ public class GameScript : MonoBehaviour
         computerPlayer=new ComputerPlayer();
         
         interactionHandler=new InteractionHandler();
-
-        characterUI=GetComponentInChildren<CharacterUI>();
 
         enabled=true;
 
@@ -109,18 +115,18 @@ public class GameScript : MonoBehaviour
     }
 
     public void dealDamage(Character target,float damage){
-        target.decreaseHealth(damage);
+        target.decreaseHealth(Mathf.Round(damage));
         if(target==player){
-            characterUI.shakePlayer();
+            StartCoroutine(characterUI.shakePlayer());
             characterUI.updatePlayerHealth(target.getHealth(),target.getMaxHealth());
         }else if(target==opponent){
-            characterUI.shakeOpponent();
+            StartCoroutine(characterUI.shakeOpponent());
             characterUI.updateOpponentHealth(target.getHealth(),target.getMaxHealth());
         }
     }
     
     public void heal(Character target,float healingAmount){
-        target.increaseHealth(healingAmount);
+        target.increaseHealth(Mathf.Round(healingAmount));
         if(target==player){
             characterUI.updatePlayerHealth(target.getHealth(),target.getMaxHealth());
         }else if(target==opponent){
@@ -150,11 +156,11 @@ public class GameScript : MonoBehaviour
         characterUI.updateOpponentName(opponent.getCharacterName());
     }
 
-    public void updatePlayerHealth(float health,float maxHealth){
+    public void updatePlayerHealth(){
         characterUI.updatePlayerHealth(player.getHealth(),player.getMaxHealth());
     }
 
-    public void updateOpponentHealth(float health,float maxHealth){
+    public void updateOpponentHealth(){
         characterUI.updateOpponentHealth(opponent.getHealth(),opponent.getMaxHealth());
     }
 
