@@ -39,7 +39,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 428.4622, y: 136.0462}
+  m_SizeDelta: {x: 333.5962, y: 111.2351}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &475360916749781804
 CanvasRenderer:
@@ -154,7 +154,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 302.1, y: 105}
+  m_SizeDelta: {x: 332.749, y: 113.0272}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4037886797842784296
 MonoBehaviour:
@@ -485,8 +485,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 97.5, y: 0}
-  m_SizeDelta: {x: 0, y: 40}
+  m_AnchoredPosition: {x: 57, y: 0}
+  m_SizeDelta: {x: 0, y: 58.2435}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8956965429572109032
 CanvasRenderer:
@@ -522,14 +522,16 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
-    m_MaxSize: 40
+    m_MaxSize: 94
     m_Alignment: 3
     m_AlignByGeometry: 1
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Method Name:'
+  m_Text: 'Method
+
+    Name:'
 --- !u!114 &6299152191568397132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,10 +695,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.633, y: 0.46053296}
-  m_AnchorMax: {x: 0.633, y: 0.46053296}
-  m_AnchoredPosition: {x: -133.0358, y: 20.1531}
-  m_SizeDelta: {x: 429.91, y: 135.3}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 167.1621, y: -55.6094}
+  m_SizeDelta: {x: 334.3142, y: 111.2186}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &410710789573656377
 MonoBehaviour:

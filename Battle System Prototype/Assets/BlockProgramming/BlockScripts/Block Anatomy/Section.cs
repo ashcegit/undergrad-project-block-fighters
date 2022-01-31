@@ -41,16 +41,14 @@ public class Section : MonoBehaviour
     }
 
     public Vector2 updateBlockLayouts(){
-        Vector2 sizeVector=new Vector2();
-        if(header!=null){
-            sizeVector+=header.updateBlockLayouts();
-        }
+        Vector2 sizeVector=header.updateBlockLayouts();
         if(body!=null){
-            sizeVector+=body.updateBlockLayouts();
-            return sizeVector;
-        }else{
-            return GetComponentInParent<RectTransform>().sizeDelta;
+            Vector2 bodyVector=body.updateBlockLayouts();
+            if(sizeVector.x<bodyVector.x){sizeVector.x=bodyVector.x;}
+            sizeVector.y+=bodyVector.y;
         }
+        GetComponent<RectTransform>().sizeDelta=sizeVector;
+        return sizeVector;
     }
 
     public void setSpacesActive(bool active){
@@ -69,9 +67,5 @@ public class Section : MonoBehaviour
                 inputFieldHandler.removeInputSpace();
             }
         }
-    }
-
-    public void initActionInputFieldHandler(){
-        header.initActionInputFieldHandler();
     }
 }

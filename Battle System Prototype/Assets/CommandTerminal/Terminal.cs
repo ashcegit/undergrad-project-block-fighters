@@ -175,11 +175,13 @@ namespace CommandTerminal
             window_style.padding = new RectOffset(4, 4, 4, 4);
             window_style.normal.textColor = ForegroundColor;
             window_style.font = ConsoleFont;
+            window_style.fontSize=50;
         }
 
         void setupLabels() {
             labelStyle = new GUIStyle();
             labelStyle.font = ConsoleFont;
+            labelStyle.fontSize=50;
             labelStyle.normal.textColor = ForegroundColor;
             labelStyle.wordWrap = true;
         }
@@ -188,6 +190,7 @@ namespace CommandTerminal
             input_style = new GUIStyle();
             input_style.padding = new RectOffset(4, 4, 4, 4);
             input_style.font = ConsoleFont;
+            input_style.fontSize=50;
             input_style.fixedHeight = ConsoleFont.fontSize * 1.6f;
             input_style.normal.textColor = InputColor;
 

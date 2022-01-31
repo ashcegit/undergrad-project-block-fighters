@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace CommandTerminal
 {
@@ -116,11 +117,7 @@ namespace CommandTerminal
         }
 
         public void quit() {
-        #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-        #else
-            Application.Quit();
-        #endif
+            SceneManager.LoadScene("Main Menu");
         }
         
         public Tuple<string,string[]> parseCommandText(string commandText){

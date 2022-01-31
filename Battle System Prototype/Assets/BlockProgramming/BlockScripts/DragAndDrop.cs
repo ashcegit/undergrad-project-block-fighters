@@ -18,7 +18,8 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
     Vector2 offset;
     GameObject environment;
     ScrollRect selectionScrollRect;
-    const float SNAPDISTANCE=60f;
+    GameObject ghostBlockParent;
+    const float SNAPDISTANCE=100f;
     bool dragging;
     bool ghostBlockActive;
     bool highlightActive;
@@ -32,7 +33,6 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
         environment=GameObject.FindGameObjectWithTag("BlockEnvironment");
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         ghostBlock.SetActive(false);
@@ -53,9 +53,6 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
             currentlyDraggedObject.GetComponent<RectTransform>().localScale=new Vector3(1,1,1);
             blockProgrammerScript.addBlockObject(currentlyDraggedObject);
             currentlyDraggedObject.transform.SetParent(environment.transform);
-            if(currentlyDraggedObject.GetComponent<Block>().getBlockType()==BlockType.Action){
-                currentlyDraggedObject.GetComponent<Block>().initActionInputFieldHandler();
-            }
             offset=(Vector2)data.position;
             currentlyDraggedObject.GetComponent<RectTransform>().position=data.position;
         }
@@ -69,18 +66,23 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
             if(currentlyDraggedObject.transform.parent.gameObject!=environment){
                 int currentlyDraggedSiblingIndex=currentlyDraggedObject.transform.GetSiblingIndex();
                 if(currentBlockType==BlockType.Action||currentBlockType==BlockType.Control){
-                    Body parentBody=currentlyDraggedObject.GetComponentInParent<Body>();
-                    parentBody.updateBlockLayouts();
-                    parentBody.removeBlockSpaceByIndex(currentlyDraggedSiblingIndex);
-                    parentBody.updateSpacePositions();
+                    GameObject parentBlock=currentlyDraggedObject;
+                    while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
+                        parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
+                    }
+                    parentBlock.GetComponentInChildren<Body>().removeBlockSpaceByIndex(currentlyDraggedSiblingIndex);
+                    currentlyDraggedObject.transform.SetParent(environment.transform);
+                    parentBlock.GetComponent<Block>().updateBlockLayouts();
+                    parentBlock.GetComponent<Block>().updateSpacePositions();
                 }else if(currentBlockType!=BlockType.Method){
+                    blockProgrammerScript.addBlockObject(currentlyDraggedObject);
                     Header parentHeader=currentlyDraggedObject.GetComponentInParent<Header>();
                     InputFieldHandler inputFieldHandler=parentHeader.getInputFieldHandlerForInputBlock(currentlyDraggedObject);
                     inputFieldHandler.clearInputBlock();
-                    inputFieldHandler.setInputSpaceActive(true);
                     parentHeader.updateBlockLayouts();
                 }
             }
+            
             currentlyDraggedObject.transform.SetParent(environment.transform);
             currentlyDraggedObject.transform.SetAsLastSibling();
             currentlyDraggedObject.GetComponent<Block>().setPosition(cursorPosition);
@@ -92,6 +94,12 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                                                                                     SNAPDISTANCE);
                 if(nearestBlockSpace.getParentBody()!=null){
                     addGhostBlockToBlockAtSiblingIndex(nearestBlockSpace.getParentBody(),nearestBlockSpace.getIndex());
+                    GameObject parentBlock=nearestBlockSpace.getParentBody().GetComponentInParent<Block>().gameObject;
+                    while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
+                        parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
+                    }
+                    parentBlock.GetComponent<Block>().updateBlockLayouts();
+                    parentBlock.GetComponent<Block>().updateSpacePositions();
                 }else{
                     removeGhostBlock();
                 }
@@ -121,12 +129,16 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                 BlockType currentBlockType=currentlyDraggedObject.GetComponent<Block>().getBlockType();
                 if(currentBlockType==BlockType.Action||currentBlockType==BlockType.Control){
                     if(ghostBlockActive){
-                        // Debug.Log(nearestBlockSpace.getIndex());
+                        removeGhostBlock();
                         GameObject nearestBlockSpaceBody=nearestBlockSpace.getParentBody();
                         nearestBlockSpaceBody.GetComponent<Body>().insertBlock(currentlyDraggedObject,nearestBlockSpace.getIndex());
-                        nearestBlockSpaceBody.GetComponentInParent<Block>().updateBlockLayouts();
-                        nearestBlockSpaceBody.GetComponentInParent<Block>().updateSpacePositions();
                         nearestBlockSpaceBody.GetComponentInParent<Block>().setSpacesActive(true);
+                        GameObject parentBlock=nearestBlockSpaceBody.GetComponentInParent<Block>().gameObject;
+                        while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
+                            parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
+                        }
+                        parentBlock.GetComponent<Block>().updateBlockLayouts();
+                        parentBlock.GetComponent<Block>().updateSpacePositions();
                     }else{
                         currentlyDraggedObject.GetComponent<Block>().updateBlockLayouts();
                         currentlyDraggedObject.GetComponent<Block>().updateSpacePositions();
@@ -134,6 +146,7 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                     }
                 }else if(currentBlockType!=BlockType.Method){
                     if(highlightActive){
+                        removeInputFieldHighlight();
                         nearestInputSpace.getInputFieldHandler().addInputBlock(currentlyDraggedObject);
                         nearestInputSpace.getInputFieldHandler().GetComponentInParent<Block>().updateBlockLayouts();
                         nearestInputSpace.getInputFieldHandler().GetComponentInParent<Block>().updateSpacePositions();
@@ -150,8 +163,6 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
             nearestBlockSpace=null;
             nearestInputSpace=null;
             currentlyDraggedObject=null;
-            removeGhostBlock();
-            removeInputFieldHighlight();
         }
     }
 
@@ -160,12 +171,22 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
         ghostBlock.SetActive(true);
         ghostBlock.transform.SetParent(blockObject.transform);
         ghostBlock.transform.SetSiblingIndex(siblingIndex);
+        ghostBlockParent=blockObject;
+        ghostBlockParent.GetComponentInParent<Block>().updateBlockLayouts();
     }
 
     public void removeGhostBlock(){
         ghostBlockActive=false;
         ghostBlock.SetActive(false);
         ghostBlock.transform.SetParent(null);
+        if(ghostBlockParent!=null){
+            while(ghostBlockParent.transform.parent.GetComponentInParent<Block>()!=null){
+                ghostBlockParent=ghostBlockParent.transform.parent.GetComponentInParent<Block>().gameObject;
+            }
+            ghostBlockParent.GetComponent<Block>().updateBlockLayouts();
+            ghostBlockParent.GetComponent<Block>().updateSpacePositions();
+        }
+        ghostBlockParent=null;
     }
 
     public void highlightInputField(InputFieldHandler inputFieldHandler){

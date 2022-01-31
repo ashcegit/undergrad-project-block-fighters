@@ -52,9 +52,13 @@ public class Block : MonoBehaviour
 
     public Vector2 updateBlockLayouts(){
         Vector2 sizeSum=new Vector2();
+        Vector2 sectionSizeDelta=new Vector2();
         foreach(Section section in sections){
-            sizeSum+=section.updateBlockLayouts();
+            sectionSizeDelta=section.updateBlockLayouts();
+            sizeSum.y+=sectionSizeDelta.y;
+            if(sizeSum.x<sectionSizeDelta.x){sizeSum.x=sectionSizeDelta.x;}
         }
+        GetComponent<RectTransform>().sizeDelta=sizeSum;
         return sizeSum;
     }
 
@@ -99,7 +103,4 @@ public class Block : MonoBehaviour
         return startBlock;
     }
 
-    public void initActionInputFieldHandler(){
-        sections[0].initActionInputFieldHandler();
-    }
 }

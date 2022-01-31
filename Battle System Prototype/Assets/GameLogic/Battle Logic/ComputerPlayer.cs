@@ -80,7 +80,6 @@ public ExecutionWrapper executeCurrentBlock(){
                                     pointer=controlForeverFunction.onRepeat(pointer,ref blockStack);
                                     break;
                             }
-                            Debug.Log(pointer);
                         }
                     }
                     break;

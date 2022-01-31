@@ -5,13 +5,17 @@ using UnityEngine;
 public class Header : MonoBehaviour
 {
     private List<InputFieldHandler> inputFieldHandlers;
+    private Vector2 initialSizeDelta;
 
     void Awake(){
+        RectTransform rectTransform=GetComponent<RectTransform>();
+        initialSizeDelta=rectTransform.sizeDelta;
         inputFieldHandlers=new List<InputFieldHandler>();
         foreach(Transform childTransform in transform){
             InputFieldHandler inputFieldHandler=childTransform.gameObject.GetComponent<InputFieldHandler>();
             if(inputFieldHandler!=null){
                 inputFieldHandlers.Add(inputFieldHandler);
+                inputFieldHandler.Awake();
             }
         }
     }
@@ -64,38 +68,49 @@ public class Header : MonoBehaviour
 
     public List<InputFieldHandler> getInputFieldHandlers(){return inputFieldHandlers;}
 
-    public void initActionInputFieldHandler(){
-        inputFieldHandlers[0].initActionInputFieldHandler();
-    }
-
     public Vector2 updateBlockLayouts(){
-        Block thisBlock=GetComponentInParent<Block>();
-        if(thisBlock!=null){
-            if(thisBlock.getBlockType()==BlockType.Method){
-                return gameObject.GetComponent<RectTransform>().sizeDelta;
-            }
-        }
         RectTransform rectTransform=gameObject.GetComponent<RectTransform>();
-        float width=0f;
-        float height=60f;
-        float heightDelta=0f;
-        foreach(InputFieldHandler inputFieldHandler in inputFieldHandlers){
-            GameObject inputBlock=inputFieldHandler.getInputBlock();
-            if(inputBlock!=null){
-                Vector2 inputBlockSize=inputBlock.GetComponent<Block>().getSections()[0].getHeader().updateBlockLayouts();
-                width+=inputBlockSize.x;
-                if(inputBlockSize.y>heightDelta){heightDelta=inputBlockSize.y;}
+        Vector2 sizeVector;
+        if(transform.parent.transform.GetSiblingIndex()==0){
+            Block thisBlock=GetComponentInParent<Block>();
+            if(thisBlock!=null){
+                if(thisBlock.getBlockType()==BlockType.Method){
+                    return gameObject.GetComponent<RectTransform>().sizeDelta;
+                }
             }
+            float width=10f;
+            float height=20f;
+            float heightDelta=0f;
+            if(inputFieldHandlers.Count>0){
+                width+=GameObject.Find("Text").GetComponent<RectTransform>().sizeDelta.x;
+                foreach(InputFieldHandler inputFieldHandler in inputFieldHandlers){
+                    inputFieldHandler.updateInputSpacePosition();
+                    GameObject? inputBlock=inputFieldHandler.getInputBlock();
+                    if(inputBlock!=null){
+                        Vector2 inputBlockSize=inputBlock.GetComponent<Block>().getSections()[0].getHeader().updateBlockLayouts();
+                        width+=inputBlockSize.x;
+                        width+=5f;
+                        if(inputBlockSize.y>heightDelta){
+                            heightDelta=inputBlockSize.y;
+                        }
+                    }else{
+                        width+=inputFieldHandler.gameObject.GetComponent<RectTransform>().sizeDelta.x;
+                        if(initialSizeDelta.y>heightDelta){
+                            heightDelta=initialSizeDelta.y;
+                        }
+                    }
+                }
+                height+=heightDelta;
+            }else{
+                width=initialSizeDelta.x;
+                height=initialSizeDelta.y;
+            }
+            sizeVector=new Vector2(width,height);
+            rectTransform.sizeDelta=sizeVector;
+        }else{
+            sizeVector=new Vector2(rectTransform.sizeDelta.x,rectTransform.sizeDelta.y);
         }
-        width+=15f;
-
-        if(width<150f){width=150f;}
-
-        height+=heightDelta;
-        if(height<60f){height=60f;}
-
-        Vector2 sizeVector=new Vector2(width,height);
-        rectTransform.sizeDelta=sizeVector;
+        
         return sizeVector;
     }
 }

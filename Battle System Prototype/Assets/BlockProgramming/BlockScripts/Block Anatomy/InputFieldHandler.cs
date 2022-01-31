@@ -7,7 +7,7 @@ public class InputFieldHandler : MonoBehaviour
 {
 
     BlockProgrammerScript blockProgrammerScript;
-    public GameObject inputBlock;
+    private GameObject inputBlock;
     public BlockType inputType;
     public BlockType secondaryInputType;
     public int inputFieldNumber;
@@ -17,7 +17,7 @@ public class InputFieldHandler : MonoBehaviour
     private InputSpace inputSpace;
     private Outline outline;
 
-    void Awake(){
+    public void Awake(){
         blockProgrammerScript=GameObject.FindGameObjectWithTag("BlockProgrammer").GetComponent<BlockProgrammerScript>();
         inputField=GetComponent<InputField>();
         header=transform.parent.gameObject.GetComponent<Header>();
@@ -27,30 +27,15 @@ public class InputFieldHandler : MonoBehaviour
             inputSpace=new InputSpace();
             inputSpace.setInputFieldHandler(this);
             inputSpace.setPosition((Vector2)gameObject.GetComponent<RectTransform>().position);
-            inputSpace.setActive(true);
             blockProgrammerScript.addInputSpace(inputSpace);
+            if(transform.parent.GetComponentInChildren<Block>()!=null){
+                inputSpace.setActive(false);
+                inputBlock=transform.parent.GetComponentInChildren<Block>().gameObject;
+            }else{
+                inputSpace.setActive(true);
+            }
         }
-    }
-
-    public void initActionInputFieldHandler(){
-        blockProgrammerScript=GameObject.FindGameObjectWithTag("BlockProgrammer").GetComponent<BlockProgrammerScript>();
-        inputField=GetComponent<InputField>();
-        header=transform.parent.gameObject.GetComponent<Header>();
-        header.addInputFieldHandler(this);
-        outline=GetComponent<Outline>();
-        inputField.enabled=false;
-        inputSpace=new InputSpace();
-        inputSpace.setInputFieldHandler(this);
-        inputSpace.setPosition((Vector2)gameObject.GetComponent<RectTransform>().position);
-        inputSpace.setActive(false);
-        blockProgrammerScript.addInputSpace(inputSpace);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
+    }   
 
     public Header getHeader(){return header;}
 
@@ -87,7 +72,7 @@ public class InputFieldHandler : MonoBehaviour
         inputSpace.setActive(true);
     }
 
-    public GameObject getInputBlock(){return inputBlock;}
+    public GameObject? getInputBlock(){return inputBlock;}
 
     public void removeInputSpace(){
         blockProgrammerScript.removeInputSpace(inputSpace);

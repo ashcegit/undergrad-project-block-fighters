@@ -173,8 +173,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputBlock: {fileID: 0}
-  inputType: 0
-  secondaryInputType: 0
+  inputType: 4
+  secondaryInputType: 4
   inputFieldNumber: 0
   textAllowed: 0
 --- !u!1 &147985093889640196
@@ -966,8 +966,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputBlock: {fileID: 0}
-  inputType: 0
-  secondaryInputType: 0
+  inputType: 4
+  secondaryInputType: 4
   inputFieldNumber: 1
   textAllowed: 0
 --- !u!1 &5576707702672623937

@@ -6,11 +6,13 @@ public class Body : MonoBehaviour
 {
     BlockProgrammerScript blockProgrammerScript;
     List<BlockSpace> blockSpaces;
+    Vector2 initialSizeDelta;
     bool dragged;
 
     void Awake(){
         blockSpaces=new List<BlockSpace>();
         blockProgrammerScript=GameObject.FindGameObjectWithTag("BlockProgrammer").GetComponent<BlockProgrammerScript>();
+        initialSizeDelta=GetComponent<RectTransform>().sizeDelta;
     }
 
     // Start is called before the first frame update
@@ -57,10 +59,12 @@ public class Body : MonoBehaviour
             blockSpaces[i].setPosition((Vector2)transform.GetChild(i).GetComponent<RectTransform>().position);
         }
         foreach(Transform childTransform in transform){
-            if(childTransform.GetComponent<Block>()!=null){
+            Debug.Log(childTransform.gameObject.name);
+            if(childTransform.GetComponent<Block>()!=null&&childTransform.gameObject.name!="GhostBlock"){
                 childTransform.GetComponent<Block>().updateSpacePositions();
             }
         }
+        Debug.Log("End");
     }
 
     public void setBlockSpacesActive(bool active){
@@ -76,26 +80,36 @@ public class Body : MonoBehaviour
     }
 
     public Vector2 updateBlockLayouts(){
-        RectTransform rectTransform=gameObject.GetComponent<RectTransform>();
-        float width=0f;
-        float height=35f;
-        float heightDelta=0f;
-        foreach(Transform childTransform in transform){
-            Block childBlock=childTransform.gameObject.GetComponent<Block>();
-            if(childBlock!=null){
-                height+=childBlock.updateBlockLayouts().y;
-            }else{
-                height+=childTransform.gameObject.GetComponent<RectTransform>().sizeDelta.y;
-            }
+        RectTransform rectTransform=GetComponent<RectTransform>();
+        float width=initialSizeDelta.x;
+        float height;
+        if(transform.parent.parent.childCount>2&&transform.parent.GetSiblingIndex()<transform.parent.parent.childCount-2){
+            height=0f;
+        }else{
+            height=50f;
         }
-        width+=15f;
-
-        if(width<150f){width=150f;}
-
-        height+=heightDelta;
-        if(height<120f){height=120f;}
-
-        Vector2 sizeVector=new Vector2(width,height);
+        Vector2 deltaVector;
+        Vector2 sizeVector=new Vector2();
+        if(transform.childCount>0){
+            foreach(Transform childTransform in transform){
+                Block childBlock=childTransform.gameObject.GetComponent<Block>();
+                if(childBlock.name=="GhostBlock"){
+                    height+=90f;
+                }else if(childBlock!=null){
+                    deltaVector=childBlock.updateBlockLayouts();
+                    height+=deltaVector.y;
+                    if(width<deltaVector.x){
+                        width=deltaVector.x;
+                    } 
+                }
+            }
+            height-=10f*(float)(transform.childCount+1);
+            //width+=20f;
+        }else{
+            width=initialSizeDelta.x;
+            height=initialSizeDelta.y; 
+        }
+        sizeVector=new Vector2(width,height);
         rectTransform.sizeDelta=sizeVector;
         return sizeVector;
     }
