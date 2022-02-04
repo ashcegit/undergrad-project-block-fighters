@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Header : MonoBehaviour
 {
@@ -78,10 +79,10 @@ public class Header : MonoBehaviour
                     return gameObject.GetComponent<RectTransform>().sizeDelta;
                 }
             }
-            float width=10f;
-            float height=20f;
+            float width=15f;
+            float height=40f;
             float heightDelta=0f;
-            if(inputFieldHandlers.Count>0){
+            if(inputFieldHandlers.Count(inputFieldHandler=>inputFieldHandler.getInputBlock()!=null)>0){
                 width+=GameObject.Find("Text").GetComponent<RectTransform>().sizeDelta.x;
                 foreach(InputFieldHandler inputFieldHandler in inputFieldHandlers){
                     inputFieldHandler.updateInputSpacePosition();
@@ -89,7 +90,7 @@ public class Header : MonoBehaviour
                     if(inputBlock!=null){
                         Vector2 inputBlockSize=inputBlock.GetComponent<Block>().getSections()[0].getHeader().updateBlockLayouts();
                         width+=inputBlockSize.x;
-                        width+=5f;
+                        width+=10f;
                         if(inputBlockSize.y>heightDelta){
                             heightDelta=inputBlockSize.y;
                         }

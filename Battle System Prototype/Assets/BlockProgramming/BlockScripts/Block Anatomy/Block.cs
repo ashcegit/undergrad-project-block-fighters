@@ -40,7 +40,7 @@ public class Block : MonoBehaviour
     public BlockType getBlockType(){return blockType;}
 
     public void setPosition(Vector2 position){
-        transform.position=position;
+        GetComponent<RectTransform>().position=position;
         updateSpacePositions();
     }
 

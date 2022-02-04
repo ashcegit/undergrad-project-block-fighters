@@ -93,13 +93,15 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                                                                                     data.position,
                                                                                     SNAPDISTANCE);
                 if(nearestBlockSpace.getParentBody()!=null){
-                    addGhostBlockToBlockAtSiblingIndex(nearestBlockSpace.getParentBody(),nearestBlockSpace.getIndex());
-                    GameObject parentBlock=nearestBlockSpace.getParentBody().GetComponentInParent<Block>().gameObject;
-                    while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
-                        parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
+                    if(nearestBlockSpace.getParentBody().GetComponentInParent<Block>().gameObject!=currentlyDraggedObject){
+                        addGhostBlockToBlockAtSiblingIndex(nearestBlockSpace.getParentBody(),nearestBlockSpace.getIndex());
+                        GameObject parentBlock=nearestBlockSpace.getParentBody().GetComponentInParent<Block>().gameObject;
+                        while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
+                            parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
+                        }
+                        parentBlock.GetComponent<Block>().updateBlockLayouts();
+                        parentBlock.GetComponent<Block>().updateSpacePositions();
                     }
-                    parentBlock.GetComponent<Block>().updateBlockLayouts();
-                    parentBlock.GetComponent<Block>().updateSpacePositions();
                 }else{
                     removeGhostBlock();
                 }
@@ -148,9 +150,13 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                     if(highlightActive){
                         removeInputFieldHighlight();
                         nearestInputSpace.getInputFieldHandler().addInputBlock(currentlyDraggedObject);
-                        nearestInputSpace.getInputFieldHandler().GetComponentInParent<Block>().updateBlockLayouts();
-                        nearestInputSpace.getInputFieldHandler().GetComponentInParent<Block>().updateSpacePositions();
-                        nearestInputSpace.getInputFieldHandler().GetComponentInParent<Block>().setSpacesActive(true);
+                        GameObject parentBlock=nearestInputSpace.getInputFieldHandler().GetComponentInParent<Block>().gameObject;
+                        while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
+                            parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
+                        }
+                        parentBlock.GetComponent<Block>().updateBlockLayouts();
+                        parentBlock.GetComponent<Block>().updateSpacePositions();
+                        parentBlock.GetComponent<Block>().setSpacesActive(true);
                     }else{
                         currentlyDraggedObject.GetComponent<Block>().updateBlockLayouts();
                         currentlyDraggedObject.GetComponent<Block>().updateSpacePositions();

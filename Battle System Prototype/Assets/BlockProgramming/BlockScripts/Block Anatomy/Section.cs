@@ -47,7 +47,10 @@ public class Section : MonoBehaviour
             if(sizeVector.x<bodyVector.x){sizeVector.x=bodyVector.x;}
             sizeVector.y+=bodyVector.y;
         }
+        Debug.Log("Block Name: "+GetComponentInParent<Block>().gameObject.name);
+        Debug.Log("RectTransform sizeDelta before: "+GetComponent<RectTransform>().sizeDelta);
         GetComponent<RectTransform>().sizeDelta=sizeVector;
+        Debug.Log("RectTransform sizeDelta after: "+GetComponent<RectTransform>().sizeDelta);
         return sizeVector;
     }
 

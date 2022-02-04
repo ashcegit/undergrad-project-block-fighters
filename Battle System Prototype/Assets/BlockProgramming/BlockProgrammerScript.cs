@@ -12,6 +12,7 @@ public class BlockProgrammerScript : MonoBehaviour
     List<BlockSpace> blockSpaces;
     List<InputSpace> inputSpaces;
     int maxMethodBlocks;
+    BlockSave blockSave;
 
     void Awake(){
         methodBlockObjects=new List<GameObject>();
@@ -20,6 +21,8 @@ public class BlockProgrammerScript : MonoBehaviour
         inputSpaces=new List<InputSpace>();
         environment=GameObject.FindGameObjectWithTag("BlockEnvironment");
         maxMethodBlocks=4;
+        blockSave=new BlockSave();
+        refreshBlockSelection();
     }   
 
     // Start is called before the first frame update
@@ -32,6 +35,7 @@ public class BlockProgrammerScript : MonoBehaviour
         foreach(Transform childTransform in transform){
             childTransform.gameObject.SetActive(true);
         }
+        refreshBlockSelection();
     }
 
     void OnDisable(){
@@ -104,6 +108,23 @@ public class BlockProgrammerScript : MonoBehaviour
     public void applyMethodNames(){
         foreach(GameObject methodBlockObject in methodBlockObjects){
             methodBlockObject.GetComponent<Block>().setMethodNameFromHeader();
+        }
+    }
+
+    public void refreshBlockSelection(){
+        blockSave.refreshSelectionBlocks();
+        GameObject selectionContent=GameObject.FindGameObjectWithTag("SelectionContent");
+        foreach(Transform panelTransform in selectionContent.transform){
+            RectTransform rectTransform=panelTransform.GetComponent<RectTransform>();
+            Vector2 heightVector=new Vector2();
+            foreach(Transform blockTransform in panelTransform.transform){
+                if(blockTransform.gameObject.activeSelf){
+                    heightVector.y+=blockTransform.GetComponent<RectTransform>().sizeDelta.y;
+                }
+            }
+            heightVector.x=rectTransform.sizeDelta.x;
+            heightVector.y+=5f;
+            panelTransform.GetComponent<RectTransform>().sizeDelta=heightVector;
         }
     }
 }

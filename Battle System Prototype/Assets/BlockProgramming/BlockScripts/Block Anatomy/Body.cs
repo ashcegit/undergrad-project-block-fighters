@@ -15,7 +15,6 @@ public class Body : MonoBehaviour
         initialSizeDelta=GetComponent<RectTransform>().sizeDelta;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         BlockSpace startingBlockSpace=new BlockSpace();
@@ -36,7 +35,7 @@ public class Body : MonoBehaviour
         newBlockSpace.setActive(true);
         blockSpaces.Add(newBlockSpace);
         blockProgrammerScript.addBlockSpace(newBlockSpace);
-        for(int i=index+1;i<blockSpaces.Count;i++){
+        for(int i=0;i<blockSpaces.Count;i++){
             blockSpaces[i].setIndex(i);
         }
     }
@@ -55,16 +54,12 @@ public class Body : MonoBehaviour
     public void updateSpacePositions(){
         blockSpaces[0].setPosition((Vector2)GetComponentInParent<Section>().gameObject
                                             .GetComponentInChildren<Header>().gameObject.GetComponent<RectTransform>().position);
-        for(int i=1;i<transform.childCount;i++){
+        for(int i=0;i<transform.childCount;i++){
             blockSpaces[i].setPosition((Vector2)transform.GetChild(i).GetComponent<RectTransform>().position);
+            Debug.Log("Trying");
+            transform.GetChild(i).GetComponent<Block>().updateSpacePositions();
+            Debug.Log("Finished");
         }
-        foreach(Transform childTransform in transform){
-            Debug.Log(childTransform.gameObject.name);
-            if(childTransform.GetComponent<Block>()!=null&&childTransform.gameObject.name!="GhostBlock"){
-                childTransform.GetComponent<Block>().updateSpacePositions();
-            }
-        }
-        Debug.Log("End");
     }
 
     public void setBlockSpacesActive(bool active){
@@ -83,10 +78,12 @@ public class Body : MonoBehaviour
         RectTransform rectTransform=GetComponent<RectTransform>();
         float width=initialSizeDelta.x;
         float height;
-        if(transform.parent.parent.childCount>2&&transform.parent.GetSiblingIndex()<transform.parent.parent.childCount-2){
+        if(GetComponentInParent<Block>().getBlockType()==BlockType.Method||
+            transform.parent.parent.childCount>2&&
+            transform.parent.GetSiblingIndex()<transform.parent.parent.childCount-2){
             height=0f;
         }else{
-            height=50f;
+            height=40f;
         }
         Vector2 deltaVector;
         Vector2 sizeVector=new Vector2();
@@ -103,7 +100,7 @@ public class Body : MonoBehaviour
                     } 
                 }
             }
-            height-=10f*(float)(transform.childCount+1);
+            height-=10f*(float)(transform.childCount);
             //width+=20f;
         }else{
             width=initialSizeDelta.x;

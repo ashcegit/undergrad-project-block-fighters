@@ -50,12 +50,17 @@ public class InputFieldHandler : MonoBehaviour
             inputSpace.setActive(active);
         }else if(inputBlock!=null){
             inputSpace.setActive(false);
+            inputBlock.GetComponent<Block>().setSpacesActive(true);
         }
     }
 
     public void updateInputSpacePosition(){
         if(!textAllowed){
-            inputSpace.setPosition((Vector2)gameObject.transform.position);
+            if(inputBlock!=null){
+                inputBlock.GetComponent<Block>().updateSpacePositions();
+            }else{
+                inputSpace.setPosition((Vector2)gameObject.transform.position);
+            }
         }
     }
 

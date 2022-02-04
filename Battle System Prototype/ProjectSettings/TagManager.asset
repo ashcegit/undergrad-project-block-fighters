@@ -13,6 +13,7 @@ TagManager:
   - ClearButton
   - GhostBlock
   - EnvironmentCanvas
+  - SelectionContent
   layers:
   - Default
   - TransparentFX
