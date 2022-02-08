@@ -121,10 +121,7 @@ namespace CommandTerminal
 
             Shell.registerPlayer(player);
             Shell.registerOpponent(opponent);
-            Shell.registerPlayerCommands(methodBlockObjects);        
-                                            
-            Autocomplete.register(player.getCharacterName());
-            Autocomplete.register(opponent.getCharacterName());
+            Shell.registerPlayerCommands(methodBlockObjects);
 
             foreach(var command in Shell.getPlayerCommands()) {
                 Autocomplete.register(command.Key);
@@ -158,7 +155,7 @@ namespace CommandTerminal
         }
 
         void setupWindow() {
-            window = new Rect(5*Screen.width/8, Screen.height/10, 5*Screen.width/16, 8*Screen.height/10);
+            window = new Rect(5*Screen.width/8, Screen.height/9, 5*Screen.width/16, 7*Screen.height/10);
 
             // Set background color
             Texture2D background_texture = new Texture2D(1, 1);
@@ -191,7 +188,7 @@ namespace CommandTerminal
             input_style.padding = new RectOffset(4, 4, 4, 4);
             input_style.font = ConsoleFont;
             input_style.fontSize=50;
-            input_style.fixedHeight = ConsoleFont.fontSize * 1.6f;
+            input_style.fixedHeight = ConsoleFont.fontSize * 4f;
             input_style.normal.textColor = InputColor;
 
         }
