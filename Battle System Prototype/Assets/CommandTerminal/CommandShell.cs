@@ -105,9 +105,22 @@ namespace CommandTerminal
         }
 
         public bool finishProgramming(){
-            if(!GameObject.FindGameObjectWithTag("BlockProgrammer")
-                        .GetComponent<BlockProgrammerScript>().enabled){
+            BlockProgrammerScript blockProgrammerScript=GameObject.FindGameObjectWithTag("BlockProgrammer")
+                                                                    .GetComponent<BlockProgrammerScript>();
+            if(!blockProgrammerScript.enabled){
                 IssueErrorMessage("Command {0} cannot be called when in battle","finish");
+                return false;
+            }else if(!blockProgrammerScript.checkMinAmountOfMethods()){
+                IssueErrorMessage("Amount of methods must be above 0");
+                return false;
+            }else if(!blockProgrammerScript.checkMaxAmountOfMethods()){
+                IssueErrorMessage("Maximum of 4 methods allowed");
+                return false;
+            }else if(!blockProgrammerScript.checkForNonEmptyMethods()){
+                IssueErrorMessage("Methods must not be empty");
+                return false;
+            }else if(!blockProgrammerScript.finishProgrammingCheck()){
+                IssueErrorMessage("Not all methods have been named");
                 return false;
             }else{
                 GameObject.FindGameObjectWithTag("Main").GetComponent<Main>().finishProgramming();

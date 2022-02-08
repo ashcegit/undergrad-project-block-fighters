@@ -141,4 +141,33 @@ public class BlockProgrammerScript : MonoBehaviour
         }
         return true;
     }
+
+    public bool checkForNonEmptyMethods(){
+        foreach(GameObject methodBlockObject in methodBlockObjects){
+            if(methodBlockObject.GetComponentInChildren<Body>.transform.childCount==0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public bool checkMaxAmountOfMethods(){
+        if(methodBlockObjects.Count>5){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public bool checkMinAmountOfMethods(){
+        if(methodBlockObjects.Count<1){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public void cleanUpStrayBlocks(){
+
+    }
 }
