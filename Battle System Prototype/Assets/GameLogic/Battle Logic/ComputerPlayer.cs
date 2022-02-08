@@ -15,6 +15,10 @@ public class ComputerPlayer:MonoBehaviour
         kickPrefab=(GameObject)Resources.Load("Prefabs/Blocks/Actions/Attacks/Block Action Attack Kick");
     }
 
+    public void initBlockStack(int levelCounter){
+        initComputerBlockStackA();
+    }
+
     public void initComputerBlockStackA(){
         for(int i=0;i<5;i++){
             blockStack.Add(Instantiate(punchPrefab).GetComponent<Block>());

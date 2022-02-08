@@ -111,6 +111,10 @@ public class BlockProgrammerScript : MonoBehaviour
         }
     }
 
+    public void unlockRandomBlock(){
+        blockSave.unlockRandomBlock();
+    }
+
     public void refreshBlockSelection(){
         blockSave.refreshSelectionBlocks();
         GameObject selectionContent=GameObject.FindGameObjectWithTag("SelectionContent");
@@ -121,9 +125,10 @@ public class BlockProgrammerScript : MonoBehaviour
                 if(blockTransform.gameObject.activeSelf){
                     heightVector.y+=blockTransform.GetComponent<RectTransform>().sizeDelta.y;
                 }
+                heightVector.y+=5f;
             }
             heightVector.x=rectTransform.sizeDelta.x;
-            heightVector.y+=5f;
+            heightVector.y+=2f;
             panelTransform.GetComponent<RectTransform>().sizeDelta=heightVector;
         }
     }

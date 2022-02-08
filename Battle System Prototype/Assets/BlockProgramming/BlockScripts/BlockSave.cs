@@ -18,8 +18,8 @@ public class BlockSave
                                     "Block Logic True",
                                     "Block Logic False",
                                     "Block Info Number",
-                                    "Block Info Player",
-                                    "Block Info Opponent"
+                                    "Block Character Player",
+                                    "Block Character Opponent"
                                 };
     
     public BlockSave(){
@@ -37,7 +37,7 @@ public class BlockSave
         }
     }
 
-    public SelectionBlock? enableRandomBlock(){
+    public SelectionBlock? unlockRandomBlock(){
         if(lockedBlocks.Count>0){
             SelectionBlock newBlock=lockedBlocks[Random.Range(0,lockedBlocks.Count)];
             lockedBlocks.Remove(newBlock);

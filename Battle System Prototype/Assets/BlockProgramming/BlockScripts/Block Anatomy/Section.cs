@@ -41,16 +41,14 @@ public class Section : MonoBehaviour
     }
 
     public Vector2 updateBlockLayouts(){
-        Vector2 sizeVector=header.updateBlockLayouts();
+        Vector2 sizeVector=new Vector2();
+        sizeVector=header.updateBlockLayouts();
         if(body!=null){
             Vector2 bodyVector=body.updateBlockLayouts();
             if(sizeVector.x<bodyVector.x){sizeVector.x=bodyVector.x;}
             sizeVector.y+=bodyVector.y;
         }
-        Debug.Log("Block Name: "+GetComponentInParent<Block>().gameObject.name);
-        Debug.Log("RectTransform sizeDelta before: "+GetComponent<RectTransform>().sizeDelta);
         GetComponent<RectTransform>().sizeDelta=sizeVector;
-        Debug.Log("RectTransform sizeDelta after: "+GetComponent<RectTransform>().sizeDelta);
         return sizeVector;
     }
 

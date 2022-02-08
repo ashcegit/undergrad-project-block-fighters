@@ -18,6 +18,8 @@ public class GameScript : MonoBehaviour
     private bool opponentWon;
     private InteractionHandler interactionHandler;
 
+    private int levelCounter;
+
     CharacterUI characterUI;
 
     void OnEnable(){
@@ -28,8 +30,10 @@ public class GameScript : MonoBehaviour
         characterUI.hideUI();
     }
 
-    public void initGameScript(){
+    public void Start(){
         enabled=false;
+
+        levelCounter=0;              
 
         player=new Character("Player",
                           100f,
@@ -71,13 +75,17 @@ public class GameScript : MonoBehaviour
     public bool hasPlayerLost(){return player.getHealth()==0;}
     public bool hasOpponentLost(){return opponent.getHealth()==0;}
 
-    public ComputerPlayer getComputerPlayer(){
-        return computerPlayer;
+    public void initComputerPlayerBlockStack(){
+        computerPlayer.initBlockStack(levelCounter);
     }
 
     public void clearComputerBlockStack(){
         computerPlayer.clearBlockStack();
         opponentChosen=false;
+    }
+
+    public ExecutionWrapper executeCurrentComputerPlayerBlock(){
+        return computerPlayer.executeCurrentBlock();
     }
 
     public void setPlayerMethod(GameObject playerMethod){
@@ -162,6 +170,37 @@ public class GameScript : MonoBehaviour
 
     public void updateOpponentHealth(){
         characterUI.updateOpponentHealth(opponent.getHealth(),opponent.getMaxHealth());
+    }
+
+    public void nextLevel(){
+        levelCounter++;
+        playerLoaded=false;
+        opponentLoaded=false;
+        
+        player=new Character("Player",
+                          100f,
+                          15f,
+                          45f,
+                          60f,
+                          5);
+
+        opponent=new Character("Opponent",
+                              100f,
+                              15f,
+                              45f,
+                              60f,
+                              5);
+
+        computerPlayer=new ComputerPlayer();
+
+        opponentChosen=false;
+        playerChosen=false;
+
+        characterUI.updatePlayerHealth(player.getHealth(),player.getMaxHealth());
+        characterUI.updateOpponentHealth(opponent.getHealth(),opponent.getMaxHealth());
+
+        playerLoaded=true;
+        opponentLoaded=true;
     }
 
     public void resetGame(){

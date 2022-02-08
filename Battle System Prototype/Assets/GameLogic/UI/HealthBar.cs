@@ -8,10 +8,22 @@ public class HealthBar : MonoBehaviour
     Image innerHealthBar;
 
     void Awake(){
-        innerHealthBar=GetComponentInChildren<Image>();
+        innerHealthBar=transform.GetChild(0).GetComponent<Image>();
     }
 
     public void updateHealthBar(float healthPercentage){
-        innerHealthBar.fillAmount=healthPercentage;
+        StopAllCoroutines();
+        StartCoroutine(updateHealthBarCoroutine(healthPercentage,2f));
+    }
+
+    IEnumerator updateHealthBarCoroutine(float healthPercentage,float speed){
+        float time=0f;
+        float initialAmount=innerHealthBar.fillAmount;
+        while(innerHealthBar.fillAmount!=healthPercentage){
+            innerHealthBar.fillAmount=Mathf.Lerp(initialAmount,healthPercentage,time);
+            time+=Time.deltaTime*speed;
+            yield return null;
+        }
+        yield return null;
     }
 }
