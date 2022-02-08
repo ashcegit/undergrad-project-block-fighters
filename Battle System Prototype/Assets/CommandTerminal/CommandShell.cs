@@ -126,7 +126,6 @@ namespace CommandTerminal
                 GameObject.FindGameObjectWithTag("Main").GetComponent<Main>().finishProgramming();
                 return true;
             }
-            
         }
 
         public void quit() {
@@ -148,24 +147,7 @@ namespace CommandTerminal
                 string commandName=parsedCommand.Item1;
                 string[] argStringArray=parsedCommand.Item2;
                 if(playerCommands.ContainsKey(commandName)){
-                    // if(argStringArray.Length!=playerCommands[commandName].GetParameters().Length){
-                    //     commandWrapper.setIsValid(false);
-                    //     IssueErrorMessage("Command {0} takes {1} parameter(s)",commandName,
-                    //                                                         playerCommands[commandName].GetParameters().Length);
-                    //     return commandWrapper;
-                    // }
-                    
                     commandWrapper.setIsGameAction(true);
-                    //List<Character> targets=new List<Character>();
-                    // foreach(string arg in argStringArray){
-                    //     if(arg.Equals(player.getCharacterName())){targets.Add(player);}
-                    //     else if(arg.Equals(player.getCharacterName())){targets.Add(opponent);}
-                    //     else{
-                    //         commandWrapper.setIsValid(false);
-                    //         IssueErrorMessage("Parameter {0} not recognisable target",arg);
-                    //         return commandWrapper;
-                    //     }
-                    // }
                     GameObject selectedMethodBlockObject=playerCommands[commandName];
                     commandWrapper.setMethodBlockObject(selectedMethodBlockObject);
                     commandWrapper.setIsValid(true);

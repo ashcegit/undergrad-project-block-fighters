@@ -144,7 +144,7 @@ public class BlockProgrammerScript : MonoBehaviour
 
     public bool checkForNonEmptyMethods(){
         foreach(GameObject methodBlockObject in methodBlockObjects){
-            if(methodBlockObject.GetComponentInChildren<Body>.transform.childCount==0){
+            if(methodBlockObject.GetComponentInChildren<Body>().transform.childCount==0){
                 return false;
             }
         }
@@ -168,6 +168,11 @@ public class BlockProgrammerScript : MonoBehaviour
     }
 
     public void cleanUpStrayBlocks(){
-
+        Transform environmentTransform=GameObject.FindGameObjectWithTag("BlockEnvironment").transform;
+        foreach(Transform childTransform in environmentTransform){
+            if(childTransform.GetComponent<Block>().getBlockType()!=BlockType.Method){
+                Destroy(childTransform.gameObject);
+            }
+        }
     }
 }
