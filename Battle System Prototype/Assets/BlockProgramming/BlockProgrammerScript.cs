@@ -132,4 +132,13 @@ public class BlockProgrammerScript : MonoBehaviour
             panelTransform.GetComponent<RectTransform>().sizeDelta=heightVector;
         }
     }
+
+    public bool finishProgrammingCheck(){
+        foreach(GameObject methodBlockObject in methodBlockObjects){
+            if(methodBlockObject.GetComponent<Block>().getMethodName()==""){
+                return false;
+            }
+        }
+        return true;
+    }
 }

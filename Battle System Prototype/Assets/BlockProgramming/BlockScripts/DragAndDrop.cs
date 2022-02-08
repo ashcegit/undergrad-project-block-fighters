@@ -94,13 +94,37 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                                                                                     SNAPDISTANCE);
                 if(nearestBlockSpace.getParentBody()!=null){
                     if(nearestBlockSpace.getParentBody().GetComponentInParent<Block>().gameObject!=currentlyDraggedObject){
-                        addGhostBlockToBlockAtSiblingIndex(nearestBlockSpace.getParentBody(),nearestBlockSpace.getIndex());
-                        GameObject parentBlock=nearestBlockSpace.getParentBody().GetComponentInParent<Block>().gameObject;
-                        while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
-                            parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
+                        if(currentBlockType==BlockType.Control){
+                            if(currentlyDraggedObject.GetComponent<ControlFunction>().getName()=="Break Loop"){
+                                if(nearestBlockSpace.getParentBody().GetComponentInParent<ControlRepeatFunction>()!=null||
+                                    nearestBlockSpace.getParentBody().GetComponentInParent<ControlRepeatUntilFunction>()!=null||
+                                    nearestBlockSpace.getParentBody().GetComponentInParent<ControlRepeatForeverFunction>()!=null){
+                                        addGhostBlockToBlockAtSiblingIndex(nearestBlockSpace.getParentBody(),nearestBlockSpace.getIndex());
+                                        GameObject parentBlock=nearestBlockSpace.getParentBody().GetComponentInParent<Block>().gameObject;
+                                        while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
+                                            parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
+                                        }
+                                        parentBlock.GetComponent<Block>().updateBlockLayouts();
+                                        parentBlock.GetComponent<Block>().updateSpacePositions();
+                                    }
+                            }else{
+                                addGhostBlockToBlockAtSiblingIndex(nearestBlockSpace.getParentBody(),nearestBlockSpace.getIndex());
+                                GameObject parentBlock=nearestBlockSpace.getParentBody().GetComponentInParent<Block>().gameObject;
+                                while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
+                                    parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
+                                }
+                                parentBlock.GetComponent<Block>().updateBlockLayouts();
+                                parentBlock.GetComponent<Block>().updateSpacePositions();
+                            }
+                        }else{
+                            addGhostBlockToBlockAtSiblingIndex(nearestBlockSpace.getParentBody(),nearestBlockSpace.getIndex());
+                            GameObject parentBlock=nearestBlockSpace.getParentBody().GetComponentInParent<Block>().gameObject;
+                            while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
+                                parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
+                            }
+                            parentBlock.GetComponent<Block>().updateBlockLayouts();
+                            parentBlock.GetComponent<Block>().updateSpacePositions();
                         }
-                        parentBlock.GetComponent<Block>().updateBlockLayouts();
-                        parentBlock.GetComponent<Block>().updateSpacePositions();
                     }
                 }else{
                     removeGhostBlock();

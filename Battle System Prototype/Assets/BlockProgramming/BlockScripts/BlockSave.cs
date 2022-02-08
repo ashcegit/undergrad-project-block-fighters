@@ -14,6 +14,7 @@ public class BlockSave
                                     "Block Action Heal Plaster",
                                     "Block Ins If",
                                     "Block Ins RepeatForever",
+                                    "Block Ins BreakLoop",
                                     "Block Math Sum",
                                     "Block Logic True",
                                     "Block Logic False",

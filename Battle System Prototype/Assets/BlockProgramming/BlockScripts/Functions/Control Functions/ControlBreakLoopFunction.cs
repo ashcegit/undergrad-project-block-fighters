@@ -9,11 +9,18 @@ public class ControlBreakLoopFunction : ControlFunction
     public override string getName(){return NAME;}
 
     public override int function(int pointer,ref List<Block> blockList){
-        while(blockList[pointer].getStartBlock().gameObject.GetComponent<ControlFunction>().name!="Repeat"
-            ||blockList[pointer].getStartBlock().gameObject.GetComponent<ControlFunction>().name!="Repeat Until"
-            ||blockList[pointer].getStartBlock().gameObject.GetComponent<ControlFunction>().name!="Repeat Forever"){
+        bool foundFlag=false;
+        while(!foundFlag){
+            if(blockList[pointer].getStartBlock()!=null){
+                if(blockList[pointer].getStartBlock().gameObject.GetComponent<ControlFunction>().getName()=="Repeat"||
+                    blockList[pointer].getStartBlock().gameObject.GetComponent<ControlFunction>().getName()=="Repeat Until"||
+                    blockList[pointer].getStartBlock().gameObject.GetComponent<ControlFunction>().getName()=="Repeat Forever"){
+                        foundFlag=true;
+                    }
+            }else{
                 pointer++;
             }
+        }
         return ++pointer;
         
     }
