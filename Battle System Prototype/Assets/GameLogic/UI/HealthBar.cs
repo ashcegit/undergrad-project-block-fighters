@@ -13,7 +13,7 @@ public class HealthBar : MonoBehaviour
 
     public void updateHealthBar(float healthPercentage){
         StopAllCoroutines();
-        StartCoroutine(updateHealthBarCoroutine(healthPercentage,2f));
+        StartCoroutine(updateHealthBarCoroutine(healthPercentage,10f));
     }
 
     IEnumerator updateHealthBarCoroutine(float healthPercentage,float speed){

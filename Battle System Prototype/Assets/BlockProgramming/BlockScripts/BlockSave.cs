@@ -38,14 +38,17 @@ public class BlockSave
         }
     }
 
-    public SelectionBlock? unlockRandomBlock(){
-        if(lockedBlocks.Count>0){
-            SelectionBlock newBlock=lockedBlocks[Random.Range(0,lockedBlocks.Count)];
-            lockedBlocks.Remove(newBlock);
-            availableBlocks.Add(newBlock);
-            return newBlock;
+    public List<SelectionBlock> unlockRandomBlocks(){
+        List<SelectionBlock> newSelectionBlocks=new List<SelectionBlock>();
+        for(int i=0;i<3;i++){
+            if(lockedBlocks.Count>0){
+                SelectionBlock newBlock=lockedBlocks[Random.Range(0,lockedBlocks.Count)];
+                lockedBlocks.Remove(newBlock);
+                availableBlocks.Add(newBlock);
+                newSelectionBlocks.Add(newBlock);
+            }
         }
-        return null;
+        return newSelectionBlocks;
     }
 
     public void refreshSelectionBlocks(){

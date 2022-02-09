@@ -15,6 +15,7 @@ public class CharacterUI : MonoBehaviour
         player=transform.Find("Player").gameObject;
         playerHudObject=transform.Find("Player HUD").gameObject;
         playerHud=playerHudObject.GetComponent<Hud>();
+        
         opponent=transform.Find("Opponent").gameObject;
         opponentHudObject=transform.Find("Opponent HUD").gameObject;
         opponentHud=opponentHudObject.GetComponent<Hud>();
@@ -25,17 +26,11 @@ public class CharacterUI : MonoBehaviour
     }
 
     public void hideUI(){
-        player.SetActive(false);
-        playerHudObject.SetActive(false);
-        opponent.SetActive(false);
-        opponentHudObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public void showUI(){
-        player.SetActive(true);
-        playerHudObject.SetActive(true);
-        opponent.SetActive(true);
-        opponentHudObject.SetActive(true);
+        gameObject.SetActive(true);
     }
 
     public void updatePlayerName(string name){

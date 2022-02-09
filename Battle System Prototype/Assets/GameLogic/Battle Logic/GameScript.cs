@@ -22,6 +22,14 @@ public class GameScript : MonoBehaviour
 
     CharacterUI characterUI;
 
+    void Awake(){
+        characterUI=GetComponentInChildren<CharacterUI>();
+
+        computerPlayer=new ComputerPlayer();
+        
+        interactionHandler=new InteractionHandler();
+    }
+
     void OnEnable(){
         characterUI.showUI();
     }
@@ -50,13 +58,7 @@ public class GameScript : MonoBehaviour
                               60f,
                               5);
         opponentLoaded=true;
-
-        characterUI=GetComponentInChildren<CharacterUI>();
-
-        computerPlayer=new ComputerPlayer();
         
-        interactionHandler=new InteractionHandler();
-
         enabled=true;
 
         StopAllCoroutines();

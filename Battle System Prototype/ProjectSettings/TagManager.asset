@@ -14,6 +14,7 @@ TagManager:
   - GhostBlock
   - EnvironmentCanvas
   - SelectionContent
+  - LevelUp
   layers:
   - Default
   - TransparentFX

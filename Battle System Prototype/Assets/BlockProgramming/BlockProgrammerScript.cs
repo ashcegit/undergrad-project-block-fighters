@@ -111,8 +111,8 @@ public class BlockProgrammerScript : MonoBehaviour
         }
     }
 
-    public void unlockRandomBlock(){
-        blockSave.unlockRandomBlock();
+    public List<SelectionBlock> unlockRandomBlocks(){
+        return blockSave.unlockRandomBlocks();
     }
 
     public void refreshBlockSelection(){

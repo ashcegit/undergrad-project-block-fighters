@@ -107,6 +107,7 @@ namespace CommandTerminal
         public bool finishProgramming(){
             BlockProgrammerScript blockProgrammerScript=GameObject.FindGameObjectWithTag("BlockProgrammer")
                                                                     .GetComponent<BlockProgrammerScript>();
+            blockProgrammerScript.applyMethodNames();
             if(!blockProgrammerScript.enabled){
                 IssueErrorMessage("Command {0} cannot be called when in battle","finish");
                 return false;

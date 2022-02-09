@@ -69,6 +69,7 @@ public class Block : MonoBehaviour
     }
 
     public string getMethodName(){return methodName;}
+    
     public void setMethodNameFromHeader(){
         methodName=sections[0].getHeader().getInputStrings()[0];
     }

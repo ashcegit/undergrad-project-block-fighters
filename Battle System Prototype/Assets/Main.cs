@@ -11,14 +11,14 @@ public class Main : MonoBehaviour
     private BlockProgrammerScript blockProgrammerScript;
     private List<Block> methodBlocks;
 
-    private GameObject game;
     private GameScript gameScript;
 
     private GameObject playerMethod;
     private GameObject opponentMethod;
 
-    private GameObject terminal;
     private Terminal terminalScript;
+
+    private LevelInfoScript levelInfoScript;
 
     private InteractionHandler interactionHandler;
 
@@ -26,7 +26,7 @@ public class Main : MonoBehaviour
 
 
     void Start(){
-        enabled=false;
+        
 
         StopAllCoroutines();
         blockProgrammer=GameObject.FindGameObjectWithTag("BlockProgrammer");
@@ -35,6 +35,8 @@ public class Main : MonoBehaviour
         gameScript=GetComponentInChildren<GameScript>();
 
         terminalScript=GetComponentInChildren<Terminal>();
+
+        levelInfoScript=GetComponentInChildren<LevelInfoScript>();
 
         interactionHandler=new InteractionHandler();
 
@@ -45,7 +47,9 @@ public class Main : MonoBehaviour
 
         loopDone=true;
         terminalScript.setState(TerminalState.Write);
+        enabled=false;
         gameScript.enabled=false;
+        levelInfoScript.enabled=false;
     }
     
     void resetGame(){
@@ -63,9 +67,10 @@ public class Main : MonoBehaviour
         if(!gameScript.hasPlayerLost()){
             gameScript.nextLevel();
             terminalScript.initShell(gameScript);
-            blockProgrammerScript.unlockRandomBlock();
-            blockProgrammerScript.unlockRandomBlock();
-            blockProgrammerScript.unlockRandomBlock();
+            List<SelectionBlock> newSelectionBlocks=blockProgrammerScript.unlockRandomBlocks();
+            levelInfoScript.enabled=true;
+
+            levelInfoScript.enabled=false;
             openProgramming();
             loopDone=true;
         }else{
@@ -81,7 +86,6 @@ public class Main : MonoBehaviour
 
     public void finishProgramming(){
         terminalScript.setState(TerminalState.Write);
-        blockProgrammerScript.applyMethodNames();
         terminalScript.registerCharacterCommands(gameScript.getPlayer(),
                                                     gameScript.getOpponent(),
                                                     blockProgrammerScript.getMethodBlockObjects());
