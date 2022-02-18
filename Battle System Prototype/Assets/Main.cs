@@ -23,11 +23,12 @@ public class Main : MonoBehaviour
     private InteractionHandler interactionHandler;
 
     private bool loopDone;
+    public bool levellingUp;
+
+    private const int maxLevels=10;
 
 
     void Start(){
-        
-
         StopAllCoroutines();
         blockProgrammer=GameObject.FindGameObjectWithTag("BlockProgrammer");
         blockProgrammerScript=(BlockProgrammerScript)blockProgrammer.GetComponent<BlockProgrammerScript>();
@@ -61,21 +62,28 @@ public class Main : MonoBehaviour
         loopDone=true;
     }
 
-    void endOfLevel(){
+    void levelDone(){
         enabled=false;
         Terminal.Buffer.Clear();
         if(!gameScript.hasPlayerLost()){
-            gameScript.nextLevel();
-            terminalScript.initShell(gameScript);
-            List<SelectionBlock> newSelectionBlocks=blockProgrammerScript.unlockRandomBlocks();
+            gameScript.enabled=false;
+            terminalScript.setState(TerminalState.Close);
+            levelInfoScript.gameObject.SetActive(true);
             levelInfoScript.enabled=true;
-
-            levelInfoScript.enabled=false;
-            openProgramming();
-            loopDone=true;
+            levelInfoScript.levelUp(gameScript.getLevelCounter(),maxLevels);
         }else{
             resetGame();
         }
+    }
+
+    public void nextLevel(){
+        gameScript.nextLevel();
+        terminalScript.setState(TerminalState.Write);
+        terminalScript.initShell(gameScript);
+        List<SelectionBlock> newSelectionBlocks=blockProgrammerScript.unlockRandomBlocks();
+        levelInfoScript.enabled=false;
+        openProgramming();
+        loopDone=true;
     }
 
     public void openProgramming(){
@@ -122,7 +130,7 @@ public class Main : MonoBehaviour
             }
         }else if(gameScript.isGameOver()){
             StopAllCoroutines();
-            endOfLevel();
+            levelDone();
         }
     }
 

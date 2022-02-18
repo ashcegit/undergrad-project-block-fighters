@@ -77,6 +77,8 @@ public class GameScript : MonoBehaviour
     public bool hasPlayerLost(){return player.getHealth()==0;}
     public bool hasOpponentLost(){return opponent.getHealth()==0;}
 
+    public int getLevelCounter(){return levelCounter;}
+
     public void initComputerPlayerBlockStack(){
         computerPlayer.initBlockStack(levelCounter);
     }

@@ -26,7 +26,7 @@ public class Hud : MonoBehaviour
     public void updateHealth(float health,float maxHealth){
         healthText.text=Mathf.Round(health).ToString();
         maxHealthText.text=Mathf.Round(maxHealth).ToString();
-        healthBar.updateHealthBar(health/maxHealth);
+        healthBar.updateHealthBar(health/maxHealth,10f);
     }
 
     public IEnumerator shakeHealth(){

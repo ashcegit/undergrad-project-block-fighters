@@ -11,9 +11,9 @@ public class HealthBar : MonoBehaviour
         innerHealthBar=transform.GetChild(0).GetComponent<Image>();
     }
 
-    public void updateHealthBar(float healthPercentage){
+    public void updateHealthBar(float healthPercentage,float speed){
         StopAllCoroutines();
-        StartCoroutine(updateHealthBarCoroutine(healthPercentage,10f));
+        StartCoroutine(updateHealthBarCoroutine(healthPercentage,speed));
     }
 
     IEnumerator updateHealthBarCoroutine(float healthPercentage,float speed){
