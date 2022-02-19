@@ -66,6 +66,7 @@ public class Main : MonoBehaviour
         enabled=false;
         Terminal.Buffer.Clear();
         if(!gameScript.hasPlayerLost()){
+            gameScript.nextLevel();
             gameScript.enabled=false;
             terminalScript.setState(TerminalState.Close);
             levelInfoScript.gameObject.SetActive(true);
@@ -77,7 +78,6 @@ public class Main : MonoBehaviour
     }
 
     public void nextLevel(){
-        gameScript.nextLevel();
         terminalScript.setState(TerminalState.Write);
         terminalScript.initShell(gameScript);
         List<SelectionBlock> newSelectionBlocks=blockProgrammerScript.unlockRandomBlocks();

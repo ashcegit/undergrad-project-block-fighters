@@ -24,7 +24,7 @@ public class LevelInfoScript : MonoBehaviour
     }
 
     public void levelUp(int levelCounter,int maxLevels){
-        levelsToGoGameObject.GetComponent<TextMeshProUGUI>().text=levelCounter+" levels to go";
+        levelsToGoGameObject.GetComponent<TextMeshProUGUI>().text=(maxLevels-levelCounter).ToString()+" levels to go";
         levelUpBar.updateHealthBar((float)((float)levelCounter/(float)maxLevels),1f);
     }
 
