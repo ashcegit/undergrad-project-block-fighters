@@ -123,9 +123,15 @@ namespace CommandTerminal
             Shell.registerOpponent(opponent);
             Shell.registerPlayerCommands(methodBlockObjects);
 
+            Autocomplete = new CommandAutocomplete();
+            foreach(var command in Shell.getBuiltInCommands()) {
+                Autocomplete.register(command.Key);
+            }
+
             foreach(var command in Shell.getPlayerCommands()) {
                 Autocomplete.register(command.Key);
             }
+
         }
 
         void Start() {
@@ -172,13 +178,13 @@ namespace CommandTerminal
             window_style.padding = new RectOffset(4, 4, 4, 4);
             window_style.normal.textColor = ForegroundColor;
             window_style.font = ConsoleFont;
-            window_style.fontSize=50;
+            window_style.fontSize=45;
         }
 
         void setupLabels() {
             labelStyle = new GUIStyle();
             labelStyle.font = ConsoleFont;
-            labelStyle.fontSize=50;
+            labelStyle.fontSize=45;
             labelStyle.normal.textColor = ForegroundColor;
             labelStyle.wordWrap = true;
         }
@@ -187,7 +193,7 @@ namespace CommandTerminal
             input_style = new GUIStyle();
             input_style.padding = new RectOffset(4, 4, 4, 4);
             input_style.font = ConsoleFont;
-            input_style.fontSize=50;
+            input_style.fontSize=45;
             input_style.fixedHeight = ConsoleFont.fontSize * 4f;
             input_style.normal.textColor = InputColor;
 

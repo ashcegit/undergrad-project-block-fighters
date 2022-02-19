@@ -79,6 +79,8 @@ public class GameScript : MonoBehaviour
 
     public int getLevelCounter(){return levelCounter;}
 
+    public void updatePlayerHUDName() { characterUI.updatePlayerName(player.getCharacterName()); }
+
     public void initComputerPlayerBlockStack(){
         computerPlayer.initBlockStack(levelCounter);
     }

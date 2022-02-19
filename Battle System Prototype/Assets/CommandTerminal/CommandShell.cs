@@ -57,13 +57,20 @@ namespace CommandTerminal
                 Block methodBlock=methodBlockObject.GetComponent<Block>();
                 playerCommands.Add(methodBlock.getMethodName().ToUpper(),methodBlockObject);
             }
+
             builtInCommands.Add("LISTPLAYERCOMMANDS", this.GetType().GetMethod("listPlayerCommands"));
             builtInCommandHelp.Add("LISTPLAYERCOMMANDS", "lists player's current battle commands");
+
+            builtInCommands.Add("CHANGENAME", this.GetType().GetMethod("changeName"));
+            builtInCommandHelp.Add("CHANGENAME", "changes your character's name");
+
+            builtInCommands.Add("PLAYERSTATS", this.GetType().GetMethod("playerStats"));
+            builtInCommandHelp.Add("PLAYERSTATS", "check your current stats");
         }
 
         public void registerBuiltInCommands(){
             builtInCommands.Add("HELP",this.GetType().GetMethod("help"));
-            builtInCommandHelp.Add("HELP","prints this help screen");
+            builtInCommandHelp.Add("HELP","prints this help screen.\nType all to see help text of all available commands");
 
             builtInCommands.Add("CLEAR",this.GetType().GetMethod("clear"));
             builtInCommandHelp.Add("CLEAR","clears terminal");
@@ -75,35 +82,43 @@ namespace CommandTerminal
             builtInCommandHelp.Add("QUIT","quits game");
         }
 
-        public bool clear() {
-            Terminal.Buffer.Clear();
-            return true;
-        }
-
-        public bool help(string[] commandNames) {
-            if(commandNames.Length>0){
-                if(!builtInCommandHelp.ContainsKey(commandNames[0])) {
-                    IssueErrorMessage("Built in command {0} could not be found.\n", commandNames[0].ToLower());
-                    return false;
-                }else{
-                    string commandName=commandNames[0];
-                    Terminal.log(TerminalLogType.Message,"{0}: {1}\n",commandName,builtInCommandHelp[commandName]);
-                    return true;
-                }
-            }else{
-                foreach(KeyValuePair<string,string> command in builtInCommandHelp){
-                    Terminal.log(TerminalLogType.Message,"{0}: {1}\n",command.Key,command.Value);
-                }
+        public bool clear(string[] argStringArray) {
+            if (argStringArray.Length != 0) {
+                IssueErrorMessage("Clear takes 1 parameter");
+                return false;
+            } else {
+                Terminal.Buffer.Clear();
                 return true;
             }
         }
 
-        public bool listPlayerCommands(){
-            foreach(KeyValuePair<string,GameObject> command in playerCommands){Terminal.log(TerminalLogType.Message,"{0}()",command.Key);}
-            return true;
+        public bool help(string[] commandNames) {
+            if (commandNames.Length == 0) {
+                foreach (KeyValuePair<string, string> command in builtInCommandHelp) {
+                    Terminal.log(TerminalLogType.Message, "{0}: {1}\n", command.Key, command.Value);
+                }
+                return true;
+            }else if (!builtInCommandHelp.ContainsKey(commandNames[0])) {
+                IssueErrorMessage("Built in command {0} could not be found.\n", commandNames[0].ToLower());
+                return false;                
+            }else{
+                string commandName=commandNames[0];
+                Terminal.log(TerminalLogType.Message,"{0}: {1}\n",commandName,builtInCommandHelp[commandName]);
+                return true;
+            }
         }
 
-        public bool finishProgramming(){
+        public bool listPlayerCommands(string[] argStringArray) {
+            if (argStringArray.Length != 0) {
+                IssueErrorMessage("listplayercommands takes no parameters");
+                return false;
+            } else {
+                foreach (KeyValuePair<string, GameObject> command in playerCommands) { Terminal.log(TerminalLogType.Message, "{0}()", command.Key); }
+                return true;
+            }
+        }
+
+        public bool finishProgramming(string[] argStringArray) {
             BlockProgrammerScript blockProgrammerScript=GameObject.FindGameObjectWithTag("BlockProgrammer")
                                                                     .GetComponent<BlockProgrammerScript>();
             blockProgrammerScript.applyMethodNames();
@@ -128,8 +143,50 @@ namespace CommandTerminal
             }
         }
 
-        public void quit() {
-            SceneManager.LoadScene("Main Menu");
+        public bool quit(string[] argStringArray) {
+            if (argStringArray.Length != 0) {
+                IssueErrorMessage("Quit takes no parameters");
+                return false;
+            } else {
+                SceneManager.LoadScene("Main Menu");
+                return true;
+            }
+        }
+
+        public bool changeName(string[] argStringArray) {
+            if (argStringArray.Length != 1) {
+                IssueErrorMessage("changeName takes 1 parameter");
+                return false;
+            } else {
+                player.setCharacterName(argStringArray[0]);
+                GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>().updatePlayerHUDName();
+                return true;
+            }
+        }
+
+        public bool playerStats() {
+            Terminal.log(TerminalLogType.Message, "Character Name: {0}", player.getCharacterName());
+            Terminal.log(TerminalLogType.Message,
+                        "Max Health: {0} (Base Max Health: {1})",
+                        player.getAttack(),
+                        player.getBaseAttack());
+            Terminal.log(TerminalLogType.Message,
+                        "Attack: {0} (Base Attack: {1})",
+                        player.getAttack(),
+                        player.getBaseAttack());
+            Terminal.log(TerminalLogType.Message,
+                        "Defence: {0} (Base Defence: {1})",
+                        player.getDefence(),
+                        player.getBaseDefence());
+            Terminal.log(TerminalLogType.Message,
+                        "Speed: {0} (Base Speed: {1})",
+                        player.getSpeed(),
+                        player.getBaseSpeed());
+            Terminal.log(TerminalLogType.Message,
+                        "Stamina: {0} (Base Stamina: {1})\n",
+                        player.getStamina(),
+                        player.getBaseStamina());
+            return true;
         }
         
         public Tuple<string,string[]> parseCommandText(string commandText){
@@ -148,30 +205,19 @@ namespace CommandTerminal
                 string[] argStringArray=parsedCommand.Item2;
                 if(playerCommands.ContainsKey(commandName)){
                     commandWrapper.setIsGameAction(true);
-                    GameObject selectedMethodBlockObject=playerCommands[commandName];
-                    commandWrapper.setMethodBlockObject(selectedMethodBlockObject);
-                    commandWrapper.setIsValid(true);
-                    return commandWrapper;
-                }else if(builtInCommands.ContainsKey(commandName)){
-                    if(commandName.ToLower()=="help"){
-                        if(argStringArray.Length>1||argStringArray.Length < 0){
-                            commandWrapper.setIsValid(false);
-                            IssueErrorMessage("Command {0} takes 0 or 1 parameters","help");
-                            return commandWrapper;
-                        }else{
-                            commandWrapper.setIsValid((bool)builtInCommands["HELP"].Invoke(this,new object[]{argStringArray}));
-                            return commandWrapper;
-                        }
-                    }
-                    else if(argStringArray.Length!=builtInCommands[commandName].GetParameters().Length){
+                    if (argStringArray.Length > 0) {
                         commandWrapper.setIsValid(false);
-                        IssueErrorMessage("Command {0} takes {1} parameter(s)",commandName,builtInCommands[commandName].GetParameters().Length);
+                        IssueErrorMessage("Methods can take no parameters");
                         return commandWrapper;
-                    }else{
-                        commandWrapper.setIsValid((bool)builtInCommands[commandName].Invoke(this,argStringArray));
+                    } else {
+                        commandWrapper.setIsValid(true);
+                        GameObject selectedMethodBlockObject = playerCommands[commandName];
+                        commandWrapper.setMethodBlockObject(selectedMethodBlockObject);
                         return commandWrapper;
                     }
-                    
+                }else if(builtInCommands.ContainsKey(commandName)){
+                    commandWrapper.setIsValid((bool)builtInCommands[commandName].Invoke(this, new object[] { argStringArray }));
+                    return commandWrapper;
                 }else{
                     commandWrapper.setIsValid(false);
                     IssueErrorMessage("Command {0} not recognised",commandName);
