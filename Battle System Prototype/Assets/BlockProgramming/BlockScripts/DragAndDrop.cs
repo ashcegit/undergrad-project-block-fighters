@@ -19,7 +19,7 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
     GameObject environment;
     ScrollRect selectionScrollRect;
     GameObject ghostBlockParent;
-    const float SNAPDISTANCE=100f;
+    const float SNAPDISTANCE=150f;
     bool dragging;
     bool ghostBlockActive;
     bool highlightActive;

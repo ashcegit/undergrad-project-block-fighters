@@ -27,6 +27,9 @@ public class Main : MonoBehaviour
 
     private const int maxLevels=10;
 
+    private string terminalWelcomeMessage1 = "Welcome to _, here you can program methods that your character will use to fight 10 battles";
+    private string terminalWelcomeMessage2 = "Press tab on this interface for a list of available commands - all commands are in the form \"command()\"";
+    public string terminalWelcomeMessage3 = "When you're finished programming, type \"finish()\" to  begin your first battle";
 
     void Start(){
         StopAllCoroutines();
@@ -46,7 +49,12 @@ public class Main : MonoBehaviour
 
         terminalScript.initShell(gameScript);
 
-        loopDone=true;
+        Terminal.log(TerminalLogType.Message,"{0}\n",terminalWelcomeMessage1);
+        Terminal.log(TerminalLogType.Message, "{0}\n", terminalWelcomeMessage2);
+        Terminal.log(TerminalLogType.Message, "{0}\n", terminalWelcomeMessage3);
+
+
+        loopDone =true;
         terminalScript.setState(TerminalState.Write);
         enabled=false;
         gameScript.enabled=false;

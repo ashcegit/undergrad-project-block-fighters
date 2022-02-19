@@ -293,7 +293,9 @@ namespace CommandTerminal
                 commandText = headText + completionBuffer[0]+"()";
             } else if (completionLength > 1) {
                 // Print possible completions
-                log(string.Join("    ", completionBuffer));
+                log(TerminalLogType.ShellMessage,
+                    "{0}\n",
+                    string.Join("    ", completionBuffer));
                 scrollPosition.y = int.MaxValue;
             }
         }

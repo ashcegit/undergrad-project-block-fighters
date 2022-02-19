@@ -57,6 +57,8 @@ namespace CommandTerminal
                 Block methodBlock=methodBlockObject.GetComponent<Block>();
                 playerCommands.Add(methodBlock.getMethodName().ToUpper(),methodBlockObject);
             }
+            builtInCommands.Add("LISTPLAYERCOMMANDS", this.GetType().GetMethod("listPlayerCommands"));
+            builtInCommandHelp.Add("LISTPLAYERCOMMANDS", "lists player's current battle commands");
         }
 
         public void registerBuiltInCommands(){
@@ -65,9 +67,6 @@ namespace CommandTerminal
 
             builtInCommands.Add("CLEAR",this.GetType().GetMethod("clear"));
             builtInCommandHelp.Add("CLEAR","clears terminal");
-
-            builtInCommands.Add("LISTPLAYERCOMMANDS",this.GetType().GetMethod("listPlayerCommands"));
-            builtInCommandHelp.Add("LISTPLAYERCOMMANDS","lists player's current battle commands");
 
             builtInCommands.Add("FINISH",this.GetType().GetMethod("finishProgramming"));
             builtInCommandHelp.Add("FINISH","finishes programming your character's methods");
@@ -154,13 +153,13 @@ namespace CommandTerminal
                     commandWrapper.setIsValid(true);
                     return commandWrapper;
                 }else if(builtInCommands.ContainsKey(commandName)){
-                    if(commandName=="help"){
+                    if(commandName.ToLower()=="help"){
                         if(argStringArray.Length>1||argStringArray.Length < 0){
                             commandWrapper.setIsValid(false);
                             IssueErrorMessage("Command {0} takes 0 or 1 parameters","help");
                             return commandWrapper;
                         }else{
-                            commandWrapper.setIsValid((bool)builtInCommands["help"].Invoke(this,new object[]{argStringArray}));
+                            commandWrapper.setIsValid((bool)builtInCommands["HELP"].Invoke(this,new object[]{argStringArray}));
                             return commandWrapper;
                         }
                     }
