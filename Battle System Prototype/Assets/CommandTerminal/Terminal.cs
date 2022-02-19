@@ -16,8 +16,8 @@ namespace CommandTerminal
 
     public class Terminal : MonoBehaviour
     {
-        float ToggleSpeed = 360;
-
+        float ToggleSpeed        = 720;
+        
         int BufferSize           = 512;
 
         Font ConsoleFont;
