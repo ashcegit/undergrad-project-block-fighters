@@ -66,6 +66,9 @@ namespace CommandTerminal
 
             builtInCommands.Add("PLAYERSTATS", this.GetType().GetMethod("playerStats"));
             builtInCommandHelp.Add("PLAYERSTATS", "check your current stats");
+
+            builtInCommands.Add("OPPONENTSTATS", this.GetType().GetMethod("opponentStats"));
+            builtInCommandHelp.Add("OPPONENTSTATS", "check your current stats");
         }
 
         public void registerBuiltInCommands(){
@@ -188,7 +191,32 @@ namespace CommandTerminal
                         player.getBaseStamina());
             return true;
         }
-        
+
+        public bool opponentStats() {
+            Terminal.log(TerminalLogType.Message, "Character Name: {0}", opponent.getCharacterName());
+            Terminal.log(TerminalLogType.Message,
+                        "Max Health: {0} (Base Max Health: {1})",
+                        opponent.getAttack(),
+                        opponent.getBaseAttack());
+            Terminal.log(TerminalLogType.Message,
+                        "Attack: {0} (Base Attack: {1})",
+                        opponent.getAttack(),
+                        opponent.getBaseAttack());
+            Terminal.log(TerminalLogType.Message,
+                        "Defence: {0} (Base Defence: {1})",
+                        opponent.getDefence(),
+                        opponent.getBaseDefence());
+            Terminal.log(TerminalLogType.Message,
+                        "Speed: {0} (Base Speed: {1})",
+                        opponent.getSpeed(),
+                        opponent.getBaseSpeed());
+            Terminal.log(TerminalLogType.Message,
+                        "Stamina: {0} (Base Stamina: {1})\n",
+                        opponent.getStamina(),
+                        opponent.getBaseStamina());
+            return true;
+        }
+
         public Tuple<string,string[]> parseCommandText(string commandText){
             string[] commandArray=commandText.Split('(',')');
             if(commandArray[1]==""){return Tuple.Create(commandArray[0],new string[0]{});

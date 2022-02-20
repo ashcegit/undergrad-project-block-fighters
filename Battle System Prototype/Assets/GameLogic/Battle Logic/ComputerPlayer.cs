@@ -16,16 +16,15 @@ public class ComputerPlayer:MonoBehaviour
     }
 
     public void initBlockStack(int levelCounter){
-        initComputerBlockStackA();
+        initComputerBlockStackLevel1A();
     }
 
-    public void initComputerBlockStackA(){
+    public void initComputerBlockStackLevel1A(){
         for(int i=0;i<5;i++){
             blockStack.Add(Instantiate(punchPrefab).GetComponent<Block>());
         }
         Block endBlock=new Block();
         endBlock.blockType=BlockType.EndOfSection;
-
         blockStack.Add(endBlock);
     }
 
