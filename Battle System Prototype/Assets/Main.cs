@@ -79,6 +79,8 @@ public class Main : MonoBehaviour
             terminalScript.setState(TerminalState.Close);
             levelInfoScript.gameObject.SetActive(true);
             levelInfoScript.enabled=true;
+            List<SelectionBlock> newSelectionBlocks = blockProgrammerScript.unlockRandomBlocks();
+            levelInfoScript.setNewBlocks(newSelectionBlocks);
             levelInfoScript.levelUp(gameScript.getLevelCounter(),maxLevels);
         }else{
             resetGame();
@@ -88,8 +90,6 @@ public class Main : MonoBehaviour
     public void nextLevel(){
         terminalScript.setState(TerminalState.Write);
         terminalScript.initShell(gameScript);
-        List<SelectionBlock> newSelectionBlocks=blockProgrammerScript.unlockRandomBlocks();
-        levelInfoScript.setNewBlocks(newSelectionBlocks);
         levelInfoScript.enabled=false;
         openProgramming();
         loopDone=true;

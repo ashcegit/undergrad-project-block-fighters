@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class BlockUnlock : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    List<BlockUnlockSpace> blockUnlockSpaces;
+
+    void Awake() {
+        blockUnlockSpaces = new List<BlockUnlockSpace>(GetComponentsInChildren<BlockUnlockSpace>());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void displayBlocks(List<SelectionBlock> newSelectionBlocks) {
+        for (int i = 0; i < newSelectionBlocks.Count; i++) {
+            blockUnlockSpaces[i].displayBlock(newSelectionBlocks[i]);
+        }
     }
 }

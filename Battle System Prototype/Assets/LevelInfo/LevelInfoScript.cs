@@ -9,6 +9,7 @@ public class LevelInfoScript : MonoBehaviour
     HealthBar  levelUpBar;
     GameObject levelsToGoGameObject;
     NewBlockInfoScript newBlockInfoScript;
+    List<SelectionBlock> newBlocks;
 
     void Awake(){
         levelUpGameObject=transform.Find("Level Up Text").gameObject;
@@ -26,8 +27,7 @@ public class LevelInfoScript : MonoBehaviour
     }
 
     public void setNewBlocks(List<SelectionBlock> newSelectionBlocks) {
-        newBlockInfoScript.setNewBlocks(newSelectionBlocks);
-        newBlockInfoScript.displayBlocks();
+        newBlocks = newSelectionBlocks;
     }
 
     public void levelUp(int levelCounter,int maxLevels){
@@ -36,7 +36,8 @@ public class LevelInfoScript : MonoBehaviour
     }
 
     public void unlockBlocks(){
-        newBlockInfoScript.enabled = true;
         gameObject.SetActive(false);
+        newBlockInfoScript.gameObject.SetActive(true);
+        newBlockInfoScript.setNewBlocks(newBlocks);
     }
 }

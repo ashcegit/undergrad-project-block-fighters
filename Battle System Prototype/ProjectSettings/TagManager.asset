@@ -15,6 +15,7 @@ TagManager:
   - EnvironmentCanvas
   - SelectionContent
   - LevelUp
+  - TooltipCanvas
   layers:
   - Default
   - TransparentFX

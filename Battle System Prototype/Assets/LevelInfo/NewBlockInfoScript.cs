@@ -5,15 +5,11 @@ using UnityEngine;
 public class NewBlockInfoScript : MonoBehaviour
 {
 
-    List<SelectionBlock> newBlocks;
-    List<GameObject> unlockedBlockSpaces;
+    BlockUnlock blockUnlock;
 
     void Awake() {
-        unlockedBlockSpaces = new List<GameObject>();
-        foreach(Transform childTransform in transform) {
-            unlockedBlockSpaces.Add(childTransform.gameObject);
-        }
-        newBlocks = new List<SelectionBlock>();
+        blockUnlock = GetComponentInChildren<BlockUnlock>();
+        gameObject.SetActive(false);
     }
 
     void OnEnable() {
@@ -25,14 +21,7 @@ public class NewBlockInfoScript : MonoBehaviour
     }
 
     public void setNewBlocks(List<SelectionBlock> newSelectionBlocks) {
-        newBlocks = newSelectionBlocks;
-    }
-
-    public void displayBlocks() {
-        for (int i = 0; i < newBlocks.Count; i++) {
-            Debug.Log(newBlocks[i].gameObject.name);
-            unlockedBlockSpaces[i] = Instantiate(newBlocks[i].gameObject);
-        }
+        blockUnlock.displayBlocks(newSelectionBlocks);
     }
 
     public void nextLevel() {

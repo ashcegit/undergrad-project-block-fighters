@@ -56,9 +56,7 @@ public class Body : MonoBehaviour
                                             .GetComponentInChildren<Header>().gameObject.GetComponent<RectTransform>().position);
         for(int i=0;i<transform.childCount;i++){
             blockSpaces[i].setPosition((Vector2)transform.GetChild(i).GetComponent<RectTransform>().position);
-            Debug.Log("Trying");
             transform.GetChild(i).GetComponent<Block>().updateSpacePositions();
-            Debug.Log("Finished");
         }
     }
 
