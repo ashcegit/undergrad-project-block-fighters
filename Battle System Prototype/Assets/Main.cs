@@ -29,7 +29,7 @@ public class Main : MonoBehaviour
 
     private string terminalWelcomeMessage1 = "Welcome to _, here you can program methods that your character will use to fight 10 battles";
     private string terminalWelcomeMessage2 = "Press tab on this interface for a list of available commands - all commands are in the form \"command()\"";
-    public string terminalWelcomeMessage3 = "When you're finished programming, type \"finish()\" to  begin your first battle";
+    private string terminalWelcomeMessage3 = "When you're finished programming, type \"finish()\" to  begin your first battle";
 
     void Start(){
         StopAllCoroutines();
@@ -89,6 +89,7 @@ public class Main : MonoBehaviour
         terminalScript.setState(TerminalState.Write);
         terminalScript.initShell(gameScript);
         List<SelectionBlock> newSelectionBlocks=blockProgrammerScript.unlockRandomBlocks();
+        levelInfoScript.setNewBlocks(newSelectionBlocks);
         levelInfoScript.enabled=false;
         openProgramming();
         loopDone=true;
@@ -96,6 +97,7 @@ public class Main : MonoBehaviour
 
     public void openProgramming(){
         terminalScript.setState(TerminalState.Write);
+        blockProgrammerScript.gameObject.SetActive(true);
         blockProgrammerScript.enabled=true;
         gameScript.enabled=false;
     }

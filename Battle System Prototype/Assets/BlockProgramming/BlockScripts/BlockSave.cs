@@ -43,6 +43,7 @@ public class BlockSave
         for(int i=0;i<3;i++){
             if(lockedBlocks.Count>0){
                 SelectionBlock newBlock=lockedBlocks[Random.Range(0,lockedBlocks.Count)];
+                newBlock.gameObject.SetActive(true);
                 lockedBlocks.Remove(newBlock);
                 availableBlocks.Add(newBlock);
                 newSelectionBlocks.Add(newBlock);
@@ -54,6 +55,9 @@ public class BlockSave
     public void refreshSelectionBlocks(){
         foreach(SelectionBlock selectionBlock in lockedBlocks){
             selectionBlock.gameObject.SetActive(false);
+        }
+        foreach(SelectionBlock selectionBlock in availableBlocks) {
+            selectionBlock.gameObject.SetActive(true);
         }
     }
 }

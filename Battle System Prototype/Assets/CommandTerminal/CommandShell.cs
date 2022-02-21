@@ -167,54 +167,64 @@ namespace CommandTerminal
             }
         }
 
-        public bool playerStats() {
-            Terminal.log(TerminalLogType.Message, "Character Name: {0}", player.getCharacterName());
-            Terminal.log(TerminalLogType.Message,
-                        "Max Health: {0} (Base Max Health: {1})",
-                        player.getAttack(),
-                        player.getBaseAttack());
-            Terminal.log(TerminalLogType.Message,
-                        "Attack: {0} (Base Attack: {1})",
-                        player.getAttack(),
-                        player.getBaseAttack());
-            Terminal.log(TerminalLogType.Message,
-                        "Defence: {0} (Base Defence: {1})",
-                        player.getDefence(),
-                        player.getBaseDefence());
-            Terminal.log(TerminalLogType.Message,
-                        "Speed: {0} (Base Speed: {1})",
-                        player.getSpeed(),
-                        player.getBaseSpeed());
-            Terminal.log(TerminalLogType.Message,
-                        "Stamina: {0} (Base Stamina: {1})\n",
-                        player.getStamina(),
-                        player.getBaseStamina());
-            return true;
+        public bool playerStats(string[] argStringArray) {
+            if (argStringArray.Length != 0) {
+                IssueErrorMessage("playerStats takes no parameters");
+                return false;
+            } else {
+                Terminal.log(TerminalLogType.Message, "Character Name: {0}", player.getCharacterName());
+                Terminal.log(TerminalLogType.Message,
+                            "Max Health: {0} (Base Max Health: {1})",
+                            player.getAttack(),
+                            player.getBaseAttack());
+                Terminal.log(TerminalLogType.Message,
+                            "Attack: {0} (Base Attack: {1})",
+                            player.getAttack(),
+                            player.getBaseAttack());
+                Terminal.log(TerminalLogType.Message,
+                            "Defence: {0} (Base Defence: {1})",
+                            player.getDefence(),
+                            player.getBaseDefence());
+                Terminal.log(TerminalLogType.Message,
+                            "Speed: {0} (Base Speed: {1})",
+                            player.getSpeed(),
+                            player.getBaseSpeed());
+                Terminal.log(TerminalLogType.Message,
+                            "Stamina: {0} (Base Stamina: {1})\n",
+                            player.getStamina(),
+                            player.getBaseStamina());
+                return true;
+            }
         }
 
-        public bool opponentStats() {
-            Terminal.log(TerminalLogType.Message, "Character Name: {0}", opponent.getCharacterName());
-            Terminal.log(TerminalLogType.Message,
-                        "Max Health: {0} (Base Max Health: {1})",
-                        opponent.getAttack(),
-                        opponent.getBaseAttack());
-            Terminal.log(TerminalLogType.Message,
-                        "Attack: {0} (Base Attack: {1})",
-                        opponent.getAttack(),
-                        opponent.getBaseAttack());
-            Terminal.log(TerminalLogType.Message,
-                        "Defence: {0} (Base Defence: {1})",
-                        opponent.getDefence(),
-                        opponent.getBaseDefence());
-            Terminal.log(TerminalLogType.Message,
-                        "Speed: {0} (Base Speed: {1})",
-                        opponent.getSpeed(),
-                        opponent.getBaseSpeed());
-            Terminal.log(TerminalLogType.Message,
-                        "Stamina: {0} (Base Stamina: {1})\n",
-                        opponent.getStamina(),
-                        opponent.getBaseStamina());
-            return true;
+        public bool opponentStats(string[] argStringArray) {
+            if (argStringArray.Length != 0) {
+                IssueErrorMessage("opponentStats takes no parameters");
+                return false;
+            } else {
+                Terminal.log(TerminalLogType.Message, "Character Name: {0}", opponent.getCharacterName());
+                Terminal.log(TerminalLogType.Message,
+                            "Max Health: {0} (Base Max Health: {1})",
+                            opponent.getAttack(),
+                            opponent.getBaseAttack());
+                Terminal.log(TerminalLogType.Message,
+                            "Attack: {0} (Base Attack: {1})",
+                            opponent.getAttack(),
+                            opponent.getBaseAttack());
+                Terminal.log(TerminalLogType.Message,
+                            "Defence: {0} (Base Defence: {1})",
+                            opponent.getDefence(),
+                            opponent.getBaseDefence());
+                Terminal.log(TerminalLogType.Message,
+                            "Speed: {0} (Base Speed: {1})",
+                            opponent.getSpeed(),
+                            opponent.getBaseSpeed());
+                Terminal.log(TerminalLogType.Message,
+                            "Stamina: {0} (Base Stamina: {1})\n",
+                            opponent.getStamina(),
+                            opponent.getBaseStamina());
+                return true;
+            }
         }
 
         public Tuple<string,string[]> parseCommandText(string commandText){
