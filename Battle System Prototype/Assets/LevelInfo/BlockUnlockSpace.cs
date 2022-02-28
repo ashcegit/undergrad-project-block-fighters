@@ -13,8 +13,7 @@ public class BlockUnlockSpace : MonoBehaviour
     }
 
     public void displayBlock(SelectionBlock selectionBlock) {
-        Debug.Log("Should be displaying");
-        Debug.Log(GetComponentInChildren<SelectionBlock>().gameObject.name);
+        newBlockText.text=selectionBlock.gameObject.name;
         Destroy(GetComponentInChildren<SelectionBlock>().gameObject);
         GameObject newBlock = Instantiate(selectionBlock.gameObject);
         newBlock.transform.SetParent(transform);
@@ -23,6 +22,5 @@ public class BlockUnlockSpace : MonoBehaviour
         newRectTransform.anchorMin = new Vector2(1, 0);
         newRectTransform.anchorMax = new Vector2(0, 1);
         newRectTransform.pivot = new Vector2(0.5f, 0.5f);
-
     }
 }

@@ -41,7 +41,6 @@ public class BlockSave
     public List<SelectionBlock> unlockRandomBlocks(){
         List<SelectionBlock> newSelectionBlocks=new List<SelectionBlock>();
         for(int i=0;i<3;i++){
-            Debug.Log(lockedBlocks.Count);
             if(lockedBlocks.Count>0){
                 SelectionBlock newBlock=lockedBlocks[Random.Range(0,lockedBlocks.Count)];
                 newBlock.gameObject.SetActive(true);

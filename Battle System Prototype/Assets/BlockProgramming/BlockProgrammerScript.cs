@@ -74,6 +74,8 @@ public class BlockProgrammerScript : MonoBehaviour
         foreach(GameObject methodBlockObject in methodBlockObjects){
             Destroy(methodBlockObject);
         }
+        blockObjects = new List<GameObject>();
+        methodBlockObjects = new List<GameObject>();
     }
 
     public void addBlockSpace(BlockSpace blockSpace){
@@ -106,7 +108,8 @@ public class BlockProgrammerScript : MonoBehaviour
     public List<InputSpace> getInputSpaces(){return inputSpaces;}
 
     public void applyMethodNames(){
-        foreach(GameObject methodBlockObject in methodBlockObjects){
+        Debug.Log(methodBlockObjects.Count);
+        foreach (GameObject methodBlockObject in methodBlockObjects){
             methodBlockObject.GetComponent<Block>().setMethodNameFromHeader();
         }
     }

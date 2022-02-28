@@ -20,6 +20,10 @@ public class Main : MonoBehaviour
 
     private LevelInfoScript levelInfoScript;
 
+    private GameOverScript gameOverScript;
+
+    private WinScript winScript;
+
     private InteractionHandler interactionHandler;
 
     private bool loopDone;
@@ -42,6 +46,10 @@ public class Main : MonoBehaviour
 
         levelInfoScript=GetComponentInChildren<LevelInfoScript>();
 
+        gameOverScript = GetComponentInChildren<GameOverScript>();
+
+        winScript = GetComponentInChildren<WinScript>();
+
         interactionHandler=new InteractionHandler();
 
         Character player=gameScript.getPlayer();
@@ -54,11 +62,15 @@ public class Main : MonoBehaviour
         Terminal.log(TerminalLogType.Message, "{0}\n", terminalWelcomeMessage3);
 
 
-        loopDone =true;
+        loopDone=true;
         terminalScript.setState(TerminalState.Write);
         enabled=false;
         gameScript.enabled=false;
         levelInfoScript.enabled=false;
+        gameOverScript.enabled=false;
+        gameOverScript.gameObject.SetActive(false);
+        winScript.enabled = false;
+        winScript.gameObject.SetActive(false);
     }
     
     void resetGame(){
@@ -70,20 +82,36 @@ public class Main : MonoBehaviour
         loopDone=true;
     }
 
+    void gameOver() {
+        enabled = false;
+        gameScript.enabled = false;
+        terminalScript.setState(TerminalState.Close);
+        gameOverScript.enabled = true;
+        gameOverScript.gameObject.SetActive(true);
+    }
+
     void levelDone(){
         enabled=false;
         Terminal.Buffer.Clear();
+        Debug.Log(gameScript.hasPlayerLost());
         if(!gameScript.hasPlayerLost()){
-            gameScript.nextLevel();
-            gameScript.enabled=false;
-            terminalScript.setState(TerminalState.Close);
-            levelInfoScript.gameObject.SetActive(true);
-            levelInfoScript.enabled=true;
-            List<SelectionBlock> newSelectionBlocks = blockProgrammerScript.unlockRandomBlocks();
-            levelInfoScript.setNewBlocks(newSelectionBlocks);
-            levelInfoScript.levelUp(gameScript.getLevelCounter(),maxLevels);
+            if (gameScript.getLevelCounter() == 10) {
+                gameScript.enabled = false;
+                terminalScript.setState(TerminalState.Close);
+                winScript.gameObject.SetActive(true);
+                winScript.enabled = true;
+            } else {
+                gameScript.nextLevel();
+                gameScript.enabled = false;
+                terminalScript.setState(TerminalState.Close);
+                levelInfoScript.gameObject.SetActive(true);
+                levelInfoScript.enabled = true;
+                List<SelectionBlock> newSelectionBlocks = blockProgrammerScript.unlockRandomBlocks();
+                levelInfoScript.setNewBlocks(newSelectionBlocks);
+                levelInfoScript.levelUp(gameScript.getLevelCounter(), maxLevels);
+            }
         }else{
-            resetGame();
+            gameOver();
         }
     }
 
@@ -107,6 +135,7 @@ public class Main : MonoBehaviour
         terminalScript.registerCharacterCommands(gameScript.getPlayer(),
                                                     gameScript.getOpponent(),
                                                     blockProgrammerScript.getMethodBlockObjects());
+        
         blockProgrammerScript.enabled=false;
 
         Character player=gameScript.getPlayer();
