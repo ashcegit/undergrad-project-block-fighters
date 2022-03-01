@@ -60,26 +60,26 @@ namespace CommandTerminal
 
             builtInCommands.Add("LISTPLAYERCOMMANDS", this.GetType().GetMethod("listPlayerCommands"));
             builtInCommandHelp.Add("LISTPLAYERCOMMANDS", "lists player's current battle commands");
-
-            builtInCommands.Add("CHANGENAME", this.GetType().GetMethod("changeName"));
-            builtInCommandHelp.Add("CHANGENAME", "changes your character's name");
-
-            builtInCommands.Add("PLAYERSTATS", this.GetType().GetMethod("playerStats"));
-            builtInCommandHelp.Add("PLAYERSTATS", "check your current stats");
-
-            builtInCommands.Add("OPPONENTSTATS", this.GetType().GetMethod("opponentStats"));
-            builtInCommandHelp.Add("OPPONENTSTATS", "check your current stats");
         }
 
         public void registerBuiltInCommands(){
             builtInCommands.Add("HELP",this.GetType().GetMethod("help"));
-            builtInCommandHelp.Add("HELP","prints this help screen.\nType all to see help text of all available commands");
+            builtInCommandHelp.Add("HELP","prints this help screen.\nAdding a command in the parameter displays help for that specific command");
 
             builtInCommands.Add("CLEAR",this.GetType().GetMethod("clear"));
             builtInCommandHelp.Add("CLEAR","clears terminal");
 
             builtInCommands.Add("FINISH",this.GetType().GetMethod("finishProgramming"));
             builtInCommandHelp.Add("FINISH","finishes programming your character's methods");
+
+            builtInCommands.Add("PLAYERSTATS", this.GetType().GetMethod("playerStats"));
+            builtInCommandHelp.Add("PLAYERSTATS", "check your current stats");
+
+            builtInCommands.Add("OPPONENTSTATS", this.GetType().GetMethod("opponentStats"));
+            builtInCommandHelp.Add("OPPONENTSTATS", "check your current stats");
+
+            builtInCommands.Add("CHANGENAME", this.GetType().GetMethod("changeName"));
+            builtInCommandHelp.Add("CHANGENAME", "changes your character's name");
 
             builtInCommands.Add("QUIT",this.GetType().GetMethod("quit"));
             builtInCommandHelp.Add("QUIT","quits game");

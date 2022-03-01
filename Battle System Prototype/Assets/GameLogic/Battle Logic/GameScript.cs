@@ -1,3 +1,5 @@
+using System;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -178,26 +180,70 @@ public class GameScript : MonoBehaviour
         characterUI.updateOpponentHealth(opponent.getHealth(),opponent.getMaxHealth());
     }
 
-    public void nextLevel(){
+    public Tuple<List<int>,List<int>> nextLevel(){
         levelCounter++;
         playerLoaded=false;
         opponentLoaded=false;
-        
-        player=new Character("Player",
-                          100f,
-                          15f,
-                          45f,
-                          60f,
-                          5);
 
-        opponent=new Character("Opponent",
-                              100f,
-                              15f,
-                              45f,
-                              60f,
-                              5);
+        List<int> playerStatIncreases = new List<int> { 100, 30, 30, 30 };
+        List<int> opponentStatIncreases = new List<int>{ 100, 30, 30, 30 };
 
-        computerPlayer=new ComputerPlayer();
+        HashSet<int> uniqueRandomIndices = new HashSet<int>();
+
+        //shuffle stats then distribute stat increases from fixed total amount
+
+        int maxMultiplier = 100;
+        System.Random random = new System.Random();
+        while (uniqueRandomIndices.Count < 4) {
+            int statIndex = random.Next(0,4);
+            if (!uniqueRandomIndices.Contains(statIndex)) {
+                uniqueRandomIndices.Add(statIndex);
+                int multiplier;
+                if (uniqueRandomIndices.Count == 3) {
+                    multiplier = maxMultiplier;
+                } else {
+                    multiplier = UnityEngine.Random.Range(0, maxMultiplier);
+                }
+                Debug.Log("stat index: " + statIndex);
+                Debug.Log("Multiplier: " + multiplier);
+                maxMultiplier -= multiplier;
+                playerStatIncreases[statIndex] = (int)((float)playerStatIncreases[statIndex] * (float)multiplier/100f);
+            }
+        }
+
+        uniqueRandomIndices = new HashSet<int>();
+        maxMultiplier = 100;
+        random = new System.Random();
+        while (uniqueRandomIndices.Count < 4) {
+            int statIndex = random.Next(0, 4);
+            if (!uniqueRandomIndices.Contains(statIndex)) {
+                uniqueRandomIndices.Add(statIndex);
+                int multiplier;
+                if (uniqueRandomIndices.Count == 3) {
+                    multiplier = maxMultiplier;
+                } else {
+                    multiplier = UnityEngine.Random.Range(0, maxMultiplier);
+                }
+                maxMultiplier -= multiplier;
+                opponentStatIncreases[statIndex] = (int)((float)opponentStatIncreases[statIndex] * (float)multiplier/100f);
+            }
+        }
+
+        player =new Character(player.getCharacterName(),
+                          player.getBaseMaxHealth()+playerStatIncreases[0],
+                          player.getBaseAttack()+playerStatIncreases[1],
+                          player.getBaseDefence()+playerStatIncreases[2],
+                          player.getBaseSpeed()+playerStatIncreases[3],
+                          player.getStamina()+2);
+
+        opponent = new Character(opponent.getCharacterName(),
+                          opponent.getBaseMaxHealth() + opponentStatIncreases[0],
+                          opponent.getBaseAttack() + opponentStatIncreases[1],
+                          opponent.getBaseDefence() + opponentStatIncreases[2],
+                          opponent.getBaseSpeed() + opponentStatIncreases[3],
+                          opponent.getStamina() + 2);
+
+        computerPlayer =new ComputerPlayer();
 
         opponentChosen=false;
         playerChosen=false;
@@ -207,35 +253,7 @@ public class GameScript : MonoBehaviour
 
         playerLoaded=true;
         opponentLoaded=true;
-    }
 
-    public void resetGame(){
-        playerLoaded=false;
-        opponentLoaded=false;
-        
-        player=new Character("Player",
-                          100f,
-                          15f,
-                          45f,
-                          60f,
-                          5);
-
-        opponent=new Character("Opponent",
-                              100f,
-                              15f,
-                              45f,
-                              60f,
-                              5);
-
-        computerPlayer=new ComputerPlayer();
-
-        opponentChosen=false;
-        playerChosen=false;
-
-        characterUI.updatePlayerHealth(player.getHealth(),player.getMaxHealth());
-        characterUI.updateOpponentHealth(opponent.getHealth(),opponent.getMaxHealth());
-
-        playerLoaded=true;
-        opponentLoaded=true;
+        return new Tuple<List<int>, List<int>>(  playerStatIncreases, opponentStatIncreases ) ;
     }
 }

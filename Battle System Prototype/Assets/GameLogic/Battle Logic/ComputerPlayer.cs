@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class ComputerPlayer:MonoBehaviour
 {
+    private GameObject computerPlayerBlocks;
     private GameObject punchPrefab;
     private GameObject kickPrefab;
     private List<Block> blockStack;
@@ -11,6 +12,7 @@ public class ComputerPlayer:MonoBehaviour
     public ComputerPlayer(){
         pointer=0;
         blockStack=new List<Block>();
+        computerPlayerBlocks = GameObject.FindGameObjectWithTag("ComputerPlayerBlocks");
         punchPrefab=(GameObject)Resources.Load("Prefabs/Blocks/Actions/Attacks/Block Action Attack Punch");
         kickPrefab=(GameObject)Resources.Load("Prefabs/Blocks/Actions/Attacks/Block Action Attack Kick");
     }
@@ -21,7 +23,9 @@ public class ComputerPlayer:MonoBehaviour
 
     public void initComputerBlockStackLevel1A(){
         for(int i=0;i<5;i++){
-            blockStack.Add(Instantiate(punchPrefab).GetComponent<Block>());
+            GameObject newBlock = Instantiate(punchPrefab);
+            newBlock.transform.SetParent(computerPlayerBlocks.transform);
+            blockStack.Add(newBlock.GetComponent<Block>());
         }
         Block endBlock=new Block();
         endBlock.blockType=BlockType.EndOfSection;
@@ -29,10 +33,8 @@ public class ComputerPlayer:MonoBehaviour
     }
 
     public void clearBlockStack(){
-        foreach(Block block in blockStack){
-            if(block.blockType!=BlockType.EndOfSection){
-                Destroy(block.gameObject);
-            }
+        foreach(Transform childTransform in computerPlayerBlocks.transform) {
+            Destroy(childTransform.gameObject);
         }
         blockStack=new List<Block>();
         pointer=0;

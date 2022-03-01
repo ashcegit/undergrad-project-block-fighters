@@ -16,6 +16,10 @@ public class Main : MonoBehaviour
     private GameObject playerMethod;
     private GameObject opponentMethod;
 
+    private List<int> lastPlayerStatIncrease;
+
+    private List<int> lastOpponentStatIncrease;
+
     private Terminal terminalScript;
 
     private LevelInfoScript levelInfoScript;
@@ -29,7 +33,7 @@ public class Main : MonoBehaviour
     private bool loopDone;
     public bool levellingUp;
 
-    private const int maxLevels=10;
+    private const int maxLevels=9;
 
     private string terminalWelcomeMessage1 = "Welcome to _, here you can program methods that your character will use to fight 10 battles";
     private string terminalWelcomeMessage2 = "Press tab on this interface for a list of available commands - all commands are in the form \"command()\"";
@@ -61,6 +65,7 @@ public class Main : MonoBehaviour
         Terminal.log(TerminalLogType.Message, "{0}\n", terminalWelcomeMessage2);
         Terminal.log(TerminalLogType.Message, "{0}\n", terminalWelcomeMessage3);
 
+        blockProgrammerScript.displayStamina(gameScript.getPlayer().getStamina());
 
         loopDone=true;
         terminalScript.setState(TerminalState.Write);
@@ -73,14 +78,14 @@ public class Main : MonoBehaviour
         winScript.gameObject.SetActive(false);
     }
     
-    void resetGame(){
-        enabled=false;
-        Terminal.Buffer.Clear();
-        gameScript.resetGame();
-        terminalScript.initShell(gameScript);
-        openProgramming();
-        loopDone=true;
-    }
+    //void resetGame(){
+    //    enabled=false;
+    //    Terminal.Buffer.Clear();
+    //    gameScript.resetGame();
+    //    terminalScript.initShell(gameScript);
+    //    openProgramming();
+    //    loopDone=true;
+    //}
 
     void gameOver() {
         enabled = false;
@@ -93,15 +98,16 @@ public class Main : MonoBehaviour
     void levelDone(){
         enabled=false;
         Terminal.Buffer.Clear();
-        Debug.Log(gameScript.hasPlayerLost());
         if(!gameScript.hasPlayerLost()){
-            if (gameScript.getLevelCounter() == 10) {
+            if (gameScript.getLevelCounter()>8) {
                 gameScript.enabled = false;
                 terminalScript.setState(TerminalState.Close);
                 winScript.gameObject.SetActive(true);
                 winScript.enabled = true;
             } else {
-                gameScript.nextLevel();
+                Tuple<List<int>,List<int>> statTuple=gameScript.nextLevel();
+                lastPlayerStatIncrease=statTuple.Item1;
+                //lastOpponentStatIncrease=statTuple.Item2;
                 gameScript.enabled = false;
                 terminalScript.setState(TerminalState.Close);
                 levelInfoScript.gameObject.SetActive(true);
@@ -119,6 +125,14 @@ public class Main : MonoBehaviour
         terminalScript.setState(TerminalState.Write);
         terminalScript.initShell(gameScript);
         levelInfoScript.enabled=false;
+        if (gameScript.getLevelCounter() > 0) {
+            Terminal.log(TerminalLogType.Message,"Stats increased!");
+            Terminal.log(TerminalLogType.Message, "Max Health increased by: {0}",lastPlayerStatIncrease[0]);
+            Terminal.log(TerminalLogType.Message, "Attack increased by: {0}", lastPlayerStatIncrease[1]);
+            Terminal.log(TerminalLogType.Message, "Defence increased by: {0}", lastPlayerStatIncrease[2]);
+            Terminal.log(TerminalLogType.Message, "Speed increased by: {0}", lastPlayerStatIncrease[3]);
+            Terminal.log(TerminalLogType.Message, "Stamina increased by 2");
+        }
         openProgramming();
         loopDone=true;
     }
@@ -126,15 +140,14 @@ public class Main : MonoBehaviour
     public void openProgramming(){
         terminalScript.setState(TerminalState.Write);
         blockProgrammerScript.gameObject.SetActive(true);
+        blockProgrammerScript.displayStamina(gameScript.getPlayer().getStamina());
         blockProgrammerScript.enabled=true;
         gameScript.enabled=false;
     }
 
     public void finishProgramming(){
         terminalScript.setState(TerminalState.Write);
-        terminalScript.registerCharacterCommands(gameScript.getPlayer(),
-                                                    gameScript.getOpponent(),
-                                                    blockProgrammerScript.getMethodBlockObjects());
+        terminalScript.registerCharacterCommands(blockProgrammerScript.getMethodBlockObjects());
         
         blockProgrammerScript.enabled=false;
 

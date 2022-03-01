@@ -110,17 +110,16 @@ namespace CommandTerminal
             
             Shell.registerBuiltInCommands();
 
-            foreach(var command in Shell.getBuiltInCommands()){
+            Shell.registerPlayer(gameScript.getPlayer());
+            Shell.registerOpponent(gameScript.getOpponent());
+
+            foreach (var command in Shell.getBuiltInCommands()){
                 Autocomplete.register(command.Key);
             }           
         }
 
-        public void registerCharacterCommands(Character player,
-                                                Character opponent,
-                                                List<GameObject> methodBlockObjects){
+        public void registerCharacterCommands(List<GameObject> methodBlockObjects){
 
-            Shell.registerPlayer(player);
-            Shell.registerOpponent(opponent);
             Shell.registerPlayerCommands(methodBlockObjects);
 
             Autocomplete = new CommandAutocomplete();

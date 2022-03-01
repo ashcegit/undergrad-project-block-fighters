@@ -13,6 +13,7 @@ public class BlockProgrammerScript : MonoBehaviour
     List<InputSpace> inputSpaces;
     int maxMethodBlocks;
     BlockSave blockSave;
+    StaminaText staminaText;
 
     void Awake(){
         methodBlockObjects=new List<GameObject>();
@@ -22,6 +23,7 @@ public class BlockProgrammerScript : MonoBehaviour
         environment=GameObject.FindGameObjectWithTag("BlockEnvironment");
         maxMethodBlocks=4;
         blockSave=new BlockSave();
+        staminaText = GetComponentInChildren<StaminaText>();
         refreshBlockSelection();
     }   
 
@@ -177,5 +179,9 @@ public class BlockProgrammerScript : MonoBehaviour
                 Destroy(childTransform.gameObject);
             }
         }
+    }
+
+    public void displayStamina(int stamina) {
+        staminaText.changeText(stamina.ToString());
     }
 }
