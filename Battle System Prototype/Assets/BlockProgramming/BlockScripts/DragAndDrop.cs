@@ -19,7 +19,7 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
     GameObject environment;
     ScrollRect selectionScrollRect;
     GameObject ghostBlockParent;
-    const float SNAPDISTANCE=150f;
+    const float SNAPDISTANCE=100f;
     bool dragging;
     bool ghostBlockActive;
     bool highlightActive;
@@ -44,17 +44,17 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
         GameObject draggedSelectionBlock=raycaster.getObjectOfTypeAtPosition<SelectionBlock>((Vector2)data.position);
         if(draggedExistingBlock!=null){
             currentlyDraggedObject=draggedExistingBlock;
-            offset=(Vector2)data.position;
-            currentlyDraggedObject.GetComponent<Block>().setPosition(data.position);
-        }else if(draggedSelectionBlock!=null){
+            offset = (Vector2)data.position - (Vector2)currentlyDraggedObject.GetComponent<RectTransform>().position;
+            //currentlyDraggedObject.GetComponent<Block>().setPosition(data.position);
+        } else if(draggedSelectionBlock!=null){
             selectionScrollRect.StopMovement();
             selectionScrollRect.enabled=false;
             currentlyDraggedObject=Instantiate(draggedSelectionBlock.GetComponent<SelectionBlock>().prefabBlock);
-            currentlyDraggedObject.GetComponent<RectTransform>().localScale=new Vector3(1,1,1);
+            currentlyDraggedObject.GetComponent<RectTransform>().position = (Vector2)draggedSelectionBlock.GetComponent<RectTransform>().position;
             blockProgrammerScript.addBlockObject(currentlyDraggedObject);
             currentlyDraggedObject.transform.SetParent(environment.transform);
-            offset=(Vector2)data.position;
-            currentlyDraggedObject.GetComponent<RectTransform>().position=data.position;
+            offset = (Vector2)data.position - (Vector2)draggedSelectionBlock.GetComponent<RectTransform>().position;
+            currentlyDraggedObject.GetComponent<RectTransform>().position=data.position - offset;
         }
         
     }
@@ -62,7 +62,6 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
     public void OnDrag(PointerEventData data){
         if(currentlyDraggedObject!=null){
             BlockType currentBlockType=currentlyDraggedObject.GetComponent<Block>().getBlockType();
-            Vector2 cursorPosition = (Vector2)data.position;
             if(currentlyDraggedObject.transform.parent.gameObject!=environment){
                 int currentlyDraggedSiblingIndex=currentlyDraggedObject.transform.GetSiblingIndex();
                 if(currentBlockType==BlockType.Action||currentBlockType==BlockType.Control){
@@ -85,7 +84,7 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
             
             currentlyDraggedObject.transform.SetParent(environment.transform);
             currentlyDraggedObject.transform.SetAsLastSibling();
-            currentlyDraggedObject.GetComponent<Block>().setPosition(cursorPosition);
+            currentlyDraggedObject.GetComponent<Block>().setPosition(data.position-offset);
             currentlyDraggedObject.GetComponent<Block>().setSpacesActive(false);
 
             if(currentBlockType==BlockType.Action||currentBlockType==BlockType.Control){

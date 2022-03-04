@@ -51,6 +51,8 @@ public class Block : MonoBehaviour
     }
 
     public Vector2 updateBlockLayouts(){
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        Vector2 initialSize = rectTransform.sizeDelta;
         Vector2 sizeSum=new Vector2();
         Vector2 sectionSizeDelta=new Vector2();
         foreach(Section section in sections){
@@ -59,6 +61,12 @@ public class Block : MonoBehaviour
             if(sizeSum.x<sectionSizeDelta.x){sizeSum.x=sectionSizeDelta.x;}
         }
         GetComponent<RectTransform>().sizeDelta=sizeSum;
+        //if (transform.parent.GetComponent<Block>() == null) {
+        //    Debug.Log("Position: " + rectTransform.position);
+        //    Debug.Log("Size Sum: " + sizeSum);
+        //    Debug.Log("Initial Size: " + initialSize);
+        //    rectTransform.position = new Vector2(rectTransform.position.x, rectTransform.position.y-sizeSum.y+initialSize.y);
+        //}
         return sizeSum;
     }
 
