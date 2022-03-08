@@ -19,7 +19,7 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
     GameObject environment;
     ScrollRect selectionScrollRect;
     GameObject ghostBlockParent;
-    const float SNAPDISTANCE=100f;
+    const float SNAPDISTANCE=120f;
     bool dragging;
     bool ghostBlockActive;
     bool highlightActive;
@@ -69,7 +69,9 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                     while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
                         parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
                     }
-                    parentBlock.GetComponentInChildren<Body>().removeBlockSpaceByIndex(currentlyDraggedSiblingIndex);
+                    //Debug.Log("!!!!! ParentBlock NAME !!!!: " + currentlyDraggedObject.transform.parent.gameObject.name);
+                    Debug.Log("Currently draggedBlock: " + currentlyDraggedObject.name);
+                    currentlyDraggedObject.transform.parent.GetComponent<Body>().removeBlockSpaceByIndex(currentlyDraggedSiblingIndex);
                     currentlyDraggedObject.transform.SetParent(environment.transform);
                     parentBlock.GetComponent<Block>().updateBlockLayouts();
                     parentBlock.GetComponent<Block>().updateSpacePositions();
@@ -162,12 +164,13 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                         while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
                             parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
                         }
+                        parentBlock.GetComponent<Block>().setSpacesActive(true);
                         parentBlock.GetComponent<Block>().updateBlockLayouts();
                         parentBlock.GetComponent<Block>().updateSpacePositions();
                     }else{
+                        currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
                         currentlyDraggedObject.GetComponent<Block>().updateBlockLayouts();
                         currentlyDraggedObject.GetComponent<Block>().updateSpacePositions();
-                        currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
                     }
                 }else if(currentBlockType!=BlockType.Method){
                     if(highlightActive){
@@ -177,13 +180,13 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                         while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
                             parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
                         }
+                        parentBlock.GetComponent<Block>().setSpacesActive(true);
                         parentBlock.GetComponent<Block>().updateBlockLayouts();
                         parentBlock.GetComponent<Block>().updateSpacePositions();
-                        parentBlock.GetComponent<Block>().setSpacesActive(true);
                     }else{
+                        currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
                         currentlyDraggedObject.GetComponent<Block>().updateBlockLayouts();
                         currentlyDraggedObject.GetComponent<Block>().updateSpacePositions();
-                        currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
                     }
                 }else{
                     currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);

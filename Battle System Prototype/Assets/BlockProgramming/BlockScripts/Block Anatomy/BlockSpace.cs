@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockSpace : MonoBehaviour,I_Space
+public class BlockSpace : I_Space
 {
     GameObject parentBody;
     Vector2 position;
     int index;
     bool active;
+    GameObject test;
 
-    void Awake(){
-        parentBody=null;
+    public BlockSpace() {
+        parentBody = null;
     }
 
     // Start is called before the first frame update
@@ -21,7 +22,9 @@ public class BlockSpace : MonoBehaviour,I_Space
 
     public Vector2 getPosition(){return position;}
 
-    public void setPosition(Vector2 position){this.position=position;}
+    public void setPosition(Vector2 position){
+        this.position=position;
+    }
 
     public int getIndex(){return index;}
 
