@@ -190,7 +190,8 @@ public class GameScript : MonoBehaviour
 
         HashSet<int> uniqueRandomIndices = new HashSet<int>();
 
-        //shuffle stats then distribute stat increases from fixed total amount
+        //shuffle stats then distribute stat increases from a
+        //random multiplier against a fixed maximum amount
 
         int maxMultiplier = 100;
         System.Random random = new System.Random();
@@ -202,11 +203,10 @@ public class GameScript : MonoBehaviour
                 if (uniqueRandomIndices.Count == 3) {
                     multiplier = maxMultiplier;
                 } else {
-                    multiplier = UnityEngine.Random.Range(0, maxMultiplier);
+                    multiplier = UnityEngine.Random.Range(0, (int)((float)maxMultiplier*0.8f));
                 }
-                Debug.Log("stat index: " + statIndex);
-                Debug.Log("Multiplier: " + multiplier);
                 maxMultiplier -= multiplier;
+                if (maxMultiplier > 0) { maxMultiplier = 0; }
                 playerStatIncreases[statIndex] = (int)((float)playerStatIncreases[statIndex] * (float)multiplier/100f);
             }
         }
@@ -222,9 +222,10 @@ public class GameScript : MonoBehaviour
                 if (uniqueRandomIndices.Count == 3) {
                     multiplier = maxMultiplier;
                 } else {
-                    multiplier = UnityEngine.Random.Range(0, maxMultiplier);
+                    multiplier = UnityEngine.Random.Range(0, (int)((float)maxMultiplier * 0.8f));
                 }
                 maxMultiplier -= multiplier;
+                if (maxMultiplier > 0) { maxMultiplier= 0; }
                 opponentStatIncreases[statIndex] = (int)((float)opponentStatIncreases[statIndex] * (float)multiplier/100f);
             }
         }

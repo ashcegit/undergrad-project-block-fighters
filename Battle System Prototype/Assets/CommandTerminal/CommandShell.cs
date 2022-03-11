@@ -175,8 +175,8 @@ namespace CommandTerminal
                 Terminal.log(TerminalLogType.Message, "Character Name: {0}", player.getCharacterName());
                 Terminal.log(TerminalLogType.Message,
                             "Max Health: {0} (Base Max Health: {1})",
-                            player.getAttack(),
-                            player.getBaseAttack());
+                            player.getMaxHealth(),
+                            player.getBaseMaxHealth());
                 Terminal.log(TerminalLogType.Message,
                             "Attack: {0} (Base Attack: {1})",
                             player.getAttack(),
@@ -205,8 +205,8 @@ namespace CommandTerminal
                 Terminal.log(TerminalLogType.Message, "Character Name: {0}", opponent.getCharacterName());
                 Terminal.log(TerminalLogType.Message,
                             "Max Health: {0} (Base Max Health: {1})",
-                            opponent.getAttack(),
-                            opponent.getBaseAttack());
+                            opponent.getMaxHealth(),
+                            opponent.getBaseMaxHealth());
                 Terminal.log(TerminalLogType.Message,
                             "Attack: {0} (Base Attack: {1})",
                             opponent.getAttack(),

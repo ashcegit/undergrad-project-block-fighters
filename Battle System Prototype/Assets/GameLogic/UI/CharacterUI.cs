@@ -50,7 +50,7 @@ public class CharacterUI : MonoBehaviour
     }
 
     public IEnumerator shakePlayer(){
-        yield return StartCoroutine(shakeObject(player,0.2f,5f));
+        yield return StartCoroutine(shakeObject(player,0.5f,5f));
     }
 
     public IEnumerator shakePlayerHealth(){
@@ -62,7 +62,7 @@ public class CharacterUI : MonoBehaviour
     }
 
     public IEnumerator shakeOpponent(){
-        yield return StartCoroutine(shakeObject(opponent,0.2f,5f));
+        yield return StartCoroutine(shakeObject(opponent,0.5f,5f));
     }
 
     public IEnumerator shakeOpponentHealth(){
