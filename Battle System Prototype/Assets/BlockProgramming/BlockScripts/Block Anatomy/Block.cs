@@ -88,7 +88,7 @@ public class Block : MonoBehaviour
         blockStackManager.setBlockStack(blockStackManager.initBlockStack(this));
     }
 
-    public ExecutionWrapper executeCurrentBlock(){
+    public GameAction? executeCurrentBlock(){
         return blockStackManager.executeCurrentBlock();
     }
 

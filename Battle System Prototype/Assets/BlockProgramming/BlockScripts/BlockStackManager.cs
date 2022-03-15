@@ -51,7 +51,7 @@ public class BlockStackManager
     public GameAction? executeCurrentBlock() {
         GameAction gameAction = null;
         if (pointer >= blockStack.Count) {
-            executionWrapper.setGameAction(null);
+            return null;
         } else {
             Block currentBlock = blockStack[pointer];
             switch (currentBlock.blockType) {

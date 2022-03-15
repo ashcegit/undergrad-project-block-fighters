@@ -70,10 +70,9 @@ public class Character
         float tempMaxHealth=baseMaxHealth;
             foreach(AttributeModifier attributeModifier in healthModifiers){
                 tempMaxHealth*=attributeModifier.getMultiplier()*diminishingReturns;
-                diminishingReturns-=0.3f
+            diminishingReturns -= 0.3f;
                 if (diminishingReturns < 0.1f) { diminishingReturns = 0.1f; }
             }
-        
         return Mathf.Round(tempMaxHealth);
     }
     public float getAttack(){
@@ -81,7 +80,7 @@ public class Character
         float tempAttack =baseAttack;
         foreach(AttributeModifier attributeModifier in attackModifiers){
             tempAttack*=attributeModifier.getMultiplier()*diminishingReturns;
-            diminishingReturns -= 0.3f
+            diminishingReturns -= 0.3f;
             if (diminishingReturns < 0.1f) { diminishingReturns = 0.1f; }
         }
         return Mathf.Round(tempAttack);
@@ -91,7 +90,7 @@ public class Character
         float tempDefence =baseDefence;
         foreach(AttributeModifier attributeModifier in defenceModifiers){
             tempDefence*=attributeModifier.getMultiplier()*diminishingReturns;
-            diminishingReturns -= 0.3f
+            diminishingReturns -= 0.3f;
             if (diminishingReturns < 0.1f) { diminishingReturns = 0.1f; }
         }
         if(tempDefence>100f){return 100f;}
@@ -102,20 +101,19 @@ public class Character
         float tempSpeed=baseSpeed;
         foreach(AttributeModifier attributeModifier in speedModifiers){
             tempSpeed*=attributeModifier.getMultiplier()*diminishingReturns;
-            diminishingReturns -= 0.3f
+            diminishingReturns -= 0.3f;
             if (diminishingReturns < 0.1f) { diminishingReturns = 0.1f; }
-            }
         }
         return Mathf.Round(tempSpeed);
     }
     public int getStamina(){
-        int diminishingReturns = 1f;
+        float diminishingReturns = 1f;
         float tempStamina=baseStamina;
-            foreach(AttributeModifier attributeModifier in staminaModifiers){
-                tempStamina*=attributeModifier.getMultiplier()*diminishingReturns;
-                diminishingReturns -= 0.3f
-                    if (diminishingReturns < 0.1f) { diminishingReturns = 0.1f; }
-            }        
+        foreach(AttributeModifier attributeModifier in staminaModifiers){
+            tempStamina*=attributeModifier.getMultiplier()*diminishingReturns;
+            diminishingReturns -= 0.3f;
+            if (diminishingReturns < 0.1f) { diminishingReturns = 0.1f; }
+        }        
         return (int)tempStamina;
     }
 

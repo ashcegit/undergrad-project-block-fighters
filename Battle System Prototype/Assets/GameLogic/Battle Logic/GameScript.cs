@@ -88,7 +88,7 @@ public class GameScript : MonoBehaviour
         opponentChosen=false;
     }
 
-    public ExecutionWrapper executeCurrentComputerPlayerBlock(){
+    public GameAction? executeCurrentComputerPlayerBlock(){
         return computerPlayer.executeCurrentBlock();
     }
 
@@ -115,8 +115,6 @@ public class GameScript : MonoBehaviour
 
     public bool getOpponentChosen(){return opponentChosen;}
     public bool getPlayerChosen(){return playerChosen;}
-
-    
 
     public Interaction getInteraction(GameAction gameAction){
         return interactionHandler.getInteraction(gameAction);

@@ -28,7 +28,7 @@ public class ComputerPlayer:MonoBehaviour
         computerPlayerBlocks = GameObject.FindGameObjectWithTag("ComputerPlayerBlocks");
         presetMethods = new List<List<MethodInfo>>();
 
-        punchPrefab = (GameObject)Resouces.Load(attackPath + "Punch");
+        punchPrefab = (GameObject)Resources.Load(attackPath + "Punch");
         kickPrefab = (GameObject)Resources.Load(attackPath + "Kick");
 
         initPresetMethods();
@@ -254,7 +254,7 @@ public class ComputerPlayer:MonoBehaviour
     public GameAction? executeCurrentBlock(){
         GameAction gameAction = null;
         if(pointer>=blockStack.Count){
-            executionWrapper.setGameAction(null);
+            return null;
         }else{
             Block currentBlock=blockStack[pointer];
             switch(currentBlock.blockType){
