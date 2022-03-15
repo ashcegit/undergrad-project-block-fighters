@@ -48,49 +48,45 @@ public class BlockStackManager
         blockStack=new List<Block>();
     }
 
-    public ExecutionWrapper executeCurrentBlock(){
-        ExecutionWrapper executionWrapper=new ExecutionWrapper();
-        if(pointer>=blockStack.Count){
+    public GameAction? executeCurrentBlock() {
+        GameAction gameAction = null;
+        if (pointer >= blockStack.Count) {
             executionWrapper.setGameAction(null);
-            executionWrapper.setEndOfSection(false);
-        }else{
-            Block currentBlock=blockStack[pointer];
-            switch(currentBlock.blockType){
-                case(BlockType.Action):
+        } else {
+            Block currentBlock = blockStack[pointer];
+            switch (currentBlock.blockType) {
+                case (BlockType.Action):
                     pointer++;
-                    GameScript gameScript=GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>();
-                    Character player=gameScript.getPlayer();
-                    ActionFunction actionFunction=currentBlock.gameObject.GetComponent<ActionFunction>();
-                    executionWrapper.setGameAction(actionFunction.function(player,false));
-                    executionWrapper.setEndOfSection(false);
+                    GameScript gameScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>();
+                    Character opponent = gameScript.getOpponent();
+                    ActionFunction actionFunction = currentBlock.gameObject.GetComponent<ActionFunction>();
+                    gameAction = actionFunction.function(opponent, true);
                     break;
-                case(BlockType.Control):
-                    ControlFunction controlFunction=currentBlock.gameObject.GetComponent<ControlFunction>();
-                    pointer=controlFunction.function(pointer,ref blockStack);
-                    executionWrapper.setGameAction(null);
-                    executionWrapper.setEndOfSection(false);
+                case (BlockType.Control):
+                    ControlFunction controlFunction = currentBlock.gameObject.GetComponent<ControlFunction>();
+                    pointer = controlFunction.function(pointer, ref blockStack);
                     break;
-                case(BlockType.EndOfSection):
-                    Block startBlock=currentBlock.getStartBlock();
-                    if(startBlock!=null){
-                        if(startBlock.getBlockType()==BlockType.Control){
-                            ControlFunction endControlFunction=startBlock.gameObject.GetComponent<ControlFunction>();
-                            switch(endControlFunction.getName()){
-                                case("If Else"):
-                                    ControlIfElseFunction controlIfElseFunction=(ControlIfElseFunction)endControlFunction;
-                                    pointer=controlIfElseFunction.onRepeat(pointer,ref blockStack);
+                case (BlockType.EndOfSection):
+                    Block startBlock = currentBlock.getStartBlock();
+                    if (startBlock != null) {
+                        if (startBlock.getBlockType() == BlockType.Control) {
+                            ControlFunction endControlFunction = startBlock.gameObject.GetComponent<ControlFunction>();
+                            switch (endControlFunction.getName()) {
+                                case ("If Else"):
+                                    ControlIfElseFunction controlIfElseFunction = (ControlIfElseFunction)endControlFunction;
+                                    pointer = controlIfElseFunction.onRepeat(pointer, ref blockStack);
                                     break;
-                                case("Repeat"):
-                                    ControlRepeatFunction controlRepeatFunction=(ControlRepeatFunction)endControlFunction;
-                                    pointer=controlRepeatFunction.onRepeat(pointer,ref blockStack);
+                                case ("Repeat"):
+                                    ControlRepeatFunction controlRepeatFunction = (ControlRepeatFunction)endControlFunction;
+                                    pointer = controlRepeatFunction.onRepeat(pointer, ref blockStack);
                                     break;
-                                case("Repeat Until"):
-                                    ControlRepeatUntilFunction controlRepeatUntilFunction=(ControlRepeatUntilFunction)endControlFunction;
-                                    pointer=controlRepeatUntilFunction.onRepeat(pointer,ref blockStack);
+                                case ("Repeat Until"):
+                                    ControlRepeatUntilFunction controlRepeatUntilFunction = (ControlRepeatUntilFunction)endControlFunction;
+                                    pointer = controlRepeatUntilFunction.onRepeat(pointer, ref blockStack);
                                     break;
-                                case("Repeat Forever"):
-                                    ControlRepeatForeverFunction controlForeverFunction=(ControlRepeatForeverFunction)endControlFunction;
-                                    pointer=controlForeverFunction.onRepeat(pointer,ref blockStack);
+                                case ("Repeat Forever"):
+                                    ControlRepeatForeverFunction controlForeverFunction = (ControlRepeatForeverFunction)endControlFunction;
+                                    pointer = controlForeverFunction.onRepeat(pointer, ref blockStack);
                                     break;
                             }
                         }
@@ -98,12 +94,10 @@ public class BlockStackManager
                     break;
                 default:
                     pointer++;
-                    executionWrapper.setGameAction(null);
-                    executionWrapper.setEndOfSection(true);
                     break;
             }
         }
-        return executionWrapper;
+        return gameAction;
     }
 
     public int getBlockStackCount(){return blockStack.Count;}

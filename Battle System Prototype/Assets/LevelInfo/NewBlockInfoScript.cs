@@ -25,6 +25,7 @@ public class NewBlockInfoScript : MonoBehaviour
     }
 
     public void nextLevel() {
+        blockUnlock.clearInfo();
         gameObject.SetActive(false);
         GameObject.FindGameObjectWithTag("Main").GetComponent<Main>().nextLevel();
     }

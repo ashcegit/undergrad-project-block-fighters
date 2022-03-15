@@ -22,4 +22,8 @@ public class WinScript : MonoBehaviour
     public void win() {
         SceneManager.LoadScene("Main Menu");
     }
+
+    public void quit() {
+        SceneManager.LoadScene("Main Menu");
+    }
 }

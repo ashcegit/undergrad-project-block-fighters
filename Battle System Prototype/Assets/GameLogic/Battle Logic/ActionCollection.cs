@@ -11,16 +11,16 @@ public static class ActionCollection
         return new Attack("punch",target,ActionType.Physical,0.8f*instigator.getAttack(),1.2f*instigator.getSpeed());
     }
     public static Attack kick(Character target,Character instigator){
-        return new Attack("kick",target,ActionType.Physical,1.1f*instigator.getAttack(),0.6f*instigator.getSpeed());
+        return new Attack("kick",target,ActionType.Physical,1.1f*instigator.getAttack(),0.75f*instigator.getSpeed());
     }
     public static Attack fireball(Character target,Character instigator){
-        return new Attack("fireball",target,ActionType.Magic,1.5f*instigator.getAttack(),0.4f*instigator.getSpeed());
+        return new Attack("fireball",target,ActionType.Magic,1.5f*instigator.getAttack(),0.5f*instigator.getSpeed());
     }
     public static Attack catapult(Character target,Character instigator){
         return new Attack("catapult",target,ActionType.Science,2f*instigator.getAttack(),0.2f*instigator.getSpeed());
     }
     public static Attack lightningStrike(Character target,Character instigator) {
-        return new Attack("lightning strike", target, ActionType.Magic, 0.7f * instigator.getAttack(), 1.25f * instigator.getSpeed());
+        return new Attack("lightning strike", target, ActionType.Magic, 0.7f * instigator.getAttack(), 1.4f * instigator.getSpeed());
     }
     public static Attack laser(Character target,Character instigator) {
         return new Attack("laser", target, ActionType.Science, instigator.getAttack(), 0.9f * instigator.getSpeed());
@@ -45,22 +45,22 @@ public static class ActionCollection
 
     //Status Effects
     public static StatusEffect guard(Character target){
-        return new StatusEffect("guard",target,ActionType.Physical,AttributeEnum.Defence,2f,0.6f,1);
+        return new StatusEffect("guard",target,ActionType.Physical,AttributeEnum.Defence,1.4f,0.5f,1);
     }
     public static StatusEffect shield(Character target) {
         return new StatusEffect("shield", target, ActionType.Physical, AttributeEnum.Defence, 1.5f, 0.7f, 2);
     }
     public static StatusEffect wardSpell(Character target){
-        return new StatusEffect("ward spell",target,ActionType.Magic,AttributeEnum.Defence,1.3f,0.5f,4);
+        return new StatusEffect("ward spell",target,ActionType.Magic,AttributeEnum.Defence,1.3f,0.6f,4);
     }
     public static StatusEffect poison(Character target){
         return new StatusEffect("poison",target,ActionType.Science,AttributeEnum.MaxHealth,0.85f,0.5f,5);
     }
     public static StatusEffect coffee(Character target) {
-        return new StatusEffect("coffee", target, ActionType.Physical, AttributeEnum.Speed, 1.2f, 0.8f, 3);
+        return new StatusEffect("coffee", target, ActionType.Physical, AttributeEnum.Speed, 1.4f, 0.8f, 3);
     }
     public static StatusEffect freezingSpell(Character target) {
-        return new StatusEffect("freezing spell", target, ActionType.Magic, AttributeEnum.Speed, 0.7f, 0.8f, 4);
+        return new StatusEffect("freezing spell", target, ActionType.Magic, AttributeEnum.Speed, 0.6f, 0.8f, 2);
     }
 
 

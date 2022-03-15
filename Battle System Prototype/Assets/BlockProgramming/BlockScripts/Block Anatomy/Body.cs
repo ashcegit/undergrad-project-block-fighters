@@ -61,15 +61,16 @@ public class Body : MonoBehaviour
         blockSpaces[0].setParentBody(gameObject);
 
         for (int i=0;i<transform.childCount;i++){
-            if (transform.GetChild(i).gameObject.name == "GhostBlock") { continue; }
-            RectTransform rectTransform = transform.GetChild(i).Find("OuterArea").GetComponent<RectTransform>();
-            
-            Vector2 newPosition = new Vector2(rectTransform.position.x + rectTransform.sizeDelta.x / 2,
-                                                    rectTransform.position.y + rectTransform.sizeDelta.y / 2);
+            if(transform.GetChild(i).gameObject.name != "GhostBlock"){
+                RectTransform rectTransform = transform.GetChild(i).Find("OuterArea").GetComponent<RectTransform>();
 
-            blockSpaces[i+1].setPosition(newPosition);
-            blockSpaces[i+1].setParentBody(gameObject);
-            transform.GetChild(i).GetComponent<Block>().updateSpacePositions();
+                Vector2 newPosition = new Vector2(rectTransform.position.x + rectTransform.sizeDelta.x / 2,
+                                                        rectTransform.position.y + rectTransform.sizeDelta.y / 2);
+
+                blockSpaces[i + 1].setPosition(newPosition);
+                blockSpaces[i + 1].setParentBody(gameObject);
+                transform.GetChild(i).GetComponent<Block>().updateSpacePositions();
+            }
         }
     }
 
@@ -102,7 +103,7 @@ public class Body : MonoBehaviour
             foreach(Transform childTransform in transform){
                 Block childBlock=childTransform.gameObject.GetComponent<Block>();
                 if(childBlock.name=="GhostBlock"){
-                    height+=70f;
+                    height+=80f;
                 }else if(childBlock!=null){
                     deltaVector=childBlock.updateBlockLayouts();
                     height+=deltaVector.y;

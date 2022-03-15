@@ -5,7 +5,8 @@ using UnityEngine;
 public class BlockSave
 {
     List<SelectionBlock> availableBlocks;
-    List<SelectionBlock> lockedBlocks;
+    List<SelectionBlock> lockedActionBlocks;
+    List<SelectionBlock> lockedNonActionBlocks;
     List<string> defaultBlocks=new List<string>(){
                                     "Block Method Starter",
                                     "Block Action Attack Punch",
@@ -25,12 +26,17 @@ public class BlockSave
     
     public BlockSave(){
         availableBlocks=new List<SelectionBlock>();
-        lockedBlocks=new List<SelectionBlock>();
+        lockedActionBlocks=new List<SelectionBlock>();
+        lockedNonActionBlocks = new List<SelectionBlock>();
         GameObject selectionContent=GameObject.FindGameObjectWithTag("SelectionContent");
         SelectionBlock[] selectionBlocks=selectionContent.GetComponentsInChildren<SelectionBlock>();
         foreach(SelectionBlock selectionBlock in selectionBlocks){
             if(!(defaultBlocks.Contains(selectionBlock.gameObject.name))){
-                lockedBlocks.Add(selectionBlock);
+                if (selectionBlock.gameObject.name.Contains("Action")) {
+                    lockedActionBlocks.Add(selectionBlock);
+                } else {
+                    lockedNonActionBlocks.Add(selectionBlock);
+                }
                 selectionBlock.gameObject.SetActive(false);
             }else{
                 availableBlocks.Add(selectionBlock);
@@ -40,11 +46,21 @@ public class BlockSave
 
     public List<SelectionBlock> unlockRandomBlocks(){
         List<SelectionBlock> newSelectionBlocks=new List<SelectionBlock>();
-        for(int i=0;i<3;i++){
-            if(lockedBlocks.Count>0){
-                SelectionBlock newBlock=lockedBlocks[Random.Range(0,lockedBlocks.Count)];
+        bool noMoreActionBlocks = false;
+        if (lockedActionBlocks.Count > 0) {
+            SelectionBlock newBlock = lockedActionBlocks[Random.Range(0, lockedActionBlocks.Count)];
+            newBlock.gameObject.SetActive(true);
+            lockedActionBlocks.Remove(newBlock);
+            availableBlocks.Add(newBlock);
+            newSelectionBlocks.Add(newBlock);
+        } else {
+            noMoreActionBlocks = true;
+        }
+        for(int i=0;i<(noMoreActionBlocks?3:2);i++){
+            if(lockedNonActionBlocks.Count>0){
+                SelectionBlock newBlock= lockedNonActionBlocks[Random.Range(0, lockedNonActionBlocks.Count)];
                 newBlock.gameObject.SetActive(true);
-                lockedBlocks.Remove(newBlock);
+                lockedNonActionBlocks.Remove(newBlock);
                 availableBlocks.Add(newBlock);
                 newSelectionBlocks.Add(newBlock);
             }
@@ -53,7 +69,10 @@ public class BlockSave
     }
 
     public void refreshSelectionBlocks(){
-        foreach(SelectionBlock selectionBlock in lockedBlocks){
+        foreach (SelectionBlock selectionBlock in lockedActionBlocks) {
+            selectionBlock.gameObject.SetActive(false);
+        }
+        foreach (SelectionBlock selectionBlock in lockedNonActionBlocks) {
             selectionBlock.gameObject.SetActive(false);
         }
         foreach(SelectionBlock selectionBlock in availableBlocks) {

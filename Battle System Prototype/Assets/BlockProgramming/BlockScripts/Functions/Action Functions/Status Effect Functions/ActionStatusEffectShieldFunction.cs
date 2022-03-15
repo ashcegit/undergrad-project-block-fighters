@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActionStatusEffectShieldFunction : MonoBehaviour
+public class ActionStatusEffectShieldFunction : ActionFunction
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public override GameAction function(Character instigator, bool computerPlayer) {
+        Block inputBlock = gameObject.GetComponent<Block>().getSections()[0].getHeader().getInputFieldHandlers()[0].getInputBlock().GetComponent<Block>();
+        Character target;
+        if (computerPlayer) {
+            GameScript gameScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>();
+            target = gameScript.getOpponent();
+        } else {
+            CharacterFunction characterFunction = inputBlock.gameObject.GetComponent<CharacterFunction>();
+            target = characterFunction.function();
+        }
+        return ActionCollection.shield(target);
     }
 }

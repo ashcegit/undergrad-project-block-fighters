@@ -15,4 +15,10 @@ public class BlockUnlock : MonoBehaviour
             blockUnlockSpaces[i].displayBlock(newSelectionBlocks[i]);
         }
     }
+
+    public void clearInfo() {
+        foreach(BlockUnlockSpace blockUnlockSpace in blockUnlockSpaces) {
+            blockUnlockSpace.clearInfo();
+        }
+    }
 }

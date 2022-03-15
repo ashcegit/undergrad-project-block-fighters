@@ -41,8 +41,6 @@ public class GameScript : MonoBehaviour
     }
 
     public void Start(){
-        enabled=false;
-
         levelCounter=0;              
 
         player=new Character("Player",
@@ -61,8 +59,6 @@ public class GameScript : MonoBehaviour
                               5);
         opponentLoaded=true;
         
-        enabled=true;
-
         StopAllCoroutines();
     }
 
@@ -244,8 +240,6 @@ public class GameScript : MonoBehaviour
                           opponent.getBaseSpeed() + opponentStatIncreases[3],
                           opponent.getStamina() + 2);
 
-        computerPlayer =new ComputerPlayer();
-
         opponentChosen=false;
         playerChosen=false;
 
@@ -256,5 +250,32 @@ public class GameScript : MonoBehaviour
         opponentLoaded=true;
 
         return new Tuple<List<int>, List<int>>(  playerStatIncreases, opponentStatIncreases ) ;
+    }
+
+    public void resetGame() {
+        levelCounter = 0;
+
+        player = new Character("Player",
+                          100f,
+                          15f,
+                          45f,
+                          60f,
+                          5);
+
+        opponent = new Character("Opponent",
+                              100f,
+                              15f,
+                              45f,
+                              60f,
+                              5);
+
+        opponentChosen = false;
+        playerChosen = false;
+
+        characterUI.updatePlayerHealth(player.getHealth(), player.getMaxHealth());
+        characterUI.updateOpponentHealth(opponent.getHealth(), opponent.getMaxHealth());
+
+        playerLoaded = true;
+        opponentLoaded = true;
     }
 }

@@ -110,7 +110,6 @@ public class BlockProgrammerScript : MonoBehaviour
     public List<InputSpace> getInputSpaces(){return inputSpaces;}
 
     public void applyMethodNames(){
-        Debug.Log(methodBlockObjects.Count);
         foreach (GameObject methodBlockObject in methodBlockObjects){
             methodBlockObject.GetComponent<Block>().setMethodNameFromHeader();
         }
@@ -133,7 +132,13 @@ public class BlockProgrammerScript : MonoBehaviour
                 heightVector.y+=5f;
             }
             heightVector.x=rectTransform.sizeDelta.x;
-            heightVector.y+=2f;
+            if(panelTransform.gameObject.name=="Panel Info") {
+                heightVector.y += 100f;
+                Debug.Log("HIT");
+            } else {
+                Debug.Log(panelTransform.gameObject.name);
+                heightVector.y += 2f;
+            }
             panelTransform.GetComponent<RectTransform>().sizeDelta=heightVector;
         }
     }

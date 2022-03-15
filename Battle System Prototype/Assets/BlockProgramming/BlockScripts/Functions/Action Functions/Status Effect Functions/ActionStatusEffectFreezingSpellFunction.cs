@@ -9,7 +9,7 @@ public class ActionStatusEffectFreezingSpellFunction : ActionFunction
         Character target;
         if (computerPlayer) {
             GameScript gameScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>();
-            target = gameScript.getOpponent();
+            target = gameScript.getPlayer();
         } else {
             CharacterFunction characterFunction = inputBlock.gameObject.GetComponent<CharacterFunction>();
             target = characterFunction.function();

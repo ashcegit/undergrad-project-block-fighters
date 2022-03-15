@@ -69,7 +69,6 @@ public class Main : MonoBehaviour
 
         loopDone=true;
         terminalScript.setState(TerminalState.Write);
-        enabled=false;
         gameScript.enabled=false;
         levelInfoScript.enabled=false;
         gameOverScript.enabled=false;
@@ -78,14 +77,16 @@ public class Main : MonoBehaviour
         winScript.gameObject.SetActive(false);
     }
     
-    //void resetGame(){
-    //    enabled=false;
-    //    Terminal.Buffer.Clear();
-    //    gameScript.resetGame();
-    //    terminalScript.initShell(gameScript);
-    //    openProgramming();
-    //    loopDone=true;
-    //}
+    void resetGame(){
+        enabled=false;
+        winScript.enabled = false;
+        winScript.gameObject.SetActive(false);
+        Terminal.Buffer.Clear();
+        gameScript.resetGame();
+        terminalScript.initShell(gameScript);
+        openProgramming();
+        loopDone=true;
+    }
 
     void gameOver() {
         enabled = false;
@@ -187,104 +188,87 @@ public class Main : MonoBehaviour
     }
 
     IEnumerator playLoop(Character player,Character opponent){
-        //cannot modularise because IEnumerators cannot take ref parameters : (
+        //plays out interaction between player and opponent
+        //in order of action's priority
+
+        //cannot factor out repeated lines because
+        //IEnumerators cannot take parameters by reference
+
         Block playerMethodBlock=gameScript.getPlayerMethod().GetComponent<Block>();
         int playerStamina=player.getStamina();
         int opponentStamina=opponent.getStamina();
         if(player.getSpeed()==opponent.getSpeed()){
+            //toss up priority if character speeds are equal
+            //(the chances of this are slim)
             if(UnityEngine.Random.Range(0,1)<0.5){
                 while(playerStamina>0&&!gameScript.isGameOver()){
-                    ExecutionWrapper playerExecutionWrapper=playerMethodBlock.executeCurrentBlock();
-                    GameAction? playerGameAction=playerExecutionWrapper.getGameAction();
+                    GameAction? playerExecutionWrapper=playerMethodBlock.executeCurrentBlock();
                     if(playerGameAction!=null&&!gameScript.isGameOver()){
                         Interaction playerInteraction=gameScript.getInteraction(playerGameAction);
                         yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
-                    }
-                    if(!playerExecutionWrapper.getEndOfSection()){
                         playerStamina--;
                     }
                 }
                 while(opponentStamina>0&&!gameScript.isGameOver()){
-                    ExecutionWrapper opponentExecutionWrapper=gameScript.executeCurrentComputerPlayerBlock();
-                    GameAction? opponentGameAction=opponentExecutionWrapper.getGameAction();
+                    GameAction? opponentExecutionWrapper =gameScript.executeCurrentComputerPlayerBlock();
                     if(opponentGameAction!=null&&!gameScript.isGameOver()){
                         Interaction opponentInteraction=gameScript.getInteraction(opponentGameAction);
                         yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
-                    }
-                    if(!opponentExecutionWrapper.getEndOfSection()){
                         opponentStamina--;
                     }
                 }
             }else{
-                while(opponentStamina>0&&!gameScript.isGameOver()){
-                    ExecutionWrapper opponentExecutionWrapper=gameScript.executeCurrentComputerPlayerBlock();
-                    GameAction? opponentGameAction=opponentExecutionWrapper.getGameAction();
-                    if(opponentGameAction!=null&&!gameScript.isGameOver()){
-                        Interaction opponentInteraction=gameScript.getInteraction(opponentGameAction);
-                        yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
-                    }
-                    if(!opponentExecutionWrapper.getEndOfSection()){
+                while (opponentStamina > 0 && !gameScript.isGameOver()) {
+                    GameAction? opponentExecutionWrapper = gameScript.executeCurrentComputerPlayerBlock();
+                    if (opponentGameAction != null && !gameScript.isGameOver()) {
+                        Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
+                        yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
                         opponentStamina--;
                     }
                 }
-                while(playerStamina>0&&!gameScript.isGameOver()){
-                    ExecutionWrapper playerExecutionWrapper=playerMethodBlock.executeCurrentBlock();
-                    GameAction? playerGameAction=playerExecutionWrapper.getGameAction();
-                    if(playerGameAction!=null&&!gameScript.isGameOver()){
-                        Interaction playerInteraction=gameScript.getInteraction(playerGameAction);
-                        yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
-                    }
-                    if(!playerExecutionWrapper.getEndOfSection()){
+                while (playerStamina > 0 && !gameScript.isGameOver()) {
+                    GameAction? playerExecutionWrapper = playerMethodBlock.executeCurrentBlock();
+                    if (playerGameAction != null && !gameScript.isGameOver()) {
+                        Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
+                        yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
                         playerStamina--;
                     }
                 }
             }
         }else if(player.getSpeed()<opponent.getSpeed()){
-            while(opponentStamina>0&&!gameScript.isGameOver()){
-                ExecutionWrapper opponentExecutionWrapper=gameScript.executeCurrentComputerPlayerBlock();
-                GameAction? opponentGameAction=opponentExecutionWrapper.getGameAction();
-                if(opponentGameAction!=null&&!gameScript.isGameOver()){
-                    Interaction opponentInteraction=gameScript.getInteraction(opponentGameAction);
-                    yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
-                }
-                if(!opponentExecutionWrapper.getEndOfSection()){
+            while (opponentStamina > 0 && !gameScript.isGameOver()) {
+                GameAction? opponentExecutionWrapper = gameScript.executeCurrentComputerPlayerBlock();
+                if (opponentGameAction != null && !gameScript.isGameOver()) {
+                    Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
+                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
                     opponentStamina--;
                 }
             }
-            while(playerStamina>0&&!gameScript.isGameOver()){
-                ExecutionWrapper playerExecutionWrapper=playerMethodBlock.executeCurrentBlock();
-                GameAction? playerGameAction=playerExecutionWrapper.getGameAction();
-                if(playerGameAction!=null&&!gameScript.isGameOver()){
-                    Interaction playerInteraction=gameScript.getInteraction(playerGameAction);
-                    yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
-                }
-                if(!playerExecutionWrapper.getEndOfSection()){
+            while (playerStamina > 0 && !gameScript.isGameOver()) {
+                GameAction? playerExecutionWrapper = playerMethodBlock.executeCurrentBlock();
+                if (playerGameAction != null && !gameScript.isGameOver()) {
+                    Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
+                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
                     playerStamina--;
                 }
             }
-        }else{
-            while(playerStamina>0&&!gameScript.isGameOver()){
-                    ExecutionWrapper playerExecutionWrapper=playerMethodBlock.executeCurrentBlock();
-                    GameAction? playerGameAction=playerExecutionWrapper.getGameAction();
-                    if(playerGameAction!=null&&!gameScript.isGameOver()){
-                        Interaction playerInteraction=gameScript.getInteraction(playerGameAction);
-                        yield return StartCoroutine(playInteractionAfterDelay(0.5f,playerInteraction,player));
-                    }
-                    if(!playerExecutionWrapper.getEndOfSection()){
-                        playerStamina--;
-                    }
+        } else{
+            while (playerStamina > 0 && !gameScript.isGameOver()) {
+                GameAction? playerExecutionWrapper = playerMethodBlock.executeCurrentBlock();
+                if (playerGameAction != null && !gameScript.isGameOver()) {
+                    Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
+                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
+                    playerStamina--;
                 }
-                while(opponentStamina>0&&!gameScript.isGameOver()){
-                    ExecutionWrapper opponentExecutionWrapper=gameScript.executeCurrentComputerPlayerBlock();
-                    GameAction? opponentGameAction=opponentExecutionWrapper.getGameAction();
-                    if(opponentGameAction!=null&&!gameScript.isGameOver()){
-                        Interaction opponentInteraction=gameScript.getInteraction(opponentGameAction);
-                        yield return StartCoroutine(playInteractionAfterDelay(0.5f,opponentInteraction,opponent));
-                    }
-                    if(!opponentExecutionWrapper.getEndOfSection()){
-                        opponentStamina--;
-                    }
+            }
+            while (opponentStamina > 0 && !gameScript.isGameOver()) {
+                GameAction? opponentExecutionWrapper = gameScript.executeCurrentComputerPlayerBlock();
+                if (opponentGameAction != null && !gameScript.isGameOver()) {
+                    Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
+                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
+                    opponentStamina--;
                 }
+            }
         }
         gameScript.clearPlayerBlockStack();
         gameScript.clearComputerBlockStack();

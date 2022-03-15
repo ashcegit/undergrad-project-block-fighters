@@ -7,15 +7,16 @@ public class BlockUnlockSpace : MonoBehaviour
 {
 
     TextMeshProUGUI newBlockText;
+    Vector2 lastPosition;
 
     void Awake() {
         newBlockText = GetComponentInChildren<TextMeshProUGUI>();
+        lastPosition = GetComponentInChildren<SelectionBlock>().gameObject.GetComponent<RectTransform>().position;
+        Destroy(GetComponentInChildren<SelectionBlock>().gameObject);
     }
 
     public void displayBlock(SelectionBlock selectionBlock) {
         newBlockText.text=selectionBlock.gameObject.name;
-        Vector2 lastPosition = GetComponentInChildren<SelectionBlock>().gameObject.GetComponent<RectTransform>().position;
-        Destroy(GetComponentInChildren<SelectionBlock>().gameObject);
         GameObject newBlock = Instantiate(selectionBlock.gameObject);
         newBlock.transform.SetParent(transform);
         RectTransform newRectTransform = newBlock.GetComponent<RectTransform>();
@@ -23,5 +24,11 @@ public class BlockUnlockSpace : MonoBehaviour
         newRectTransform.anchorMax = new Vector2(0, 1);
         newRectTransform.pivot = new Vector2(0.5f, 0.5f);
         newRectTransform.position = lastPosition;
+    }
+
+    public void clearInfo() {
+        newBlockText.text = "";
+        lastPosition = GetComponentInChildren<SelectionBlock>().gameObject.GetComponent<RectTransform>().position;
+        Destroy(GetComponentInChildren<SelectionBlock>().gameObject);
     }
 }

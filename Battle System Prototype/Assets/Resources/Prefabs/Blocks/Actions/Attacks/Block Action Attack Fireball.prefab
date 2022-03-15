@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 2534138686393960206}
   - component: {fileID: 3103593857176295605}
   - component: {fileID: 4016187812950580968}
-  - component: {fileID: 8261828254888909142}
+  - component: {fileID: -8092530597661540150}
   m_Layer: 0
   m_Name: Block Action Attack Fireball
   m_TagString: Untagged
@@ -174,7 +174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockType: 1
   methodName: 
---- !u!114 &8261828254888909142
+--- !u!114 &-8092530597661540150
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2398354153124632879}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09f81508e9ed16f4aa8aec88003665c7, type: 3}
+  m_Script: {fileID: 11500000, guid: 279279fdd66ac8543a70b4868d4e8624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3621837117021145686
