@@ -231,14 +231,14 @@ public class GameScript : MonoBehaviour
                           player.getBaseAttack()+playerStatIncreases[1],
                           player.getBaseDefence()+playerStatIncreases[2],
                           player.getBaseSpeed()+playerStatIncreases[3],
-                          player.getStamina()+2);
+                          player.getStamina()+1);
 
         opponent = new Character(opponent.getCharacterName(),
                           opponent.getBaseMaxHealth() + opponentStatIncreases[0],
                           opponent.getBaseAttack() + opponentStatIncreases[1],
                           opponent.getBaseDefence() + opponentStatIncreases[2],
                           opponent.getBaseSpeed() + opponentStatIncreases[3],
-                          opponent.getStamina() + 2);
+                          opponent.getStamina() + 1);
 
         opponentChosen=false;
         playerChosen=false;

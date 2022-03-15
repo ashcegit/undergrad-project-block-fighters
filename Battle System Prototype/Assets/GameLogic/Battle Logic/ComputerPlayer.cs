@@ -147,6 +147,9 @@ public class ComputerPlayer:MonoBehaviour
         addBlockToStack(sandwichPrefab);
         addBlockToStack(punchPrefab);
         addBlockToStack(punchPrefab);
+        addBlockToStack(punchPrefab);
+        addBlockToStack(punchPrefab);
+        addBlockToStack(sandwichPrefab);
 
         finishSection();
     }
@@ -186,8 +189,8 @@ public class ComputerPlayer:MonoBehaviour
         addBlockToStack(fireballPrefab);
         addBlockToStack(kickPrefab);
         addBlockToStack(kickPrefab);
-        
-        finishSection()
+
+        finishSection();
     }
 
     public void sandwichLaser() {
@@ -201,7 +204,17 @@ public class ComputerPlayer:MonoBehaviour
         addBlockToStack(punchPrefab);
         addBlockToStack(punchPrefab);
 
-        finishSection()
+        finishSection();
+    }
+
+    public void coffeeBreak() {
+        GameObject coffeePrefab = (GameObject)Resources.Load(statusEffectPath + "Coffee");
+
+        addBlockToStack(coffeePrefab);
+        addBlockToStack(coffeePrefab);
+
+
+        finishSection();
     }
 
     public void lightningKicks() {
@@ -210,6 +223,7 @@ public class ComputerPlayer:MonoBehaviour
         addBlockToStack(lightningStrikePrefab);
         addBlockToStack(lightningStrikePrefab);
         addBlockToStack(lightningStrikePrefab);
+        addBlockToStack(kickPrefab);
         addBlockToStack(kickPrefab);
         addBlockToStack(kickPrefab);
 
