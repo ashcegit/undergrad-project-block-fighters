@@ -19,10 +19,6 @@ public class WinScript : MonoBehaviour
         enabled = false;
     }
 
-    public void win() {
-        SceneManager.LoadScene("Main Menu");
-    }
-
     public void quit() {
         SceneManager.LoadScene("Main Menu");
     }

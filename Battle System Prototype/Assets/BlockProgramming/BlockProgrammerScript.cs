@@ -69,6 +69,12 @@ public class BlockProgrammerScript : MonoBehaviour
         Destroy(blockObject);
     }
 
+    public void resetGame() {
+        clearEnvironment();
+        blockSave = new BlockSave();
+        refreshBlockSelection();
+    }
+
     public void clearEnvironment(){
         foreach(GameObject blockObject in blockObjects){
             Destroy(blockObject);
@@ -134,9 +140,7 @@ public class BlockProgrammerScript : MonoBehaviour
             heightVector.x=rectTransform.sizeDelta.x;
             if(panelTransform.gameObject.name=="Panel Info") {
                 heightVector.y += 100f;
-                Debug.Log("HIT");
             } else {
-                Debug.Log(panelTransform.gameObject.name);
                 heightVector.y += 2f;
             }
             panelTransform.GetComponent<RectTransform>().sizeDelta=heightVector;

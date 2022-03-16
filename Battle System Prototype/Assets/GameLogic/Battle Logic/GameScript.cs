@@ -225,14 +225,14 @@ public class GameScript : MonoBehaviour
         }
 
         player =new Character(player.getCharacterName(),
-                          player.getBaseMaxHealth()+playerStatIncreases[0],
+                          player.getBaseMaxHealth()+ 50 + playerStatIncreases[0],
                           player.getBaseAttack()+playerStatIncreases[1],
                           player.getBaseDefence()+playerStatIncreases[2],
                           player.getBaseSpeed()+playerStatIncreases[3],
                           player.getStamina()+1);
 
         opponent = new Character(opponent.getCharacterName(),
-                          opponent.getBaseMaxHealth() + opponentStatIncreases[0],
+                          opponent.getBaseMaxHealth() + 50 + opponentStatIncreases[0],
                           opponent.getBaseAttack() + opponentStatIncreases[1],
                           opponent.getBaseDefence() + opponentStatIncreases[2],
                           opponent.getBaseSpeed() + opponentStatIncreases[3],

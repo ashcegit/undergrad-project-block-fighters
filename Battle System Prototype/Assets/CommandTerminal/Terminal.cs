@@ -40,6 +40,7 @@ namespace CommandTerminal
         bool moveCursor;
         bool initialOpen; // Used to focus on TextField when console opens
         Rect window;
+        RectTransform terminalRect;
         float currentOpenT;
         float openTarget;
         string commandText;
@@ -85,13 +86,13 @@ namespace CommandTerminal
                     break;
                 }
                 case TerminalState.ReadOnly:
-                    openTarget = 8 * Screen.height / 10;
+                    openTarget = terminalRect.sizeDelta.y;
                     cachedCommandText = commandText;
                     commandText = "";
                     break;
                 case TerminalState.Write:
                 default: {
-                    openTarget = 8*Screen.height/10;
+                    openTarget = terminalRect.sizeDelta.y;
                     break;
                 }
             }
@@ -140,6 +141,8 @@ namespace CommandTerminal
         void Start() {
             ConsoleFont = (Font)Resources.Load("Fonts/ThaleahFat_TTF");
 
+            terminalRect=GameObject.Find("Terminal Rect").GetComponent<RectTransform>();
+
             commandText = "";
             cachedCommandText = commandText;
 
@@ -164,8 +167,8 @@ namespace CommandTerminal
         }
 
         void setupWindow() {
-            window = new Rect(5*Screen.width/8, Screen.height/9, 5*Screen.width/16, 7*Screen.height/10);
-
+            window = new Rect(22 * Screen.width / 32, 2 * Screen.height / 10, 12 * Screen.width / 16, currentOpenT - 3 * Screen.height / 16);
+        
             // Set background color
             Texture2D background_texture = new Texture2D(1, 1);
             var dark_background = new Color();
@@ -274,7 +277,7 @@ namespace CommandTerminal
                 return; // Already at target
             }
 
-            window = new Rect(5*Screen.width/8, Screen.height/10, 5*Screen.width/16, currentOpenT);
+            window = new Rect(terminalRect.position.x-terminalRect.sizeDelta.x/2,terminalRect.position.y-terminalRect.sizeDelta.y/2,terminalRect.sizeDelta.x, currentOpenT);
         }
 
         void EnterCommand() {

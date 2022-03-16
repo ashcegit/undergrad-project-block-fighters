@@ -51,7 +51,6 @@ public class BlockStackManager
 
     public Tuple<GameAction?,bool> executeCurrentBlock() {
         GameAction gameAction = null;
-        Debug.Log("Pointer is: " + pointer);
         if (pointer >= blockStack.Count-1) {
             return new Tuple<GameAction?, bool> (gameAction,true);
         } else {

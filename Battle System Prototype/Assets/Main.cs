@@ -33,7 +33,7 @@ public class Main : MonoBehaviour
     private bool loopDone;
     public bool levellingUp;
 
-    private const int maxLevels=9;
+    private const int maxLevels=10;
 
     private string terminalWelcomeMessage1 = "Welcome to _, here you can program methods that your character will use to fight 10 battles";
     private string terminalWelcomeMessage2 = "Press tab on this interface for a list of available commands - all commands are in the form \"command()\"";
@@ -48,7 +48,10 @@ public class Main : MonoBehaviour
 
         terminalScript=GetComponentInChildren<Terminal>();
 
-        levelInfoScript=GetComponentInChildren<LevelInfoScript>();
+        terminalScript.gameObject.SetActive(false);
+        terminalScript.gameObject.SetActive(true);
+
+        levelInfoScript =GetComponentInChildren<LevelInfoScript>();
 
         gameOverScript = GetComponentInChildren<GameOverScript>();
 
@@ -69,6 +72,7 @@ public class Main : MonoBehaviour
 
         loopDone=true;
         terminalScript.setState(TerminalState.Write);
+        
         gameScript.enabled=false;
         levelInfoScript.enabled=false;
         gameOverScript.enabled=false;
@@ -77,13 +81,15 @@ public class Main : MonoBehaviour
         winScript.gameObject.SetActive(false);
     }
     
-    void resetGame(){
+    public void resetGame(){
         enabled=false;
         winScript.enabled = false;
         winScript.gameObject.SetActive(false);
+        terminalScript.gameObject.SetActive(true);
         Terminal.Buffer.Clear();
         gameScript.resetGame();
         terminalScript.initShell(gameScript);
+        blockProgrammerScript.clearEnvironment();
         openProgramming();
         loopDone=true;
     }
@@ -100,9 +106,10 @@ public class Main : MonoBehaviour
         enabled=false;
         Terminal.Buffer.Clear();
         if(!gameScript.hasPlayerLost()){
-            if (gameScript.getLevelCounter()>8) {
+            if (gameScript.getLevelCounter()==maxLevels) {
                 gameScript.enabled = false;
                 terminalScript.setState(TerminalState.Close);
+                terminalScript.gameObject.SetActive(false);
                 winScript.gameObject.SetActive(true);
                 winScript.enabled = true;
             } else {
@@ -111,6 +118,7 @@ public class Main : MonoBehaviour
                 //lastOpponentStatIncrease=statTuple.Item2;
                 gameScript.enabled = false;
                 terminalScript.setState(TerminalState.Close);
+                terminalScript.gameObject.SetActive(false);
                 levelInfoScript.gameObject.SetActive(true);
                 levelInfoScript.enabled = true;
                 List<SelectionBlock> newSelectionBlocks = blockProgrammerScript.unlockRandomBlocks();
@@ -123,6 +131,7 @@ public class Main : MonoBehaviour
     }
 
     public void nextLevel(){
+        terminalScript.gameObject.SetActive(true);
         terminalScript.setState(TerminalState.Write);
         terminalScript.initShell(gameScript);
         levelInfoScript.enabled=false;
@@ -203,7 +212,6 @@ public class Main : MonoBehaviour
             if(UnityEngine.Random.Range(0,1)<0.5){
                 while(playerStamina>0&&!gameScript.isGameOver()){
                     Tuple<GameAction?,bool> execution=playerMethodBlock.executeCurrentBlock();
-                    Debug.Log(execution.Item2);
                     if (execution.Item2) {
                         break;
                     } else {

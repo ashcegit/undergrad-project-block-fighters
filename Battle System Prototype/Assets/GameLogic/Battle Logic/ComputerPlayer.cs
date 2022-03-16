@@ -36,6 +36,7 @@ public class ComputerPlayer:MonoBehaviour
     }
 
     public void initBlockStack(int levelCounter){
+        pointer = 0;
         presetMethods[levelCounter][UnityEngine.Random.Range(0, 3)].Invoke(this, new object []{ });
     }
 
@@ -126,7 +127,7 @@ public class ComputerPlayer:MonoBehaviour
 
     public void punches(){
         //string of punches
-        for (int i=0;i<5;i++){
+        for (int i=0;i<7;i++){
             addBlockToStack(punchPrefab);
         }
         
@@ -135,12 +136,9 @@ public class ComputerPlayer:MonoBehaviour
 
     public void kicks() {
         //string of kicks
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 7; i++) {
             addBlockToStack(kickPrefab);
         }
-        Block endBlock = new Block();
-        endBlock.blockType = BlockType.EndOfSection;
-        blockStack.Add(endBlock);
 
         finishSection();
     }
@@ -166,14 +164,13 @@ public class ComputerPlayer:MonoBehaviour
     public void guard() {
         //combo of all starting attack blocks + guard
         GameObject guardPrefab = (GameObject)Resources.Load(statusEffectPath + "Guard");
-        GameObject fireballPrefab = (GameObject)Resources.Load(attackPath + "Fireball");
 
         addBlockToStack(guardPrefab);
         addBlockToStack(kickPrefab);
         addBlockToStack(punchPrefab);
-        addBlockToStack(fireballPrefab);
+        addBlockToStack(kickPrefab);
         addBlockToStack(punchPrefab);
-        addBlockToStack(fireballPrefab);
+        addBlockToStack(kickPrefab);
 
         finishSection();
     }
@@ -328,11 +325,13 @@ public class ComputerPlayer:MonoBehaviour
         foreach(Transform childTransform in computerPlayerBlocks.transform) {
             Destroy(childTransform.gameObject);
         }
-        blockStack=new List<Block>();
+        blockStack.Clear();
         pointer=0;
     }
 
     public Tuple<GameAction?, bool> executeCurrentBlock() {
+        Debug.Log("computer pointer is: " + pointer);
+        Debug.Log("BlockStack count is: " + blockStack.Count);
         GameAction gameAction = null;
         if (pointer >= blockStack.Count-1) {
             return new Tuple<GameAction?, bool>( gameAction, true );
