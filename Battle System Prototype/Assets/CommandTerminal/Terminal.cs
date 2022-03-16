@@ -76,15 +76,19 @@ namespace CommandTerminal
 
         public void setState(TerminalState newState) {
             inputFix = true;
-            cachedCommandText = commandText;
-            commandText = "";
-
+            
+            
             switch (newState) {
                 case TerminalState.Close: {
                     openTarget = 0;
+                    commandText = "";
                     break;
                 }
                 case TerminalState.ReadOnly:
+                    openTarget = 8 * Screen.height / 10;
+                    cachedCommandText = commandText;
+                    commandText = "";
+                    break;
                 case TerminalState.Write:
                 default: {
                     openTarget = 8*Screen.height/10;

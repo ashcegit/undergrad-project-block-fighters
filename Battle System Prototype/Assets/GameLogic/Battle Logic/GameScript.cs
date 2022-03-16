@@ -88,7 +88,7 @@ public class GameScript : MonoBehaviour
         opponentChosen=false;
     }
 
-    public GameAction? executeCurrentComputerPlayerBlock(){
+    public Tuple<GameAction?,bool> executeCurrentComputerPlayerBlock(){
         return computerPlayer.executeCurrentBlock();
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System;
 using UnityEngine;
 
 public class ComputerPlayer:MonoBehaviour
@@ -35,7 +36,7 @@ public class ComputerPlayer:MonoBehaviour
     }
 
     public void initBlockStack(int levelCounter){
-        presetMethods[levelCounter][Random.Range(0, 3)].Invoke(this, new object []{ });
+        presetMethods[levelCounter][UnityEngine.Random.Range(0, 3)].Invoke(this, new object []{ });
     }
 
     public void initPresetMethods() {
@@ -50,14 +51,14 @@ public class ComputerPlayer:MonoBehaviour
         //level 2
         presetMethods.Add(new List<MethodInfo> {
             this.GetType().GetMethod("knuckleSandwich"),
-            this.GetType().GetMethod("poisonKicks"),
+            this.GetType().GetMethod("coffeeBreak"),
             this.GetType().GetMethod("kicks"),
             this.GetType().GetMethod("guard")
         });
 
         //level 3
         presetMethods.Add(new List<MethodInfo> {
-            this.GetType().GetMethod("laserPunches"),
+            this.GetType().GetMethod("coffeeBreak"),
             this.GetType().GetMethod("guard"),
             this.GetType().GetMethod("knuckleSandwich"),
             this.GetType().GetMethod("poisonKicks")
@@ -65,23 +66,63 @@ public class ComputerPlayer:MonoBehaviour
 
         //level 4
         presetMethods.Add(new List<MethodInfo> {
-            this.GetType().GetMethod("laserPunches"),
+            this.GetType().GetMethod("coffeeBreak"),
             this.GetType().GetMethod("knuckleSandwich"),
-            this.GetType().GetMethod("shieldCombo"),
+            this.GetType().GetMethod("wardCombo"),
             this.GetType().GetMethod("poisonKicks")
         });
 
         //level 5
         presetMethods.Add(new List<MethodInfo> {
-            this.GetType().GetMethod("punchesPlaster"),
-            this.GetType().GetMethod("shieldCombo"),
-            this.GetType().GetMethod("sandwichLaser"),
+            this.GetType().GetMethod("laserPunches"),
+            this.GetType().GetMethod("wardCombo"),
+            this.GetType().GetMethod("knuckleSandwich"),
             this.GetType().GetMethod("poisonKicks")
         });
 
         //level 6
+        presetMethods.Add(new List<MethodInfo> {
+            this.GetType().GetMethod("lightningKicks"),
+            this.GetType().GetMethod("shieldCombo"),
+            this.GetType().GetMethod("knuckleSandwich"),
+            this.GetType().GetMethod("laserPunches")
+        });
+
+        //level 7
+        presetMethods.Add(new List<MethodInfo> {
+            this.GetType().GetMethod("lightningKicks"),
+            this.GetType().GetMethod("shieldCombo"),
+            this.GetType().GetMethod("freezingMedicine"),
+            this.GetType().GetMethod("laserPunches")
+        });
+
+        //level 8
+        presetMethods.Add(new List<MethodInfo> {
+            this.GetType().GetMethod("lightningKicks"),
+            this.GetType().GetMethod("shieldCombo"),
+            this.GetType().GetMethod("freezingMedicine"),
+            this.GetType().GetMethod("coffeeCatapult")
+        });
+
+        //level 9
+        presetMethods.Add(new List<MethodInfo> {
+            this.GetType().GetMethod("lightningKicks"),
+            this.GetType().GetMethod("shieldCombo"),
+            this.GetType().GetMethod("freezingMedicine"),
+            this.GetType().GetMethod("coffeeCatapult")
+        });
+
+        //level 10
+        presetMethods.Add(new List<MethodInfo> {
+            this.GetType().GetMethod("lightningKicks"),
+            this.GetType().GetMethod("shieldCombo"),
+            this.GetType().GetMethod("freezingMedicine"),
+            this.GetType().GetMethod("coffeeCatapult")
+        });
 
     }
+
+    //Hardcoded methods for opponent to use
 
     public void punches(){
         //string of punches
@@ -137,6 +178,17 @@ public class ComputerPlayer:MonoBehaviour
         finishSection();
     }
 
+    public void wardCombo() {
+        GameObject wardSpellPrefab = (GameObject)Resources.Load(statusEffectPath + "Ward Spell");
+
+        for (int i = 0; i < 2; i++) { addBlockToStack(wardSpellPrefab); }
+        for (int i = 0; i < 3; i++) { addBlockToStack(punchPrefab); }
+        for (int i = 0; i < 2; i++) { addBlockToStack(kickPrefab); }
+        for (int i = 0; i < 2; i++) { addBlockToStack(punchPrefab); }
+
+        finishSection();
+    }
+
     public void knuckleSandwich() {
         //punchx2->sandwich->punchx2
         GameObject sandwichPrefab = (GameObject)Resources.Load(healPath + "Sandwich");
@@ -160,8 +212,10 @@ public class ComputerPlayer:MonoBehaviour
         GameObject kickPrefab = (GameObject)Resources.Load(attackPath + "Poison");
 
         addBlockToStack(poisonPrefab);
-        for (int i = 0; i < 3; i++) { addBlockToStack(kickPrefab); }
+        for (int i = 0; i < 4; i++) { addBlockToStack(kickPrefab); }
         addBlockToStack(poisonPrefab);
+        addBlockToStack(poisonPrefab);
+        for (int i = 0; i < 3; i++) { addBlockToStack(kickPrefab); }
 
         finishSection();
     }
@@ -194,15 +248,14 @@ public class ComputerPlayer:MonoBehaviour
     }
 
     public void sandwichLaser() {
-        //sandwichx2->laser->punchx2
+        //sandwichx2->laserx4->punchx3
         GameObject sandwichPrefab = (GameObject)Resources.Load(healPath + "Sandwich");
         GameObject laserPrefab = (GameObject)Resources.Load(attackPath + "Laser");
 
         addBlockToStack(sandwichPrefab);
         addBlockToStack(sandwichPrefab);
-        addBlockToStack(laserPrefab);
-        addBlockToStack(punchPrefab);
-        addBlockToStack(punchPrefab);
+        for (int i = 0; i < 4; i++) { addBlockToStack(laserPrefab); }
+        for (int i = 0; i < 3; i++) { addBlockToStack(punchPrefab); }
 
         finishSection();
     }
@@ -212,20 +265,48 @@ public class ComputerPlayer:MonoBehaviour
 
         addBlockToStack(coffeePrefab);
         addBlockToStack(coffeePrefab);
-
+        addBlockToStack(punchPrefab);
+        addBlockToStack(kickPrefab);
+        addBlockToStack(punchPrefab);
+        addBlockToStack(coffeePrefab);
+        addBlockToStack(punchPrefab);
+        addBlockToStack(kickPrefab);
+        for (int i = 0; i < 3; i++) { addBlockToStack(punchPrefab); }
 
         finishSection();
     }
 
     public void lightningKicks() {
         GameObject lightningStrikePrefab = (GameObject)Resources.Load(attackPath + "Lightning Strike");
-        
-        addBlockToStack(lightningStrikePrefab);
-        addBlockToStack(lightningStrikePrefab);
-        addBlockToStack(lightningStrikePrefab);
-        addBlockToStack(kickPrefab);
-        addBlockToStack(kickPrefab);
-        addBlockToStack(kickPrefab);
+
+        for (int i = 0; i < 3; i++) { addBlockToStack(lightningStrikePrefab); }
+        for (int i = 0; i < 3; i++) { addBlockToStack(kickPrefab); }
+        for (int i = 0; i < 2; i++) { addBlockToStack(lightningStrikePrefab); }
+
+        finishSection();
+    }
+
+    public void freezingMedicine() {
+        GameObject freezingSpellPrefab = (GameObject)Resources.Load(statusEffectPath + "Freezing Spell");
+        GameObject medicinePrefab = (GameObject)Resources.Load(healPath + "Medicine");
+
+        for (int i = 0; i < 3; i++) { addBlockToStack(freezingSpellPrefab); }
+        for (int i = 0; i < 2; i++) { addBlockToStack(medicinePrefab); }
+        for (int i = 0; i < 3; i++) { addBlockToStack(punchPrefab); }
+        for (int i = 0; i < 2; i++) { addBlockToStack(kickPrefab); }
+
+        finishSection();
+    }
+
+    public void coffeeCatapult() {
+        GameObject coffeePrefab = (GameObject)Resources.Load(statusEffectPath + "Coffee");
+        GameObject catapultPrefab = (GameObject)Resources.Load(attackPath + "Catapult");
+        GameObject shieldPrefab = (GameObject)Resources.Load(statusEffectPath + "Shield");
+
+        for (int i = 0; i < 3; i++) { addBlockToStack(coffeePrefab); }
+        for (int i = 0; i < 2; i++) { addBlockToStack(catapultPrefab); }
+        for (int i = 0; i < 3; i++) { addBlockToStack(punchPrefab); }
+        for (int i = 0; i < 2; i++) { addBlockToStack(shieldPrefab); }
 
         finishSection();
     }
@@ -251,45 +332,45 @@ public class ComputerPlayer:MonoBehaviour
         pointer=0;
     }
 
-    public GameAction? executeCurrentBlock(){
+    public Tuple<GameAction?, bool> executeCurrentBlock() {
         GameAction gameAction = null;
-        if(pointer>=blockStack.Count){
-            return null;
-        }else{
-            Block currentBlock=blockStack[pointer];
-            switch(currentBlock.blockType){
-                case(BlockType.Action):
+        if (pointer >= blockStack.Count-1) {
+            return new Tuple<GameAction?, bool>( gameAction, true );
+        } else {
+            Block currentBlock = blockStack[pointer];
+            switch (currentBlock.blockType) {
+                case (BlockType.Action):
                     pointer++;
-                    GameScript gameScript=GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>();
-                    Character opponent=gameScript.getOpponent();
-                    ActionFunction actionFunction=currentBlock.gameObject.GetComponent<ActionFunction>();
-                    gameAction=actionFunction.function(opponent,true);
+                    GameScript gameScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>();
+                    Character opponent = gameScript.getOpponent();
+                    ActionFunction actionFunction = currentBlock.gameObject.GetComponent<ActionFunction>();
+                    gameAction = actionFunction.function(opponent, true);
                     break;
-                case(BlockType.Control):
-                    ControlFunction controlFunction=currentBlock.gameObject.GetComponent<ControlFunction>();
-                    pointer=controlFunction.function(pointer,ref blockStack);
+                case (BlockType.Control):
+                    ControlFunction controlFunction = currentBlock.gameObject.GetComponent<ControlFunction>();
+                    pointer = controlFunction.function(pointer, ref blockStack);
                     break;
-                case(BlockType.EndOfSection):
-                    Block startBlock=currentBlock.getStartBlock();
-                    if(startBlock!=null){
-                        if(startBlock.getBlockType()==BlockType.Control){
-                            ControlFunction endControlFunction=startBlock.gameObject.GetComponent<ControlFunction>();
-                            switch(endControlFunction.getName()){
-                                case("If Else"):
-                                    ControlIfElseFunction controlIfElseFunction=(ControlIfElseFunction)endControlFunction;
-                                    pointer=controlIfElseFunction.onRepeat(pointer,ref blockStack);
+                case (BlockType.EndOfSection):
+                    Block startBlock = currentBlock.getStartBlock();
+                    if (startBlock != null) {
+                        if (startBlock.getBlockType() == BlockType.Control) {
+                            ControlFunction endControlFunction = startBlock.gameObject.GetComponent<ControlFunction>();
+                            switch (endControlFunction.getName()) {
+                                case ("If Else"):
+                                    ControlIfElseFunction controlIfElseFunction = (ControlIfElseFunction)endControlFunction;
+                                    pointer = controlIfElseFunction.onRepeat(pointer, ref blockStack);
                                     break;
-                                case("Repeat"):
-                                    ControlRepeatFunction controlRepeatFunction=(ControlRepeatFunction)endControlFunction;
-                                    pointer=controlRepeatFunction.onRepeat(pointer,ref blockStack);
+                                case ("Repeat"):
+                                    ControlRepeatFunction controlRepeatFunction = (ControlRepeatFunction)endControlFunction;
+                                    pointer = controlRepeatFunction.onRepeat(pointer, ref blockStack);
                                     break;
-                                case("Repeat Until"):
-                                    ControlRepeatUntilFunction controlRepeatUntilFunction=(ControlRepeatUntilFunction)endControlFunction;
-                                    pointer=controlRepeatUntilFunction.onRepeat(pointer,ref blockStack);
+                                case ("Repeat Until"):
+                                    ControlRepeatUntilFunction controlRepeatUntilFunction = (ControlRepeatUntilFunction)endControlFunction;
+                                    pointer = controlRepeatUntilFunction.onRepeat(pointer, ref blockStack);
                                     break;
-                                case("Repeat Forever"):
-                                    ControlRepeatForeverFunction controlForeverFunction=(ControlRepeatForeverFunction)endControlFunction;
-                                    pointer=controlForeverFunction.onRepeat(pointer,ref blockStack);
+                                case ("Repeat Forever"):
+                                    ControlRepeatForeverFunction controlForeverFunction = (ControlRepeatForeverFunction)endControlFunction;
+                                    pointer = controlForeverFunction.onRepeat(pointer, ref blockStack);
                                     break;
                             }
                         }
@@ -300,7 +381,7 @@ public class ComputerPlayer:MonoBehaviour
                     break;
             }
         }
-        return gameAction;
+        return new Tuple<GameAction?, bool> (gameAction, false );
     }
 
     public int getBlockStackCount(){return blockStack.Count;}

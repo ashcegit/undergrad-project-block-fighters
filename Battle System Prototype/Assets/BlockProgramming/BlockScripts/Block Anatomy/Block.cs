@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Block : MonoBehaviour
@@ -88,7 +89,7 @@ public class Block : MonoBehaviour
         blockStackManager.setBlockStack(blockStackManager.initBlockStack(this));
     }
 
-    public GameAction? executeCurrentBlock(){
+    public Tuple<GameAction?,bool> executeCurrentBlock(){
         return blockStackManager.executeCurrentBlock();
     }
 

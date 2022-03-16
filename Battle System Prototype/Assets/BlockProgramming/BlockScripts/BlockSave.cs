@@ -32,7 +32,7 @@ public class BlockSave
         SelectionBlock[] selectionBlocks=selectionContent.GetComponentsInChildren<SelectionBlock>();
         foreach(SelectionBlock selectionBlock in selectionBlocks){
             if(!(defaultBlocks.Contains(selectionBlock.gameObject.name))){
-                if (selectionBlock.gameObject.name.Contains("Action")) {
+                if (selectionBlock.prefabBlock.name.Contains("Action")) {
                     lockedActionBlocks.Add(selectionBlock);
                 } else {
                     lockedNonActionBlocks.Add(selectionBlock);

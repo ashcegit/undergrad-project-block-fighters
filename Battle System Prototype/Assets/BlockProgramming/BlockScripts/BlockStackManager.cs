@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 //The block stack is a linearisation of all attack/control blocks in a given method.
@@ -48,10 +49,11 @@ public class BlockStackManager
         blockStack=new List<Block>();
     }
 
-    public GameAction? executeCurrentBlock() {
+    public Tuple<GameAction?,bool> executeCurrentBlock() {
         GameAction gameAction = null;
-        if (pointer >= blockStack.Count) {
-            return null;
+        Debug.Log("Pointer is: " + pointer);
+        if (pointer >= blockStack.Count-1) {
+            return new Tuple<GameAction?, bool> (gameAction,true);
         } else {
             Block currentBlock = blockStack[pointer];
             switch (currentBlock.blockType) {
@@ -60,7 +62,7 @@ public class BlockStackManager
                     GameScript gameScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>();
                     Character opponent = gameScript.getOpponent();
                     ActionFunction actionFunction = currentBlock.gameObject.GetComponent<ActionFunction>();
-                    gameAction = actionFunction.function(opponent, true);
+                    gameAction = actionFunction.function(opponent, false);
                     break;
                 case (BlockType.Control):
                     ControlFunction controlFunction = currentBlock.gameObject.GetComponent<ControlFunction>();
@@ -97,7 +99,7 @@ public class BlockStackManager
                     break;
             }
         }
-        return gameAction;
+        return new Tuple<GameAction?, bool> (gameAction,false);
     }
 
     public int getBlockStackCount(){return blockStack.Count;}
