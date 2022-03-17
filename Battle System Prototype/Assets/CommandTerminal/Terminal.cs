@@ -41,6 +41,7 @@ namespace CommandTerminal
         bool initialOpen; // Used to focus on TextField when console opens
         Rect window;
         RectTransform terminalRect;
+        Vector2 terminalRectCorner;
         float currentOpenT;
         float openTarget;
         string commandText;
@@ -92,6 +93,7 @@ namespace CommandTerminal
                     break;
                 case TerminalState.Write:
                 default: {
+                    initialOpen = true;
                     openTarget = terminalRect.sizeDelta.y;
                     break;
                 }
@@ -143,6 +145,11 @@ namespace CommandTerminal
 
             terminalRect=GameObject.Find("Terminal Rect").GetComponent<RectTransform>();
 
+            Vector3[] fourCornerArray = { new Vector3(), new Vector3(), new Vector3(), new Vector3() };
+
+            terminalRect.GetWorldCorners(fourCornerArray);
+            terminalRectCorner = fourCornerArray[0];
+
             commandText = "";
             cachedCommandText = commandText;
 
@@ -156,19 +163,11 @@ namespace CommandTerminal
         public bool getTerminalLoaded(){return terminalLoaded;}
 
         void OnGUI() {
-            initialOpen = true;
-
-            if (isClosed) {
-                return;
-            }
-
             handleOpenness();
             window = GUILayout.Window(88, window, drawConsole, "", window_style);
         }
 
-        void setupWindow() {
-            window = new Rect(22 * Screen.width / 32, 2 * Screen.height / 10, 12 * Screen.width / 16, currentOpenT - 3 * Screen.height / 16);
-        
+        void setupWindow() {        
             // Set background color
             Texture2D background_texture = new Texture2D(1, 1);
             var dark_background = new Color();
@@ -242,13 +241,13 @@ namespace CommandTerminal
                 GUI.SetNextControlName("commandText_field");
                 commandText = GUILayout.TextField(commandText, input_style);
 
-                if (inputFix && commandText.Length > 0) {
-                    commandText = cachedCommandText; // Otherwise the TextField picks up the ToggleHotkey character event
-                    inputFix = false;                  // Prevents checking string Length every draw call
-                }
+                //if (inputFix && commandText.Length > 0) {
+                //    commandText = cachedCommandText;
+                //    inputFix = false;
+                //}
 
                 if (initialOpen) {
-                    //GUI.FocusControl("commandText_field");
+                    GUI.FocusControl("commandText_field");
                     initialOpen = false;
                 }
             }
@@ -277,7 +276,9 @@ namespace CommandTerminal
                 return; // Already at target
             }
 
-            window = new Rect(terminalRect.position.x-terminalRect.sizeDelta.x/2,terminalRect.position.y-terminalRect.sizeDelta.y/2,terminalRect.sizeDelta.x, currentOpenT);
+
+
+            window = new Rect(terminalRectCorner.x,terminalRectCorner.y,terminalRect.sizeDelta.x, currentOpenT);
         }
 
         void EnterCommand() {
