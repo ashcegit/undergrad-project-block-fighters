@@ -27,18 +27,20 @@ namespace CommandTerminal
 
         float InputContrast;
 
-        Color BackgroundColor    = Color.black;
-        Color ForegroundColor    = Color.white;
-        Color ShellColor         = Color.white;
-        Color InputColor         = Color.cyan;
-        Color WarningColor       = Color.yellow;
-        Color ErrorColor         = Color.red;
+        Color BackgroundColour  = Color.black;
+        Color ForegroundColour  = Color.white;
+        Color ShellColour       = Color.white;
+        Color InputColour       = Color.green;
+        Color HeaderColour      = Color.cyan;
+        Color ControlColour     = new Color(0.2F, 0.3F, 0.4F); //orange
+        Color ActionColour      = Color.red;
+        Color ErrorColour       = Color.red;
 
         TerminalState state;
         TextEditor editorState;
         bool inputFix;
         bool moveCursor;
-        bool initialOpen; // Used to focus on TextField when console opens
+        bool firstOpen; // Used to focus on TextField when console opens
         Rect window;
         RectTransform terminalRect;
         Vector2 terminalRectCorner;
@@ -49,7 +51,7 @@ namespace CommandTerminal
         static Vector2 scrollPosition;
         GUIStyle window_style;
         GUIStyle labelStyle;
-        GUIStyle input_style;
+        GUIStyle inputStyle;
 
         GameScript gameScript;
         bool terminalLoaded;
@@ -93,7 +95,7 @@ namespace CommandTerminal
                     break;
                 case TerminalState.Write:
                 default: {
-                    initialOpen = true;
+                    firstOpen = true;
                     openTarget = terminalRect.sizeDelta.y;
                     break;
                 }
@@ -170,18 +172,18 @@ namespace CommandTerminal
         void setupWindow() {        
             // Set background color
             Texture2D background_texture = new Texture2D(1, 1);
-            var dark_background = new Color();
-            dark_background.r = BackgroundColor.r - InputContrast;
-            dark_background.g = BackgroundColor.g - InputContrast;
-            dark_background.b = BackgroundColor.b - InputContrast;
-            dark_background.a = 0.5f;
+            Color dark_background = new Color();
+            dark_background.r = BackgroundColour.r;
+            dark_background.g = BackgroundColour.g;
+            dark_background.b = BackgroundColour.b;
+            dark_background.a = 0.8f;
             background_texture.SetPixel(0, 0, dark_background);
             background_texture.Apply();
 
             window_style = new GUIStyle();
             window_style.normal.background = background_texture;
             window_style.padding = new RectOffset(4, 4, 4, 4);
-            window_style.normal.textColor = ForegroundColor;
+            window_style.normal.textColor = ForegroundColour;
             window_style.font = ConsoleFont;
             window_style.fontSize=45;
         }
@@ -190,18 +192,17 @@ namespace CommandTerminal
             labelStyle = new GUIStyle();
             labelStyle.font = ConsoleFont;
             labelStyle.fontSize=45;
-            labelStyle.normal.textColor = ForegroundColor;
+            labelStyle.normal.textColor = ForegroundColour;
             labelStyle.wordWrap = true;
         }
 
         void setupInput() {
-            input_style = new GUIStyle();
-            input_style.padding = new RectOffset(4, 4, 4, 4);
-            input_style.font = ConsoleFont;
-            input_style.fontSize=45;
-            input_style.fixedHeight = ConsoleFont.fontSize * 4f;
-            input_style.normal.textColor = InputColor;
-
+            inputStyle = new GUIStyle();
+            inputStyle.padding = new RectOffset(4, 4, 4, 4);
+            inputStyle.font = ConsoleFont;
+            inputStyle.fontSize=45;
+            inputStyle.fixedHeight = ConsoleFont.fontSize * 4f;
+            inputStyle.normal.textColor = InputColour;
         }
 
         void drawConsole(int Window2D) {
@@ -234,21 +235,16 @@ namespace CommandTerminal
             GUILayout.BeginHorizontal();
 
             if (InputCaret != "") {
-                GUILayout.Label(InputCaret, input_style, GUILayout.Width(ConsoleFont.fontSize));
+                GUILayout.Label(InputCaret, inputStyle, GUILayout.Width(ConsoleFont.fontSize));
             }
 
             if(state==TerminalState.Write){
                 GUI.SetNextControlName("commandText_field");
-                commandText = GUILayout.TextField(commandText, input_style);
+                commandText = GUILayout.TextField(commandText, inputStyle);
 
-                //if (inputFix && commandText.Length > 0) {
-                //    commandText = cachedCommandText;
-                //    inputFix = false;
-                //}
-
-                if (initialOpen) {
+                if (firstOpen) {
                     GUI.FocusControl("commandText_field");
-                    initialOpen = false;
+                    firstOpen = false;
                 }
             }
 
@@ -264,6 +260,7 @@ namespace CommandTerminal
         }
 
         void handleOpenness() {
+            //handles smooth opening of terminal
             float dt = ToggleSpeed * Time.deltaTime;
 
             if (currentOpenT < openTarget) {
@@ -273,16 +270,14 @@ namespace CommandTerminal
                 currentOpenT -= dt;
                 if (currentOpenT < openTarget) currentOpenT = openTarget;
             } else {
-                return; // Already at target
+                return; // Already at target openness
             }
-
-
 
             window = new Rect(terminalRectCorner.x,terminalRectCorner.y,terminalRect.sizeDelta.x, currentOpenT);
         }
 
         void EnterCommand() {
-            log(TerminalLogType.Input, "{0}", commandText);
+            log(TerminalLogType.Input, "{0}\n", commandText);
             CommandWrapper commandWrapper=Shell.RunCommand(commandText);
             History.Push(commandText);
             if(commandWrapper.getIsGameAction()&&commandWrapper.getIsValid()){
@@ -322,11 +317,13 @@ namespace CommandTerminal
 
         Color getLogColour(TerminalLogType type) {
             switch (type) {
-                case TerminalLogType.Message: return ForegroundColor;
-                case TerminalLogType.Warning: return WarningColor;
-                case TerminalLogType.Input: return InputColor;
-                case TerminalLogType.ShellMessage: return ShellColor;
-                default: return ErrorColor;
+                case TerminalLogType.Message: return ForegroundColour;
+                case TerminalLogType.Control:  return ControlColour;
+                case TerminalLogType.Action: return ActionColour;
+                case TerminalLogType.Header: return HeaderColour;
+                case TerminalLogType.Input: return InputColour;
+                case TerminalLogType.ShellMessage: return ShellColour;
+                default: return ErrorColour;
             }
         }
     }

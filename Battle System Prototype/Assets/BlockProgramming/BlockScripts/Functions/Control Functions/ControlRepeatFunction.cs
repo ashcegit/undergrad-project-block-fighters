@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CommandTerminal;
 
 public class ControlRepeatFunction : ControlFunction
 {
@@ -28,9 +29,11 @@ public class ControlRepeatFunction : ControlFunction
         }
 
         if(triggerCount<operand){
+            Terminal.log(TerminalLogType.Control, "Repeat block triggered");
             triggerCount++;
             return loggedPointer;
         }else{
+            Terminal.log(TerminalLogType.Control, "Repeat block not triggered");
             return ++pointer;
         }
     }

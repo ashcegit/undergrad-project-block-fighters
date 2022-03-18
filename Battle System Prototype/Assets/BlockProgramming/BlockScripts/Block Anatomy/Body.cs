@@ -60,18 +60,30 @@ public class Body : MonoBehaviour
                                             .GetComponentInChildren<Header>().gameObject.GetComponent<RectTransform>().position);
         blockSpaces[0].setParentBody(gameObject);
 
-        for (int i=0;i<transform.childCount;i++){
-            if(transform.GetChild(i).gameObject.name != "GhostBlock"){
-                RectTransform rectTransform = transform.GetChild(i).Find("OuterArea").GetComponent<RectTransform>();
+        if (transform.childCount == 1&&transform.GetChild(0).gameObject.name!="GhostBlock") {
+            RectTransform rectTransform = transform.GetChild(0).Find("OuterArea").GetComponent<RectTransform>();
 
-                Vector2 newPosition = new Vector2(rectTransform.position.x + rectTransform.sizeDelta.x / 2,
-                                                        rectTransform.position.y + rectTransform.sizeDelta.y / 2);
+            Vector2 newPosition = new Vector2(rectTransform.position.x + rectTransform.sizeDelta.x / 2,
+                                                    rectTransform.position.y + rectTransform.sizeDelta.y / 2);
+            blockSpaces[1].setPosition(newPosition);
+            blockSpaces[1].setParentBody(gameObject);
 
-                blockSpaces[i + 1].setPosition(newPosition);
-                blockSpaces[i + 1].setParentBody(gameObject);
-                transform.GetChild(i).GetComponent<Block>().updateSpacePositions();
+            transform.GetChild(0).GetComponent<Block>().updateSpacePositions();
+        } else {
+            for (int i = 1; i < transform.childCount; i++) {
+                if (transform.GetChild(i - 1).gameObject.name != "GhostBlock") {
+                    RectTransform rectTransform = transform.GetChild(i - 1).Find("OuterArea").GetComponent<RectTransform>();
+
+                    Vector2 newPosition = new Vector2(rectTransform.position.x + rectTransform.sizeDelta.x / 2,
+                                                            rectTransform.position.y + rectTransform.sizeDelta.y / 2);
+
+                    blockSpaces[i].setPosition(newPosition);
+                    blockSpaces[i].setParentBody(gameObject);
+
+                    transform.GetChild(i - 1).GetComponent<Block>().updateSpacePositions();
+                }
             }
-        }
+        }        
     }
 
     public void setBlockSpacesActive(bool active){

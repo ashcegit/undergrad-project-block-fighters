@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CommandTerminal;
 
 public class MathRandomFunction : MathFunction
 {
@@ -22,6 +23,9 @@ public class MathRandomFunction : MathFunction
         }else if(block0.getBlockType()==BlockType.Info){
             operand1=block0.gameObject.GetComponent<InfoFunction>().function();
         }
-        return(Random.Range(operand0,operand1));
+
+        float result = Random.Range(operand0,operand1)*1f;
+        Terminal.log(TerminalLogType.Header, "Random block returns {0}", result);
+        return (result);
     }
 }

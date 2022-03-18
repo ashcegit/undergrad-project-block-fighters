@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CommandTerminal;
 
 public class ControlRepeatUntilFunction : ControlFunction
 {
@@ -19,8 +20,10 @@ public class ControlRepeatUntilFunction : ControlFunction
         Block inputBlock=gameObject.GetComponent<Block>().getSections()[0].getHeader().getInputFieldHandlers()[0].getInputBlock().GetComponent<Block>();
         LogicFunction logicFunction=inputBlock.GetComponent<LogicFunction>();
         if(!logicFunction.function()){
+            Terminal.log(TerminalLogType.Control,"Repeat Until block not triggered");
             return loggedPointer;
         }else{
+            Terminal.log(TerminalLogType.Control, "Repeat Until block triggered");
             return pointer;
         }
 

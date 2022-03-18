@@ -209,7 +209,8 @@ public class Main : MonoBehaviour
         if(player.getSpeed()==opponent.getSpeed()){
             //toss up priority if character speeds are equal
             //(the chances of this are slim)
-            if(UnityEngine.Random.Range(0,1)<0.5){
+            if(UnityEngine.Random.Range(0,11)<5){
+                Terminal.log(TerminalLogType.Message, "Player Turn\n");
                 while(playerStamina>0&&!gameScript.isGameOver()){
                     Tuple<GameAction?,bool> execution=playerMethodBlock.executeCurrentBlock();
                     if (execution.Item2) {
@@ -223,7 +224,8 @@ public class Main : MonoBehaviour
                         }
                     }
                 }
-                while(opponentStamina>0&&!gameScript.isGameOver()){
+                Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
+                while (opponentStamina>0&&!gameScript.isGameOver()){
                     Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
                     if (execution.Item2) {
                         break;
@@ -237,6 +239,7 @@ public class Main : MonoBehaviour
                     }
                 }
             }else{
+                Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
                 while (opponentStamina > 0 && !gameScript.isGameOver()) {
                     Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
                     if (execution.Item2) {
@@ -250,6 +253,7 @@ public class Main : MonoBehaviour
                         }
                     }
                 }
+                Terminal.log(TerminalLogType.Message, "Player Turn\n");
                 while (playerStamina > 0 && !gameScript.isGameOver()) {
                     Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
                     if (execution.Item2) {
@@ -265,6 +269,7 @@ public class Main : MonoBehaviour
                 }
             }
         }else if(player.getSpeed()<opponent.getSpeed()){
+            Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
             while (opponentStamina > 0 && !gameScript.isGameOver()) {
                 Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
                 if (execution.Item2) {
@@ -278,6 +283,7 @@ public class Main : MonoBehaviour
                     }
                 }
             }
+            Terminal.log(TerminalLogType.Message, "Player Turn\n");
             while (playerStamina > 0 && !gameScript.isGameOver()) {
                 Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
                 if (execution.Item2) {
@@ -292,6 +298,7 @@ public class Main : MonoBehaviour
                 }
             }
         } else{
+            Terminal.log(TerminalLogType.Message, "Player Turn\n");
             while (playerStamina > 0 && !gameScript.isGameOver()) {
                 Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
                 if (execution.Item2) {
@@ -305,6 +312,7 @@ public class Main : MonoBehaviour
                     }
                 }
             }
+            Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
             while (opponentStamina > 0 && !gameScript.isGameOver()) {
                 Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
                 if (execution.Item2) {
@@ -338,7 +346,7 @@ public class Main : MonoBehaviour
         switch(interaction){
             case AttackInteraction attackInteraction:
                 if(attackInteraction.getResult()==InteractionEnum.Hit){
-                    Terminal.log(TerminalLogType.Message,
+                    Terminal.log(TerminalLogType.Action,
                                         "{0}'s attack '{1}' hits for {2} damage!\n",
                                         instigator.getCharacterName(),
                                         attackInteraction.getAttack().getName(),
@@ -352,7 +360,7 @@ public class Main : MonoBehaviour
                 break;
             case StatusEffectInteraction statusEffectInteraction:
                 if(statusEffectInteraction.getResult()==InteractionEnum.Hit){
-                    Terminal.log(TerminalLogType.Message,
+                    Terminal.log(TerminalLogType.Action,
                                 "{0}'s status effect '{1}' has {2} {3}'s {4} by {5}% for {6} turns!\n",
                                 //character name
                                 instigator.getCharacterName(),
@@ -372,7 +380,7 @@ public class Main : MonoBehaviour
                                 statusEffectInteraction.getTurns().ToString());
                     gameScript.addModifier(statusEffectInteraction.getTarget(),statusEffectInteraction.getAttributeModifier());
                 }else{
-                    Terminal.log(TerminalLogType.Message,
+                    Terminal.log(TerminalLogType.Action,
                                 "{0}'s status effect '{1}' misses!\n",
                                 instigator.getCharacterName(),
                                 statusEffectInteraction.getStatusEffect().getName());
@@ -380,14 +388,14 @@ public class Main : MonoBehaviour
                 break;
             case HealInteraction healInteraction:
                 if(healInteraction.getResult()==InteractionEnum.Hit){
-                    Terminal.log(TerminalLogType.Message,
+                    Terminal.log(TerminalLogType.Action,
                                 "{0}'s heal '{1}' heals for {2} health!\n",
                                 instigator.getCharacterName(),
                                 healInteraction.getHeal().getName(),
                                 Mathf.Round(healInteraction.getHealingAmount()).ToString());
                     gameScript.heal(healInteraction.getTarget(),healInteraction.getHealingAmount());
                 }else{
-                    Terminal.log(TerminalLogType.Message,
+                    Terminal.log(TerminalLogType.Action,
                                 "{0}'s heal '{1}' misses!\n",
                                 instigator.getCharacterName(),
                                 healInteraction.getHeal().getName());

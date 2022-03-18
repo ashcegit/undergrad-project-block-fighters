@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CommandTerminal;
 
 public class ControlRepeatForeverFunction : ControlFunction
 {
@@ -15,6 +16,7 @@ public class ControlRepeatForeverFunction : ControlFunction
     }
 
     public int onRepeat(int pointer,ref List<Block> blockStack){
+        Terminal.log(TerminalLogType.Control, "Repeat Forever block triggered");
         return loggedPointer;
     }
 }

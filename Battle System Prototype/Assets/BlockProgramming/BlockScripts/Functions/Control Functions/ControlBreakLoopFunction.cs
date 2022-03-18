@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CommandTerminal;
 
 public class ControlBreakLoopFunction : ControlFunction
 {
@@ -21,6 +22,7 @@ public class ControlBreakLoopFunction : ControlFunction
                 pointer++;
             }
         }
+        Terminal.log(TerminalLogType.Message, "Break block triggered");
         return ++pointer;
         
     }

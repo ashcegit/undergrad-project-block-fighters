@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CommandTerminal;
 
 public class LogicBiggerThanFunction : LogicFunction
 {
@@ -22,6 +23,9 @@ public class LogicBiggerThanFunction : LogicFunction
         }else if(block0.getBlockType()==BlockType.Info){
             operand1=block0.gameObject.GetComponent<InfoFunction>().function();
         }
-        return(operand0>operand1);
+
+        bool result = operand0 > operand1;
+        Terminal.log(TerminalLogType.Header, "Bigger Than block returns {0}", result);
+        return(result);
     }
 }

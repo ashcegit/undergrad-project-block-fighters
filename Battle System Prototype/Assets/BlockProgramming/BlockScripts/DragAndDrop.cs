@@ -69,8 +69,6 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                     while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
                         parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
                     }
-                    //Debug.Log("!!!!! ParentBlock NAME !!!!: " + currentlyDraggedObject.transform.parent.gameObject.name);
-                    Debug.Log("Currently draggedBlock: " + currentlyDraggedObject.name);
                     currentlyDraggedObject.transform.parent.GetComponent<Body>().removeBlockSpaceByIndex(currentlyDraggedSiblingIndex);
                     currentlyDraggedObject.transform.SetParent(environment.transform);
                     parentBlock.GetComponent<Block>().updateBlockLayouts();

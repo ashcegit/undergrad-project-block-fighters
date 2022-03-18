@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CommandTerminal;
 
 public class ControlIfElseFunction : ControlFunction
 {
@@ -16,11 +17,13 @@ public class ControlIfElseFunction : ControlFunction
         pointer++;
         if(logicFunction.function()){
             triggered=true;
-        }else{
+            Terminal.log(TerminalLogType.Control, "If Else block triggered, 'If blocks' running", thisBlock.gameObject.name, triggered);
+        } else {
             triggered=false;
             while(blockStack[pointer].getStartBlock()!=thisBlock){
                 pointer++;
             }
+            Terminal.log(TerminalLogType.Control, "If Else block not triggered, 'Else blocks' running", thisBlock.gameObject.name, triggered);
         }
         return pointer;
     }

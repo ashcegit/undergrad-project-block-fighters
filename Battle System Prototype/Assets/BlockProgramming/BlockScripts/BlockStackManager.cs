@@ -92,6 +92,7 @@ public class BlockStackManager
                             }
                         }
                     }
+                    pointer++;
                     break;
                 default:
                     pointer++;

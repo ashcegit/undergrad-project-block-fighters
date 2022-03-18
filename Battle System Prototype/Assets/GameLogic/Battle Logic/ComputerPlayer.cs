@@ -374,6 +374,7 @@ public class ComputerPlayer:MonoBehaviour
                             }
                         }
                     }
+                    pointer++;
                     break;
                 default:
                     pointer++;

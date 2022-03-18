@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CommandTerminal;
 
 public class MathSumFunction : MathFunction
 {
@@ -22,6 +23,8 @@ public class MathSumFunction : MathFunction
         }else if(block0.getBlockType()==BlockType.Info){
             operand1=block0.gameObject.GetComponent<InfoFunction>().function();
         }
-        return(operand0+operand1);
+        float result = 1f*(operand0 + operand1);
+        Terminal.log(TerminalLogType.Header, "Sum block returns {0}", result);
+        return (result);
     }
 }

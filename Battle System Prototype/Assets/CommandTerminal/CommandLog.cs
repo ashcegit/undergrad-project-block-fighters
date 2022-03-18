@@ -5,11 +5,12 @@ namespace CommandTerminal
 {
     public enum TerminalLogType
     {
-        Error     = LogType.Error,
-        Assert    = LogType.Assert,
-        Warning   = LogType.Warning,
-        Message   = LogType.Log,
-        Exception = LogType.Exception,
+        Control,
+        Action,
+        Header,
+        Warning,
+        Message,
+        Error,
         Input,
         ShellMessage
     }
