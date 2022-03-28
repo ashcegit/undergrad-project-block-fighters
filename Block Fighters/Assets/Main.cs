@@ -363,7 +363,7 @@ public class Main : MonoBehaviour
             case StatusEffectInteraction statusEffectInteraction:
                 if(statusEffectInteraction.getResult()==InteractionEnum.Hit){
                     Terminal.log(TerminalLogType.Action,
-                                "{0}'s status effect '{1}' has {2} {3}'s {4} by {5}% for {6} turns!\n",
+                                "{0}'s status effect '{1}' has {2} {3}'s {4} for {6} turns!\n",
                                 //character name
                                 instigator.getCharacterName(),
                                 //status effect name
@@ -375,9 +375,9 @@ public class Main : MonoBehaviour
                                 //attribute affected
                                 statusEffectInteraction.getAttribute().ToString(),
                                 //percentage amount - affected by whether attribute is raised or lowered
-                                (statusEffectInteraction.getMultiplier()>1?
-                                     (100*Mathf.Round(statusEffectInteraction.getMultiplier())-100f).ToString():
-                                     (100*Mathf.Round(statusEffectInteraction.getMultiplier())).ToString()),
+                                //(statusEffectInteraction.getMultiplier()>1?
+                                //     (100*Mathf.Round(statusEffectInteraction.getMultiplier())-100f).ToString():
+                                //     (100*Mathf.Round(statusEffectInteraction.getMultiplier())).ToString()),
                                 //number of turns
                                 statusEffectInteraction.getTurns().ToString());
                     gameScript.addModifier(statusEffectInteraction.getTarget(),statusEffectInteraction.getAttributeModifier());

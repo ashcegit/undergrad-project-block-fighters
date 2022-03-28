@@ -66,55 +66,99 @@ public class Character
         else{return health;}
     }
     public float getMaxHealth(){
-        float diminishingReturns = 1f;
-        float tempMaxHealth=baseMaxHealth;
-            foreach(AttributeModifier attributeModifier in healthModifiers){
-                tempMaxHealth*=attributeModifier.getMultiplier()*diminishingReturns;
-            diminishingReturns -= 0.3f;
-                if (diminishingReturns < 0.1f) { diminishingReturns = 0.1f; }
+        float negativeDiminishingReturns = 1f;
+        float positiveDiminishingReturns = 1f;
+        float tempMaxHealth = baseMaxHealth;
+        float multiplier=0f;
+        foreach (AttributeModifier attributeModifier in healthModifiers) {
+            float currentMultiplier = attributeModifier.getMultiplier();
+            if (currentMultiplier < 1) {
+                multiplier += currentMultiplier * negativeDiminishingReturns;
+                negativeDiminishingReturns /= 3f;
+                if (negativeDiminishingReturns < 0.005f) { negativeDiminishingReturns = 0.005f; }
+            } else {
+                multiplier += currentMultiplier * positiveDiminishingReturns;
+                positiveDiminishingReturns /= 3f;
+                if (positiveDiminishingReturns < 0.005f) { positiveDiminishingReturns = 0.005f; }
             }
-        return Mathf.Round(tempMaxHealth);
+        }
+        return Mathf.Round(tempMaxHealth) * multiplier;
     }
     public float getAttack(){
-        float diminishingReturns = 1f;
-        float tempAttack =baseAttack;
-        foreach(AttributeModifier attributeModifier in attackModifiers){
-            tempAttack*=attributeModifier.getMultiplier()*diminishingReturns;
-            diminishingReturns -= 0.3f;
-            if (diminishingReturns < 0.1f) { diminishingReturns = 0.1f; }
+        float negativeDiminishingReturns = 1f;
+        float positiveDiminishingReturns = 1f;
+        float tempAttack = baseAttack;
+        float multiplier=0f;
+        foreach (AttributeModifier attributeModifier in attackModifiers) {
+            float currentMultiplier = attributeModifier.getMultiplier();
+            if (currentMultiplier < 1) {
+                multiplier += currentMultiplier * negativeDiminishingReturns;
+                negativeDiminishingReturns /= 3f;
+                if (negativeDiminishingReturns < 0.005f) { negativeDiminishingReturns = 0.005f; }
+            } else {
+                multiplier += currentMultiplier * positiveDiminishingReturns;
+                positiveDiminishingReturns /=3f;
+                if (positiveDiminishingReturns < 0.005f) { positiveDiminishingReturns = 0.005f; }
+            }
         }
-        return Mathf.Round(tempAttack);
+        return Mathf.Round(tempAttack) * multiplier;
     }
     public float getDefence(){
-        float diminishingReturns = 1f;
-        float tempDefence =baseDefence;
-        foreach(AttributeModifier attributeModifier in defenceModifiers){
-            tempDefence*=attributeModifier.getMultiplier()*diminishingReturns;
-            diminishingReturns -= 0.3f;
-            if (diminishingReturns < 0.1f) { diminishingReturns = 0.1f; }
+        float negativeDiminishingReturns = 1f;
+        float positiveDiminishingReturns = 1f;
+        float tempDefence = baseDefence;
+        float multiplier=0f;
+        foreach (AttributeModifier attributeModifier in defenceModifiers) {
+            float currentMultiplier = attributeModifier.getMultiplier();
+            if (currentMultiplier < 1) {
+                multiplier += currentMultiplier * negativeDiminishingReturns;
+                negativeDiminishingReturns /= 3f;
+                if (negativeDiminishingReturns < 0.005f) { negativeDiminishingReturns = 0.005f; }
+            } else {
+                multiplier += currentMultiplier * positiveDiminishingReturns;
+                positiveDiminishingReturns /= 3f;
+                if (positiveDiminishingReturns < 0.005f) { positiveDiminishingReturns = 0.005f; }
+            }
         }
-        if(tempDefence>100f){return 100f;}
-        return Mathf.Round(tempDefence);
+        return Mathf.Round(tempDefence) * multiplier;
     }
     public float getSpeed(){
-        float diminishingReturns = 1f;
+        float negativeDiminishingReturns = 1f;
+        float positiveDiminishingReturns = 1f;
         float tempSpeed=baseSpeed;
+        float multiplier=0f;
         foreach(AttributeModifier attributeModifier in speedModifiers){
-            tempSpeed*=attributeModifier.getMultiplier()*diminishingReturns;
-            diminishingReturns -= 0.3f;
-            if (diminishingReturns < 0.1f) { diminishingReturns = 0.1f; }
+            float currentMultiplier=attributeModifier.getMultiplier();
+            if (currentMultiplier < 1) {
+                multiplier += currentMultiplier * negativeDiminishingReturns;
+                negativeDiminishingReturns /= 3f;
+                if (negativeDiminishingReturns < 0.005f) { negativeDiminishingReturns = 0.005f; }
+            } else {
+                multiplier += currentMultiplier * positiveDiminishingReturns;
+                positiveDiminishingReturns /= 3f;
+                if (positiveDiminishingReturns < 0.005f) { positiveDiminishingReturns = 0.005f; }
+            }
         }
-        return Mathf.Round(tempSpeed);
+        return Mathf.Round(tempSpeed)*multiplier;
     }
     public int getStamina(){
-        float diminishingReturns = 1f;
-        float tempStamina=baseStamina;
-        foreach(AttributeModifier attributeModifier in staminaModifiers){
-            tempStamina*=attributeModifier.getMultiplier()*diminishingReturns;
-            diminishingReturns -= 0.3f;
-            if (diminishingReturns < 0.1f) { diminishingReturns = 0.1f; }
-        }        
-        return (int)tempStamina;
+        float negativeDiminishingReturns = 1f;
+        float positiveDiminishingReturns = 1f;
+        float tempStamina = baseStamina;
+        float multiplier = 0f;
+        foreach (AttributeModifier attributeModifier in staminaModifiers) {
+            float currentMultiplier = attributeModifier.getMultiplier();
+            if (currentMultiplier < 1) {
+                multiplier += currentMultiplier * negativeDiminishingReturns;
+                negativeDiminishingReturns /= 3f;
+                if (negativeDiminishingReturns < 0.005f) { negativeDiminishingReturns = 0.005f; }
+            } else {
+                multiplier += currentMultiplier * positiveDiminishingReturns;
+                positiveDiminishingReturns /= 3f;
+                if (positiveDiminishingReturns < 0.005f) { positiveDiminishingReturns = 0.005f; }
+            }
+        }
+        return (int)(tempStamina*multiplier);
     }
 
     public void addModifier(AttributeModifier attributeModifier){
