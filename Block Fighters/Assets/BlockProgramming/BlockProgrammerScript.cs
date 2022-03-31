@@ -112,10 +112,10 @@ public class BlockProgrammerScript : MonoBehaviour
 
     public bool moreMethodBlocksAllowed(){return getMethodBlockObjectLength()<maxMethodBlocks;}
 
-    public bool areInputHandlersEmpty() {
+    public bool areInputFieldHandlersEmpty() {
         bool flag = false;
         foreach(GameObject methodblockObject in methodBlockObjects) {
-            if (methodblockObject.GetComponent<Block>().areInputHandlersEmpty()) {
+            if (methodblockObject.GetComponent<Block>().areInputFieldHandlersEmpty()) {
                 flag = true;
             }
         }

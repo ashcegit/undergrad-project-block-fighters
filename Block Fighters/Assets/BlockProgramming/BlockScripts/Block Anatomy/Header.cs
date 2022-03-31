@@ -69,10 +69,10 @@ public class Header : MonoBehaviour
 
     public List<InputFieldHandler> getInputFieldHandlers(){return inputFieldHandlers;}
 
-    public bool areInputHandlersEmpty() {
+    public bool areInputFieldHandlersEmpty() {
         bool flag = false;
         foreach(InputFieldHandler inputFieldHandler in inputFieldHandlers) {
-            if (inputFieldHandler.getInputBlock() == null) {
+            if (inputFieldHandler.getInputBlock() == null&&!inputFieldHandler.textAllowed) {
                 flag = true;
             }
         }

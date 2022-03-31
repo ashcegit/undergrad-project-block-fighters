@@ -70,10 +70,12 @@ public class Section : MonoBehaviour
         }
     }
 
-    public bool areInputHandlersEmpty() {
+    public bool areInputFieldHandlersEmpty() {
         bool flag = false;
         if (header != null) {
-            flag=header.areInputHandlersEmpty();
+            if (header.areInputFieldHandlersEmpty()) {
+                flag = true;
+            }
         }
         return flag;
     }

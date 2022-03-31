@@ -330,8 +330,6 @@ public class ComputerPlayer:MonoBehaviour
     }
 
     public Tuple<GameAction?, bool> executeCurrentBlock() {
-        Debug.Log("computer pointer is: " + pointer);
-        Debug.Log("BlockStack count is: " + blockStack.Count);
         GameAction gameAction = null;
         if (pointer >= blockStack.Count-1) {
             return new Tuple<GameAction?, bool>( gameAction, true );

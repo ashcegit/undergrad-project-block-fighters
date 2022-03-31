@@ -6,14 +6,14 @@ using UnityEngine;
 //The block stack is a linearisation of all attack/control blocks in a given method.
 //By adding endOfSection blocks, I can linearlly serach over the player's code
 //while controlling where in the code is being executed via an internal pointer variable
-public class BlockStackManager
-{
+public class BlockStackManager{
+
     private int pointer;
     private List<Block> blockStack;
 
-    public BlockStackManager(){
+    public BlockStackManager() {
         pointer=0;
-        blockStack=new List<Block>();
+        blockStack = new List<Block>();
     }
 
     public List<Block> initBlockStack(Block block){
@@ -38,11 +38,9 @@ public class BlockStackManager
         return blocks;
     }
 
-    public void setBlockStack(List<Block> blockStack){
-        this.blockStack=blockStack;
-    }
-
     public List<Block> getBlockStack(){return blockStack;}
+
+    public void setBlockStack(List<Block> blockStack) { this.blockStack = blockStack; }
 
     public void clearBlockStack(){
         pointer=0;
@@ -50,6 +48,9 @@ public class BlockStackManager
     }
 
     public Tuple<GameAction?,bool> executeCurrentBlock() {
+        Debug.Log("Pointer: " + pointer);
+        Debug.Log("Block stack count: " + blockStack.Count);
+        //returns a tuple of a game action and whether the method has come to an end
         GameAction gameAction = null;
         if (pointer >= blockStack.Count-1) {
             return new Tuple<GameAction?, bool> (gameAction,true);

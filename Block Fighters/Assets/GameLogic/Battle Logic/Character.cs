@@ -69,7 +69,7 @@ public class Character
         float negativeDiminishingReturns = 1f;
         float positiveDiminishingReturns = 1f;
         float tempMaxHealth = baseMaxHealth;
-        float multiplier=0f;
+        float multiplier=1f;
         foreach (AttributeModifier attributeModifier in healthModifiers) {
             float currentMultiplier = attributeModifier.getMultiplier();
             if (currentMultiplier < 1) {
@@ -88,7 +88,7 @@ public class Character
         float negativeDiminishingReturns = 1f;
         float positiveDiminishingReturns = 1f;
         float tempAttack = baseAttack;
-        float multiplier=0f;
+        float multiplier=1f;
         foreach (AttributeModifier attributeModifier in attackModifiers) {
             float currentMultiplier = attributeModifier.getMultiplier();
             if (currentMultiplier < 1) {
@@ -107,7 +107,7 @@ public class Character
         float negativeDiminishingReturns = 1f;
         float positiveDiminishingReturns = 1f;
         float tempDefence = baseDefence;
-        float multiplier=0f;
+        float multiplier=1f;
         foreach (AttributeModifier attributeModifier in defenceModifiers) {
             float currentMultiplier = attributeModifier.getMultiplier();
             if (currentMultiplier < 1) {
@@ -126,7 +126,7 @@ public class Character
         float negativeDiminishingReturns = 1f;
         float positiveDiminishingReturns = 1f;
         float tempSpeed=baseSpeed;
-        float multiplier=0f;
+        float multiplier=1f;
         foreach(AttributeModifier attributeModifier in speedModifiers){
             float currentMultiplier=attributeModifier.getMultiplier();
             if (currentMultiplier < 1) {
@@ -145,7 +145,7 @@ public class Character
         float negativeDiminishingReturns = 1f;
         float positiveDiminishingReturns = 1f;
         float tempStamina = baseStamina;
-        float multiplier = 0f;
+        float multiplier = 1f;
         foreach (AttributeModifier attributeModifier in staminaModifiers) {
             float currentMultiplier = attributeModifier.getMultiplier();
             if (currentMultiplier < 1) {

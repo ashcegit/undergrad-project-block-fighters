@@ -98,6 +98,7 @@ public class Main : MonoBehaviour
         enabled = false;
         gameScript.enabled = false;
         terminalScript.setState(TerminalState.Close);
+        terminalScript.gameObject.SetActive(false);
         gameOverScript.enabled = true;
         gameOverScript.gameObject.SetActive(true);
     }
@@ -131,9 +132,6 @@ public class Main : MonoBehaviour
     }
 
     public void nextLevel(){
-        terminalScript.gameObject.SetActive(true);
-        terminalScript.setState(TerminalState.Write);
-        terminalScript.initShell(gameScript);
         levelInfoScript.enabled=false;
         if (gameScript.getLevelCounter() > 0) {
             Terminal.log(TerminalLogType.Message,"Stats increased!");
@@ -148,7 +146,9 @@ public class Main : MonoBehaviour
     }
 
     public void openProgramming(){
+        terminalScript.gameObject.SetActive(true);
         terminalScript.setState(TerminalState.Write);
+        terminalScript.initShell(gameScript);
         blockProgrammerScript.gameObject.SetActive(true);
         blockProgrammerScript.displayStamina(gameScript.getPlayer().getStamina());
         blockProgrammerScript.enabled=true;
@@ -212,22 +212,22 @@ public class Main : MonoBehaviour
             //(the chances of this are slim)
             if(UnityEngine.Random.Range(0,11)<5){
                 Terminal.log(TerminalLogType.Message, "Player Turn\n");
-                while(playerStamina>0&&!gameScript.isGameOver()){
-                    Tuple<GameAction?,bool> execution=playerMethodBlock.executeCurrentBlock();
+                while (playerStamina > 0 && !gameScript.isGameOver()) {
+                    Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
                     if (execution.Item2) {
+                        break;
+                    }
+                    GameAction? playerGameAction = execution.Item1;
+                    if (playerGameAction != null) {
+                        infLoopDetection = 0;
+                        Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
+                        yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
+                        playerStamina--;
+                    } else {
                         if (infLoopDetection > 1000) {
-                            Terminal.log(terminalLogType.Error, "Maximum loop amount reached, turn lost");
+                            Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
                         } else {
                             infLoopDetection++;
-                        }
-                        break;
-                    } else {
-                        infLoopDetection = 0;
-                        GameAction? playerGameAction = execution.Item1;
-                        if (playerGameAction != null && !gameScript.isGameOver()) {
-                            Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
-                            yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
-                            playerStamina--;
                         }
                     }
                 }
@@ -250,14 +250,8 @@ public class Main : MonoBehaviour
                 while (opponentStamina > 0 && !gameScript.isGameOver()) {
                     Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
                     if (execution.Item2) {
-                        if (infLoopDetection > 1000) {
-                            Terminal.log(terminalLogType.Error, "Maximum loop amount reached, turn lost");
-                        } else {
-                            infLoopDetection++;
-                        }
                         break;
                     } else {
-                        infLoopDetection = 0;
                         GameAction? opponentGameAction = execution.Item1;
                         if (opponentGameAction != null && !gameScript.isGameOver()) {
                             Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
@@ -271,12 +265,18 @@ public class Main : MonoBehaviour
                     Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
                     if (execution.Item2) {
                         break;
+                    }
+                    GameAction? playerGameAction = execution.Item1;
+                    if (playerGameAction != null) {
+                        infLoopDetection = 0;
+                        Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
+                        yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
+                        playerStamina--;
                     } else {
-                        GameAction? playerGameAction = execution.Item1;
-                        if (playerGameAction != null && !gameScript.isGameOver()) {
-                            Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
-                            yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
-                            playerStamina--;
+                        if (infLoopDetection > 1000) {
+                            Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
+                        } else {
+                            infLoopDetection++;
                         }
                     }
                 }
@@ -300,19 +300,19 @@ public class Main : MonoBehaviour
             while (playerStamina > 0 && !gameScript.isGameOver()) {
                 Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
                 if (execution.Item2) {
+                    break;
+                }
+                GameAction? playerGameAction = execution.Item1;
+                if (playerGameAction != null) {
+                    infLoopDetection = 0;
+                    Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
+                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
+                    playerStamina--;
+                } else {
                     if (infLoopDetection > 1000) {
-                        Terminal.log(terminalLogType.Error, "Maximum loop amount reached, turn lost");
+                        Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
                     } else {
                         infLoopDetection++;
-                    }
-                    break;
-                } else {
-                    infLoopDetection = 0;
-                    GameAction? playerGameAction = execution.Item1;
-                    if (playerGameAction != null && !gameScript.isGameOver()) {
-                        Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
-                        yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
-                        playerStamina--;
                     }
                 }
             }
@@ -321,19 +321,19 @@ public class Main : MonoBehaviour
             while (playerStamina > 0 && !gameScript.isGameOver()) {
                 Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
                 if (execution.Item2) {
+                    break;
+                }
+                GameAction? playerGameAction = execution.Item1;
+                if (playerGameAction != null) {
+                    infLoopDetection = 0;
+                    Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
+                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
+                    playerStamina--;
+                } else {
                     if (infLoopDetection > 1000) {
-                        Terminal.log(terminalLogType.Error, "Maximum loop amount reached, turn lost");
+                        Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
                     } else {
                         infLoopDetection++;
-                    }
-                    break;
-                } else {
-                    infLoopDetection = 0;
-                    GameAction? playerGameAction = execution.Item1;
-                    if (playerGameAction != null && !gameScript.isGameOver()) {
-                        Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
-                        yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
-                        playerStamina--;
                     }
                 }
             }

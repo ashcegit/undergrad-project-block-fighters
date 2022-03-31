@@ -140,7 +140,7 @@ namespace CommandTerminal
             } else if (!blockProgrammerScript.finishProgrammingCheck()) {
                 IssueErrorMessage("Not all methods have been named");
                 return false;
-            } else if (blockProgrammerScript.areInputHandlersEmpty()) {
+            } else if (blockProgrammerScript.areInputFieldHandlersEmpty()) {
                 IssueErrorMessage("Block inputs cannot be empty");
                 return false;
             } else{

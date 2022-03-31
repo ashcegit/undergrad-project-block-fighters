@@ -113,10 +113,10 @@ public class Block : MonoBehaviour
         return startBlock;
     }
 
-    public bool areInputHandlersEmpty() {
+    public bool areInputFieldHandlersEmpty() {
         bool flag = false;
         foreach(Section section in sections) {
-            if (section.areInputHandlersEmpty()) {
+            if (section.areInputFieldHandlersEmpty()) {
                 flag = true;
             }
         }
