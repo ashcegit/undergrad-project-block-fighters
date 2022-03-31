@@ -125,22 +125,25 @@ namespace CommandTerminal
             BlockProgrammerScript blockProgrammerScript=GameObject.FindGameObjectWithTag("BlockProgrammer")
                                                                     .GetComponent<BlockProgrammerScript>();
             blockProgrammerScript.applyMethodNames();
-            if(!blockProgrammerScript.enabled){
-                IssueErrorMessage("Command {0} cannot be called when in battle","finish");
+            if (!blockProgrammerScript.enabled) {
+                IssueErrorMessage("Command {0} cannot be called when in battle", "finish");
                 return false;
-            }else if(!blockProgrammerScript.checkMinAmountOfMethods()){
+            } else if (!blockProgrammerScript.checkMinAmountOfMethods()) {
                 IssueErrorMessage("Amount of methods must be above 0");
                 return false;
-            }else if(!blockProgrammerScript.checkMaxAmountOfMethods()){
+            } else if (!blockProgrammerScript.checkMaxAmountOfMethods()) {
                 IssueErrorMessage("Maximum of 4 methods allowed");
                 return false;
-            }else if(!blockProgrammerScript.checkForNonEmptyMethods()){
+            } else if (!blockProgrammerScript.checkForNonEmptyMethods()) {
                 IssueErrorMessage("Methods must not be empty");
                 return false;
-            }else if(!blockProgrammerScript.finishProgrammingCheck()){
+            } else if (!blockProgrammerScript.finishProgrammingCheck()) {
                 IssueErrorMessage("Not all methods have been named");
                 return false;
-            }else{
+            } else if (blockProgrammerScript.areInputHandlersEmpty()) {
+                IssueErrorMessage("Block inputs cannot be empty");
+                return false;
+            } else{
                 GameObject.FindGameObjectWithTag("Main").GetComponent<Main>().finishProgramming();
                 return true;
             }

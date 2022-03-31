@@ -4,29 +4,28 @@ using UnityEngine;
 
 //takes game actions and outputs interactions
 
-public class InteractionHandler
+public static class InteractionHandler
 {    
-    public Interaction getInteraction(GameAction gameAction){
+    public static Interaction getInteraction(GameAction gameAction){
         Interaction interaction=null;
 
         switch(gameAction){
             case Attack attack:
-                interaction=(Interaction) new AttackInteraction(attack.getTarget(),attack);
+                interaction=(Interaction) new AttackInteraction(attack);
                 break;
             case StatusEffect statusEffect:
-                interaction=(Interaction) new StatusEffectInteraction(statusEffect.getTarget(),statusEffect);
+                interaction=(Interaction) new StatusEffectInteraction(statusEffect);
                 break;
             case Heal heal:
-                interaction=(Interaction) new HealInteraction(heal.getTarget(),heal);
+                interaction=(Interaction) new HealInteraction(heal);
                 break;
             default:
                 break;  
         }
-
         return interaction;
     }
 
-    public bool getPlayerFirst(GameAction playerGameAction,GameAction opponentGameAction,float playerSpeed,float opponentSpeed){
+    public static bool getPlayerFirst(GameAction playerGameAction,GameAction opponentGameAction,float playerSpeed,float opponentSpeed){
         if(!attackTypeTieCheck(playerGameAction,opponentGameAction)){
             return playerAttackTypeAdvantage(playerGameAction,opponentGameAction);
         }else{
@@ -47,11 +46,11 @@ public class InteractionHandler
         }
     }
 
-    public bool attackTypeTieCheck(GameAction playerGameAction,GameAction opponentGameAction){
+    public static bool attackTypeTieCheck(GameAction playerGameAction,GameAction opponentGameAction){
         return playerGameAction.getActionType()==opponentGameAction.getActionType();
     }
 
-    public bool playerAttackTypeAdvantage(GameAction playerGameAction,GameAction opponentGameAction){
+    public static bool playerAttackTypeAdvantage(GameAction playerGameAction,GameAction opponentGameAction){
         if(playerGameAction.getActionType()==ActionType.Physical){
             if(opponentGameAction.getActionType()==ActionType.Magic){return true;}
             else{return false;}

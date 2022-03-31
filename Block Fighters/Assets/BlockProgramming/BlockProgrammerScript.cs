@@ -112,6 +112,16 @@ public class BlockProgrammerScript : MonoBehaviour
 
     public bool moreMethodBlocksAllowed(){return getMethodBlockObjectLength()<maxMethodBlocks;}
 
+    public bool areInputHandlersEmpty() {
+        bool flag = false;
+        foreach(GameObject methodblockObject in methodBlockObjects) {
+            if (methodblockObject.GetComponent<Block>().areInputHandlersEmpty()) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
     public List<BlockSpace> getBlockSpaces(){return blockSpaces;}
     public List<InputSpace> getInputSpaces(){return inputSpaces;}
 

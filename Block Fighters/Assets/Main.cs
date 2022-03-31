@@ -28,17 +28,16 @@ public class Main : MonoBehaviour
 
     private WinScript winScript;
 
-    private InteractionHandler interactionHandler;
-
     private bool loopDone;
     public bool levellingUp;
 
     private const int maxLevels=10;
 
-    private string terminalWelcomeMessage1 = "Welcome to Block Fighters, here you can program methods that your character will use to fight 10 battles";
-    private string terminalWelcomeMessage2 = "Press tab on this interface for a list of available commands - all commands are in the form \"command()\"";
-    private string terminalWelcomeMessage3 = "When you're finished programming, type \"finish()\" to  begin your first battle";
-    private string terminalWelcomeMessage4 = "Enter the \"quit()\" command to exit to the main menu";
+    private string terminalWelcomeMessage1 = "Welcome to Block Fighters! Each round you will make the methods for a class of fighter";
+    private string terminalWelcomeMessage2 = "Here you can program methods that your character will use to fight 10 battles";
+    private string terminalWelcomeMessage3 = "Press tab on this interface for a list of available commands - all commands are in the form \"command()\"";
+    private string terminalWelcomeMessage4 = "When you're finished programming, type \"finish()\" to  begin your first battle";
+    private string terminalWelcomeMessage5 = "Enter the \"quit()\" command to exit to the main menu";
 
     void Start(){
         StopAllCoroutines();
@@ -58,8 +57,6 @@ public class Main : MonoBehaviour
 
         winScript = GetComponentInChildren<WinScript>();
 
-        interactionHandler=new InteractionHandler();
-
         Character player=gameScript.getPlayer();
         Character opponent=gameScript.getOpponent();
 
@@ -69,6 +66,7 @@ public class Main : MonoBehaviour
         Terminal.log(TerminalLogType.Message, "{0}\n", terminalWelcomeMessage2);
         Terminal.log(TerminalLogType.Message, "{0}\n", terminalWelcomeMessage3);
         Terminal.log(TerminalLogType.Message, "{0}\n", terminalWelcomeMessage4);
+        Terminal.log(TerminalLogType.Message, "{0}\n", terminalWelcomeMessage5);
 
         blockProgrammerScript.displayStamina(gameScript.getPlayer().getStamina());
 
@@ -208,6 +206,7 @@ public class Main : MonoBehaviour
         Block playerMethodBlock=gameScript.getPlayerMethod().GetComponent<Block>();
         int playerStamina=player.getStamina();
         int opponentStamina=opponent.getStamina();
+        int infLoopDetection = 0;
         if(player.getSpeed()==opponent.getSpeed()){
             //toss up priority if character speeds are equal
             //(the chances of this are slim)
@@ -216,8 +215,14 @@ public class Main : MonoBehaviour
                 while(playerStamina>0&&!gameScript.isGameOver()){
                     Tuple<GameAction?,bool> execution=playerMethodBlock.executeCurrentBlock();
                     if (execution.Item2) {
+                        if (infLoopDetection > 1000) {
+                            Terminal.log(terminalLogType.Error, "Maximum loop amount reached, turn lost");
+                        } else {
+                            infLoopDetection++;
+                        }
                         break;
                     } else {
+                        infLoopDetection = 0;
                         GameAction? playerGameAction = execution.Item1;
                         if (playerGameAction != null && !gameScript.isGameOver()) {
                             Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
@@ -245,8 +250,14 @@ public class Main : MonoBehaviour
                 while (opponentStamina > 0 && !gameScript.isGameOver()) {
                     Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
                     if (execution.Item2) {
+                        if (infLoopDetection > 1000) {
+                            Terminal.log(terminalLogType.Error, "Maximum loop amount reached, turn lost");
+                        } else {
+                            infLoopDetection++;
+                        }
                         break;
                     } else {
+                        infLoopDetection = 0;
                         GameAction? opponentGameAction = execution.Item1;
                         if (opponentGameAction != null && !gameScript.isGameOver()) {
                             Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
@@ -289,8 +300,14 @@ public class Main : MonoBehaviour
             while (playerStamina > 0 && !gameScript.isGameOver()) {
                 Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
                 if (execution.Item2) {
+                    if (infLoopDetection > 1000) {
+                        Terminal.log(terminalLogType.Error, "Maximum loop amount reached, turn lost");
+                    } else {
+                        infLoopDetection++;
+                    }
                     break;
                 } else {
+                    infLoopDetection = 0;
                     GameAction? playerGameAction = execution.Item1;
                     if (playerGameAction != null && !gameScript.isGameOver()) {
                         Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
@@ -304,8 +321,14 @@ public class Main : MonoBehaviour
             while (playerStamina > 0 && !gameScript.isGameOver()) {
                 Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
                 if (execution.Item2) {
+                    if (infLoopDetection > 1000) {
+                        Terminal.log(terminalLogType.Error, "Maximum loop amount reached, turn lost");
+                    } else {
+                        infLoopDetection++;
+                    }
                     break;
                 } else {
+                    infLoopDetection = 0;
                     GameAction? playerGameAction = execution.Item1;
                     if (playerGameAction != null && !gameScript.isGameOver()) {
                         Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
@@ -353,7 +376,7 @@ public class Main : MonoBehaviour
                                         instigator.getCharacterName(),
                                         attackInteraction.getAttack().getName(),
                                         Mathf.Round(attackInteraction.getDamage()).ToString());
-                    gameScript.dealDamage(attackInteraction.getTarget(),attackInteraction.getDamage());
+                    gameScript.dealDamage(attackInteraction.getAttack().getTarget(),attackInteraction.getDamage());
                 }else{
                     Terminal.log("{0}'s attack '{1}' misses!\n",
                                         instigator.getCharacterName(),
@@ -371,7 +394,7 @@ public class Main : MonoBehaviour
                                 //raised or decreased
                                 (statusEffectInteraction.getMultiplier()>1?"raised ":"decreased "),
                                 //target name
-                                statusEffectInteraction.getTarget().getCharacterName(),
+                                statusEffectInteraction.getStatusEffect().getTarget().getCharacterName(),
                                 //attribute affected
                                 statusEffectInteraction.getAttribute().ToString(),
                                 //percentage amount - affected by whether attribute is raised or lowered
@@ -380,7 +403,7 @@ public class Main : MonoBehaviour
                                 //     (100*Mathf.Round(statusEffectInteraction.getMultiplier())).ToString()),
                                 //number of turns
                                 statusEffectInteraction.getTurns().ToString());
-                    gameScript.addModifier(statusEffectInteraction.getTarget(),statusEffectInteraction.getAttributeModifier());
+                    gameScript.addModifier(statusEffectInteraction.getStatusEffect().getTarget(),statusEffectInteraction.getAttributeModifier());
                 }else{
                     Terminal.log(TerminalLogType.Action,
                                 "{0}'s status effect '{1}' misses!\n",
@@ -395,7 +418,7 @@ public class Main : MonoBehaviour
                                 instigator.getCharacterName(),
                                 healInteraction.getHeal().getName(),
                                 Mathf.Round(healInteraction.getHealingAmount()).ToString());
-                    gameScript.heal(healInteraction.getTarget(),healInteraction.getHealingAmount());
+                    gameScript.heal(healInteraction.getHeal().getTarget(),healInteraction.getHealingAmount());
                 }else{
                     Terminal.log(TerminalLogType.Action,
                                 "{0}'s heal '{1}' misses!\n",

@@ -113,4 +113,13 @@ public class Block : MonoBehaviour
         return startBlock;
     }
 
+    public bool areInputHandlersEmpty() {
+        bool flag = false;
+        foreach(Section section in sections) {
+            if (section.areInputHandlersEmpty()) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
 }

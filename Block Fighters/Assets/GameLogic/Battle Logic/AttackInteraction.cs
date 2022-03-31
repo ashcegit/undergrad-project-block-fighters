@@ -11,10 +11,10 @@ public class AttackInteraction:Interaction
 
     private float damage;
 
-    public AttackInteraction(Character target,Attack attack):base(target){
+    public AttackInteraction(Attack attack){
         this.attack=attack;
-        this.defenderDefence=target.getDefence();
-        this.defenderSpeed=target.getSpeed();
+        this.defenderDefence=attack.getTarget().getDefence();
+        this.defenderSpeed=attack.getTarget().getSpeed();
         damage=attack.getDamage()*(100-defenderDefence)/100;
         if(Random.Range(0.0f,attack.getSpeed())<defenderSpeed){
             result=InteractionEnum.Hit;

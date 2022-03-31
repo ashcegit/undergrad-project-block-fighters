@@ -7,7 +7,7 @@ public class StatusEffectInteraction:Interaction
     private AttributeModifier attributeModifier;
     private StatusEffect statusEffect;
 
-    public StatusEffectInteraction(Character target,StatusEffect statusEffect):base(target){
+    public StatusEffectInteraction(StatusEffect statusEffect){
         this.statusEffect=statusEffect;
         if(Random.Range(0.0f,1.0f)<=statusEffect.getChance()){result=InteractionEnum.Hit;}
         else{result=InteractionEnum.Miss;}

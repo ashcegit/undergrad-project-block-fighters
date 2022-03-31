@@ -188,6 +188,8 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                     }
                 }else{
                     currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
+                    //currentlyDraggedObject.GetComponent<Block>().updateBlockLayouts();
+                    currentlyDraggedObject.GetComponent<Block>().updateSpacePositions();
                 }
             }
             nearestBlockSpace=null;

@@ -18,7 +18,6 @@ public class GameScript : MonoBehaviour
     private bool opponentLoaded;
     private bool opponentChosen;
     private bool opponentWon;
-    private InteractionHandler interactionHandler;
 
     private int levelCounter;
 
@@ -28,8 +27,6 @@ public class GameScript : MonoBehaviour
         characterUI=GetComponentInChildren<CharacterUI>();
 
         computerPlayer=new ComputerPlayer();
-        
-        interactionHandler=new InteractionHandler();
     }
 
     void OnEnable(){
@@ -117,11 +114,11 @@ public class GameScript : MonoBehaviour
     public bool getPlayerChosen(){return playerChosen;}
 
     public Interaction getInteraction(GameAction gameAction){
-        return interactionHandler.getInteraction(gameAction);
+        return InteractionHandler.getInteraction(gameAction);
     }
 
     public bool getPlayerFirst(GameAction playerGameAction,GameAction opponentGameAction){
-        return interactionHandler.getPlayerFirst(playerGameAction,opponentGameAction,player.getSpeed(),opponent.getSpeed());
+        return InteractionHandler.getPlayerFirst(playerGameAction,opponentGameAction,player.getSpeed(),opponent.getSpeed());
     }
 
     public void dealDamage(Character target,float damage){

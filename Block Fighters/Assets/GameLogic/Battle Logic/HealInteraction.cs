@@ -8,7 +8,7 @@ public class HealInteraction:Interaction
     float healingAmount;
     float chance;
 
-    public HealInteraction(Character target,Heal heal):base(target){
+    public HealInteraction(Heal heal){
         this.heal=heal;
         this.healingAmount=heal.getHealingAmount();
         this.chance=heal.getChance();

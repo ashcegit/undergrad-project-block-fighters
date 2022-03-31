@@ -69,6 +69,16 @@ public class Header : MonoBehaviour
 
     public List<InputFieldHandler> getInputFieldHandlers(){return inputFieldHandlers;}
 
+    public bool areInputHandlersEmpty() {
+        bool flag = false;
+        foreach(InputFieldHandler inputFieldHandler in inputFieldHandlers) {
+            if (inputFieldHandler.getInputBlock() == null) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
     public Vector2 updateBlockLayouts(){
         RectTransform rectTransform=gameObject.GetComponent<RectTransform>();
         Vector2 sizeVector;

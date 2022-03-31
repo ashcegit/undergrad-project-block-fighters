@@ -69,4 +69,12 @@ public class Section : MonoBehaviour
             }
         }
     }
+
+    public bool areInputHandlersEmpty() {
+        bool flag = false;
+        if (header != null) {
+            flag=header.areInputHandlersEmpty();
+        }
+        return flag;
+    }
 }
