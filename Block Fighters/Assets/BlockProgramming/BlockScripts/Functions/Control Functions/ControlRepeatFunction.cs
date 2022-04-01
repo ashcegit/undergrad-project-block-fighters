@@ -18,7 +18,7 @@ public class ControlRepeatFunction : ControlFunction
         return loggedPointer;
     }
 
-    public int onRepeat(int pointer,ref List<Block> blockStack){
+    public override int onRepeat(int pointer,ref List<Block> blockStack){
         List<InputFieldHandler> inputFieldHandlers=gameObject.GetComponent<Block>().getSections()[0].getHeader().getInputFieldHandlers();
         int operand=0;
         Block operandBlock=inputFieldHandlers[0].getInputBlock().GetComponent<Block>();

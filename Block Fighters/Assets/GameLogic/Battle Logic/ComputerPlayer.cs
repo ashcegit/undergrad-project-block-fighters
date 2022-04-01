@@ -330,9 +330,10 @@ public class ComputerPlayer:MonoBehaviour
     }
 
     public Tuple<GameAction?, bool> executeCurrentBlock() {
+        //returns a tuple of a game action and whether the method has come to an end
         GameAction gameAction = null;
-        if (pointer >= blockStack.Count-1) {
-            return new Tuple<GameAction?, bool>( gameAction, true );
+        if (pointer >= blockStack.Count - 1) {
+            return new Tuple<GameAction?, bool>(gameAction, true);
         } else {
             Block currentBlock = blockStack[pointer];
             switch (currentBlock.blockType) {
@@ -341,7 +342,7 @@ public class ComputerPlayer:MonoBehaviour
                     GameScript gameScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>();
                     Character opponent = gameScript.getOpponent();
                     ActionFunction actionFunction = currentBlock.gameObject.GetComponent<ActionFunction>();
-                    gameAction = actionFunction.function(opponent, true);
+                    gameAction = actionFunction.function(opponent, false);
                     break;
                 case (BlockType.Control):
                     ControlFunction controlFunction = currentBlock.gameObject.GetComponent<ControlFunction>();
@@ -352,35 +353,20 @@ public class ComputerPlayer:MonoBehaviour
                     if (startBlock != null) {
                         if (startBlock.getBlockType() == BlockType.Control) {
                             ControlFunction endControlFunction = startBlock.gameObject.GetComponent<ControlFunction>();
-                            switch (endControlFunction.getName()) {
-                                case ("If Else"):
-                                    ControlIfElseFunction controlIfElseFunction = (ControlIfElseFunction)endControlFunction;
-                                    pointer = controlIfElseFunction.onRepeat(pointer, ref blockStack);
-                                    break;
-                                case ("Repeat"):
-                                    ControlRepeatFunction controlRepeatFunction = (ControlRepeatFunction)endControlFunction;
-                                    pointer = controlRepeatFunction.onRepeat(pointer, ref blockStack);
-                                    break;
-                                case ("Repeat Until"):
-                                    ControlRepeatUntilFunction controlRepeatUntilFunction = (ControlRepeatUntilFunction)endControlFunction;
-                                    pointer = controlRepeatUntilFunction.onRepeat(pointer, ref blockStack);
-                                    break;
-                                case ("Repeat Forever"):
-                                    ControlRepeatForeverFunction controlForeverFunction = (ControlRepeatForeverFunction)endControlFunction;
-                                    pointer = controlForeverFunction.onRepeat(pointer, ref blockStack);
-                                    break;
-                            }
+                            pointer = endControlFunction.onRepeat(pointer, ref blockStack);
                         }
+                    } else {
+                        pointer++;
                     }
-                    pointer++;
                     break;
                 default:
                     pointer++;
                     break;
             }
         }
-        return new Tuple<GameAction?, bool> (gameAction, false );
+        return new Tuple<GameAction?, bool>(gameAction, false);
     }
+
 
     public int getBlockStackCount(){return blockStack.Count;}
 }

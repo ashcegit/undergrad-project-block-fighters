@@ -27,7 +27,7 @@ public class BlockStackManager{
             if(section.getBody()!=null){
                 foreach(Transform childTransform in section.getBody().gameObject.transform){
                     Block childBlock=childTransform.gameObject.GetComponent<Block>();
-                    blocks.AddRange(initBlockStack(childBlock));
+                    blocks.AddRange(    initBlockStack(childBlock));
                 }
                 Block endBlock=new Block();
                 endBlock.blockType=BlockType.EndOfSection;
@@ -40,7 +40,7 @@ public class BlockStackManager{
 
     public List<Block> getBlockStack(){return blockStack;}
 
-    public void setBlockStack(List<Block> blockStack) { this.blockStack = blockStack; }
+    public void setBlockStack(List<Block> blockStack) {this.blockStack = blockStack; }
 
     public void clearBlockStack(){
         pointer=0;
@@ -48,14 +48,12 @@ public class BlockStackManager{
     }
 
     public Tuple<GameAction?,bool> executeCurrentBlock() {
-        Debug.Log("Pointer: " + pointer);
-        Debug.Log("Block stack count: " + blockStack.Count);
         //returns a tuple of a game action and whether the method has come to an end
         GameAction gameAction = null;
         if (pointer >= blockStack.Count-1) {
             return new Tuple<GameAction?, bool> (gameAction,true);
         } else {
-            Block currentBlock = blockStack[pointer];
+            Block currentBlock = blockStack[pointer] ;
             switch (currentBlock.blockType) {
                 case (BlockType.Action):
                     pointer++;
@@ -73,27 +71,11 @@ public class BlockStackManager{
                     if (startBlock != null) {
                         if (startBlock.getBlockType() == BlockType.Control) {
                             ControlFunction endControlFunction = startBlock.gameObject.GetComponent<ControlFunction>();
-                            switch (endControlFunction.getName()) {
-                                case ("If Else"):
-                                    ControlIfElseFunction controlIfElseFunction = (ControlIfElseFunction)endControlFunction;
-                                    pointer = controlIfElseFunction.onRepeat(pointer, ref blockStack);
-                                    break;
-                                case ("Repeat"):
-                                    ControlRepeatFunction controlRepeatFunction = (ControlRepeatFunction)endControlFunction;
-                                    pointer = controlRepeatFunction.onRepeat(pointer, ref blockStack);
-                                    break;
-                                case ("Repeat Until"):
-                                    ControlRepeatUntilFunction controlRepeatUntilFunction = (ControlRepeatUntilFunction)endControlFunction;
-                                    pointer = controlRepeatUntilFunction.onRepeat(pointer, ref blockStack);
-                                    break;
-                                case ("Repeat Forever"):
-                                    ControlRepeatForeverFunction controlForeverFunction = (ControlRepeatForeverFunction)endControlFunction;
-                                    pointer = controlForeverFunction.onRepeat(pointer, ref blockStack);
-                                    break;
-                            }
+                            pointer = endControlFunction.onRepeat(pointer, ref blockStack);
                         }
+                    } else {
+                        pointer++;
                     }
-                    pointer++;
                     break;
                 default:
                     pointer++;

@@ -12,7 +12,6 @@ public class HealthBar : MonoBehaviour
     }
 
     public void updateHealthBar(float healthPercentage,float speed){
-        StopAllCoroutines();
         StartCoroutine(updateHealthBarCoroutine(healthPercentage,speed));
     }
 

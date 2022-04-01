@@ -6,4 +6,5 @@ public abstract class ControlFunction : MonoBehaviour
 {
     public abstract string getName();
     public abstract int function(int pointer,ref List<Block> blockStack);
+    public abstract int onRepeat(int pointer,ref List<Block> blockStack);
 }

@@ -16,7 +16,7 @@ public class ControlRepeatUntilFunction : ControlFunction
         return loggedPointer;
     }
 
-    public int onRepeat(int pointer,ref List<Block> blockStack){
+    public override int onRepeat(int pointer,ref List<Block> blockStack){
         Block inputBlock=gameObject.GetComponent<Block>().getSections()[0].getHeader().getInputFieldHandlers()[0].getInputBlock().GetComponent<Block>();
         LogicFunction logicFunction=inputBlock.GetComponent<LogicFunction>();
         if(!logicFunction.function()){
@@ -28,6 +28,4 @@ public class ControlRepeatUntilFunction : ControlFunction
         }
 
     }
-
-
 }

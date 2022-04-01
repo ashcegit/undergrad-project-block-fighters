@@ -14,26 +14,46 @@ public class ControlIfElseFunction : ControlFunction
         Block thisBlock=gameObject.GetComponent<Block>();
         Block inputBlock=gameObject.GetComponent<Block>().getSections()[0].getHeader().getInputFieldHandlers()[0].getInputBlock().GetComponent<Block>();
         LogicFunction logicFunction=inputBlock.GetComponent<LogicFunction>();
-        pointer++;
         if(logicFunction.function()){
             triggered=true;
             Terminal.log(TerminalLogType.Control, "If Else block triggered, 'If blocks' running", thisBlock.gameObject.name, triggered);
         } else {
             triggered=false;
-            while(blockStack[pointer].getStartBlock()!=thisBlock){
-                pointer++;
+            while (pointer < blockStack.Count-1) {
+                Block currentBlock = blockStack[pointer];
+                if (currentBlock.getBlockType() == BlockType.EndOfSection) {
+                    if (currentBlock.getStartBlock() == thisBlock) {
+                        Debug.Log("Start block found");
+                        pointer++;
+                        break;
+                    }
+                } else {
+                    pointer++;
+                }
             }
             Terminal.log(TerminalLogType.Control, "If Else block not triggered, 'Else blocks' running", thisBlock.gameObject.name, triggered);
         }
         return pointer;
     }
 
-    public int onRepeat(int pointer,ref List<Block> blockStack){
+    public override int onRepeat(int pointer,ref List<Block> blockStack){
+        //fix If/Else block stack
+        Debug.Log("In onRepeat");   
         Block thisBlock=gameObject.GetComponent<Block>();
         if(triggered){
-            while(blockStack[pointer].getStartBlock()!=thisBlock){
-                pointer++;
+            Debug.Log("Code skipped, pre-skip pointer: " + pointer);
+            while (pointer < blockStack.Count-1) {
+                Block currentBlock = blockStack[pointer];
+                if (currentBlock.getBlockType() == BlockType.EndOfSection) {
+                    if (currentBlock.getStartBlock() == thisBlock) {
+                        Debug.Log("Start block found");
+                        break;
+                    }
+                } else {
+                    pointer++;
+                }
             }
+            Debug.Log("Post-skip pointer: " + ++pointer);
             triggered=false;
         }
         return ++pointer;

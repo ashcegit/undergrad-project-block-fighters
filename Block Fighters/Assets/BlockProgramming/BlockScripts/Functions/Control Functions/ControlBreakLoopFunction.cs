@@ -9,21 +9,27 @@ public class ControlBreakLoopFunction : ControlFunction
 
     public override string getName(){return NAME;}
 
-    public override int function(int pointer,ref List<Block> blockList){
+    public override int function(int pointer,ref List<Block> blockStack){
         bool foundFlag=false;
         while(!foundFlag){
-            if(blockList[pointer].getStartBlock()!=null){
-                if(blockList[pointer].getStartBlock().gameObject.GetComponent<ControlFunction>().getName()=="Repeat"||
-                    blockList[pointer].getStartBlock().gameObject.GetComponent<ControlFunction>().getName()=="Repeat Until"||
-                    blockList[pointer].getStartBlock().gameObject.GetComponent<ControlFunction>().getName()=="Repeat Forever"){
-                        foundFlag=true;
+            Block currentBlock = blockStack[pointer];
+            if (currentBlock.getBlockType() == BlockType.EndOfSection) {
+                if (currentBlock.getStartBlock() != null) {
+                    if (currentBlock.getStartBlock().gameObject.GetComponent<ControlFunction>().getName() == "Repeat" ||
+                        currentBlock.getStartBlock().gameObject.GetComponent<ControlFunction>().getName() == "Repeat Until" ||
+                        currentBlock.getStartBlock().gameObject.GetComponent<ControlFunction>().getName() == "Repeat Forever") {
+                        foundFlag = true;
                     }
-            }else{
-                pointer++;
+                } else {
+                    pointer++;
+                }
             }
         }
         Terminal.log(TerminalLogType.Message, "Break block triggered");
+        return ++pointer;   
+    }
+
+    public override int onRepeat(int pointer, ref List<Block> blockStack) {
         return ++pointer;
-        
     }
 }

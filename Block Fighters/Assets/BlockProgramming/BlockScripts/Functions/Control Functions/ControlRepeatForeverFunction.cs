@@ -15,7 +15,7 @@ public class ControlRepeatForeverFunction : ControlFunction
         return loggedPointer;
     }
 
-    public int onRepeat(int pointer,ref List<Block> blockStack){
+    public override int onRepeat(int pointer,ref List<Block> blockStack){
         Terminal.log(TerminalLogType.Control, "Repeat Forever block triggered");
         return loggedPointer;
     }

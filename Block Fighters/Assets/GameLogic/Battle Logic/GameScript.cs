@@ -121,15 +121,20 @@ public class GameScript : MonoBehaviour
         return InteractionHandler.getPlayerFirst(playerGameAction,opponentGameAction,player.getSpeed(),opponent.getSpeed());
     }
 
-    public void dealDamage(Character target,float damage){
+    public IEnumerator dealDamage(Character target,float damage){
+        Debug.Log("Deal damage started");
         target.decreaseHealth(Mathf.Round(damage));
         if(target==player){
-            StartCoroutine(characterUI.shakePlayer());
+            Debug.Log("about to shake player");
+            StartCoroutine(characterUI.shakePlayer());            
             characterUI.updatePlayerHealth(target.getHealth(),target.getMaxHealth());
-        }else if(target==opponent){
+            StartCoroutine(characterUI.shakePlayerHealth());
+        } else if(target==opponent){
             StartCoroutine(characterUI.shakeOpponent());
             characterUI.updateOpponentHealth(target.getHealth(),target.getMaxHealth());
+            StartCoroutine(characterUI.shakeOpponentHealth());
         }
+        yield return null;
     }
     
     public void heal(Character target,float healingAmount){

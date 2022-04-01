@@ -62,6 +62,7 @@ public class CharacterUI : MonoBehaviour
     }
 
     public IEnumerator shakeOpponent(){
+        Debug.Log("Shake opponent coroutine started");
         yield return StartCoroutine(shakeObject(opponent,0.5f,5f));
     }
 
@@ -84,6 +85,7 @@ public class CharacterUI : MonoBehaviour
             yield return null;
         }
         gameObject.GetComponent<RectTransform>().position=initialPosition;
+        yield return null;
     }
 
 }

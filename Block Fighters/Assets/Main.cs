@@ -210,11 +210,12 @@ public class Main : MonoBehaviour
         if(player.getSpeed()==opponent.getSpeed()){
             //toss up priority if character speeds are equal
             //(the chances of this are slim)
-            if(UnityEngine.Random.Range(0,11)<5){
+            //if(UnityEngine.Random.Range(0,11)<5){
                 Terminal.log(TerminalLogType.Message, "Player Turn\n");
                 while (playerStamina > 0 && !gameScript.isGameOver()) {
                     Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
                     if (execution.Item2) {
+                        Debug.Log("!!!! END OF METHOD !!!!");
                         break;
                     }
                     GameAction? playerGameAction = execution.Item1;
@@ -226,131 +227,132 @@ public class Main : MonoBehaviour
                     } else {
                         if (infLoopDetection > 1000) {
                             Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
+                            break;    
                         } else {
                             infLoopDetection++;
                         }
                     }
                 }
-                Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
-                while (opponentStamina>0&&!gameScript.isGameOver()){
-                    Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
-                    if (execution.Item2) {
-                        break;
-                    } else {
-                        GameAction? opponentGameAction = execution.Item1;
-                        if (opponentGameAction != null && !gameScript.isGameOver()) {
-                            Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
-                            yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
-                            opponentStamina--;
-                        }
-                    }
-                }
-            }else{
-                Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
-                while (opponentStamina > 0 && !gameScript.isGameOver()) {
-                    Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
-                    if (execution.Item2) {
-                        break;
-                    } else {
-                        GameAction? opponentGameAction = execution.Item1;
-                        if (opponentGameAction != null && !gameScript.isGameOver()) {
-                            Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
-                            yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
-                            opponentStamina--;
-                        }
-                    }
-                }
-                Terminal.log(TerminalLogType.Message, "Player Turn\n");
-                while (playerStamina > 0 && !gameScript.isGameOver()) {
-                    Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
-                    if (execution.Item2) {
-                        break;
-                    }
-                    GameAction? playerGameAction = execution.Item1;
-                    if (playerGameAction != null) {
-                        infLoopDetection = 0;
-                        Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
-                        yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
-                        playerStamina--;
-                    } else {
-                        if (infLoopDetection > 1000) {
-                            Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
-                        } else {
-                            infLoopDetection++;
-                        }
-                    }
-                }
-            }
-        }else if(player.getSpeed()<opponent.getSpeed()){
-            Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
-            while (opponentStamina > 0 && !gameScript.isGameOver()) {
-                Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
-                if (execution.Item2) {
-                    break;
-                } else {
-                    GameAction? opponentGameAction = execution.Item1;
-                    if (opponentGameAction != null && !gameScript.isGameOver()) {
-                        Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
-                        yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
-                        opponentStamina--;
-                    }
-                }
-            }
-            Terminal.log(TerminalLogType.Message, "Player Turn\n");
-            while (playerStamina > 0 && !gameScript.isGameOver()) {
-                Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
-                if (execution.Item2) {
-                    break;
-                }
-                GameAction? playerGameAction = execution.Item1;
-                if (playerGameAction != null) {
-                    infLoopDetection = 0;
-                    Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
-                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
-                    playerStamina--;
-                } else {
-                    if (infLoopDetection > 1000) {
-                        Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
-                    } else {
-                        infLoopDetection++;
-                    }
-                }
-            }
-        } else{
-            Terminal.log(TerminalLogType.Message, "Player Turn\n");
-            while (playerStamina > 0 && !gameScript.isGameOver()) {
-                Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
-                if (execution.Item2) {
-                    break;
-                }
-                GameAction? playerGameAction = execution.Item1;
-                if (playerGameAction != null) {
-                    infLoopDetection = 0;
-                    Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
-                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
-                    playerStamina--;
-                } else {
-                    if (infLoopDetection > 1000) {
-                        Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
-                    } else {
-                        infLoopDetection++;
-                    }
-                }
-            }
-            Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
-            while (opponentStamina > 0 && !gameScript.isGameOver()) {
-                Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
-                if (execution.Item2) {
-                    break;
-                } else {
-                    GameAction? opponentGameAction = execution.Item1;
-                    if (opponentGameAction != null && !gameScript.isGameOver()) {
-                        Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
-                        yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
-                        opponentStamina--;
-                    }
-                }
-            }
+        //        Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
+        //        while (opponentStamina>0&&!gameScript.isGameOver()){
+        //            Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
+        //            if (execution.Item2) {
+        //                break;
+        //            } else {
+        //                GameAction? opponentGameAction = execution.Item1;
+        //                if (opponentGameAction != null && !gameScript.isGameOver()) {
+        //                    Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
+        //                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
+        //                    opponentStamina--;
+        //                }
+        //            }
+        //        }
+        //    }else{
+        //        Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
+        //        while (opponentStamina > 0 && !gameScript.isGameOver()) {
+        //            Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
+        //            if (execution.Item2) {
+        //                break;
+        //            } else {
+        //                GameAction? opponentGameAction = execution.Item1;
+        //                if (opponentGameAction != null && !gameScript.isGameOver()) {
+        //                    Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
+        //                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
+        //                    opponentStamina--;
+        //                }
+        //            }
+        //        }
+        //        Terminal.log(TerminalLogType.Message, "Player Turn\n");
+        //        while (playerStamina > 0 && !gameScript.isGameOver()) {
+        //            Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
+        //            if (execution.Item2) {
+        //                break;
+        //            }
+        //            GameAction? playerGameAction = execution.Item1;
+        //            if (playerGameAction != null) {
+        //                infLoopDetection = 0;
+        //                Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
+        //                yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
+        //                playerStamina--;
+        //            } else {
+        //                if (infLoopDetection > 1000) {
+        //                    Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
+        //                } else {
+        //                    infLoopDetection++;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}else if(player.getSpeed()<opponent.getSpeed()){
+        //    Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
+        //    while (opponentStamina > 0 && !gameScript.isGameOver()) {
+        //        Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
+        //        if (execution.Item2) {
+        //            break;
+        //        } else {
+        //            GameAction? opponentGameAction = execution.Item1;
+        //            if (opponentGameAction != null && !gameScript.isGameOver()) {
+        //                Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
+        //                yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
+        //                opponentStamina--;
+        //            }
+        //        }
+        //    }
+        //    Terminal.log(TerminalLogType.Message, "Player Turn\n");
+        //    while (playerStamina > 0 && !gameScript.isGameOver()) {
+        //        Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
+        //        if (execution.Item2) {
+        //            break;
+        //        }
+        //        GameAction? playerGameAction = execution.Item1;
+        //        if (playerGameAction != null) {
+        //            infLoopDetection = 0;
+        //            Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
+        //            yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
+        //            playerStamina--;
+        //        } else {
+        //            if (infLoopDetection > 1000) {
+        //                Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
+        //            } else {
+        //                infLoopDetection++;
+        //            }
+        //        }
+        //    }
+        //} else{
+        //    Terminal.log(TerminalLogType.Message, "Player Turn\n");
+        //    while (playerStamina > 0 && !gameScript.isGameOver()) {
+        //        Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
+        //        if (execution.Item2) {
+        //            break;
+        //        }
+        //        GameAction? playerGameAction = execution.Item1;
+        //        if (playerGameAction != null) {
+        //            infLoopDetection = 0;
+        //            Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
+        //            yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
+        //            playerStamina--;
+        //        } else {
+        //            if (infLoopDetection > 1000) {
+        //                Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
+        //            } else {
+        //                infLoopDetection++;
+        //            }
+        //        }
+        //    }
+        //    Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
+        //    while (opponentStamina > 0 && !gameScript.isGameOver()) {
+        //        Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
+        //        if (execution.Item2) {
+        //            break;
+        //        } else {
+        //            GameAction? opponentGameAction = execution.Item1;
+        //            if (opponentGameAction != null && !gameScript.isGameOver()) {
+        //                Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
+        //                yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
+        //                opponentStamina--;
+        //            }
+        //        }
+        //    }
         }
         gameScript.clearPlayerBlockStack();
         gameScript.clearComputerBlockStack();
