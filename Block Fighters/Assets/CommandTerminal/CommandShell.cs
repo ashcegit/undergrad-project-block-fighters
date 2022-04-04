@@ -36,7 +36,7 @@ namespace CommandTerminal
         string IssuedErrorMessage;
 
         public CommandShell(){
-            commandRegex=new Regex(@"^\w*(\w*||\d*)?\({1}\w*(\w?||\d?)*\){1}$");
+            commandRegex=new Regex(@"^[a-zA-Z][0-9a-zA-Z]*\([a-zA-Z]?[0-9a-zA-Z]*\)$");
         }
 
         public void IssueErrorMessage(string format, params object[] message) {
@@ -143,7 +143,7 @@ namespace CommandTerminal
             } else if (blockProgrammerScript.areInputFieldHandlersEmpty()) {
                 IssueErrorMessage("Block inputs cannot be empty");
                 return false;
-            }else if (blockProgrammerScript.areMethodNamesLegal()) {
+            }else if (!blockProgrammerScript.areMethodNamesLegal()) {
                 IssueErrorMessage("Method names should start with a letter and contain no special characters");
                 return false;
             }else{
@@ -243,6 +243,7 @@ namespace CommandTerminal
             commandText=commandText.ToUpper();
             CommandWrapper commandWrapper=new CommandWrapper();
             commandWrapper.setIsGameAction(false);
+            Debug.Log(commandText);
             if(commandRegex.IsMatch(commandText)){
                 Tuple<string,string[]> parsedCommand=parseCommandText(commandText);
                 string commandName=parsedCommand.Item1;

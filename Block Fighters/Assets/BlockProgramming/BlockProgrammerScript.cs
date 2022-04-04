@@ -26,7 +26,7 @@ public class BlockProgrammerScript : MonoBehaviour
         maxMethodBlocks=4;
         blockSave=new BlockSave();
         staminaText = GetComponentInChildren<StaminaText>();
-        methodNameRegex = new Regex(@"^\w*(\w*||\d*)$");
+        methodNameRegex = new Regex(@"^[a-zA-Z][0-9a-zA-Z]*$");
         refreshBlockSelection();
     }   
 
@@ -128,9 +128,11 @@ public class BlockProgrammerScript : MonoBehaviour
     public bool areMethodNamesLegal() {
         bool flag = true;
         foreach(GameObject methodBlockObject in methodBlockObjects) {
+            Debug.Log(methodNameRegex.IsMatch(methodBlockObject.GetComponent<Block>().methodName));
             if (!methodNameRegex.IsMatch(methodBlockObject.GetComponent<Block>().methodName)) {
                 flag = false;
             }
+            Debug.Log(flag);
         }
         return flag;
     }
