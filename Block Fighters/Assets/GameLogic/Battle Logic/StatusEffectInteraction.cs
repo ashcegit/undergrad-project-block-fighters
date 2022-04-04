@@ -22,5 +22,4 @@ public class StatusEffectInteraction:Interaction
     public AttributeEnum getAttribute(){return statusEffect.getAttribute();}
     public float getMultiplier(){return statusEffect.getMultiplier();}
     public float getChance(){return statusEffect.getChance();}
-    public int getTurns(){return statusEffect.getTurns();}
 }

@@ -6,17 +6,17 @@ public class AttackInteraction:Interaction
 {   
     private Attack attack;
 
-    private float defenderDefence;
-    private float defenderSpeed;
+    private float targetDefence;
+    private float targetSpeed;
 
     private float damage;
 
     public AttackInteraction(Attack attack){
         this.attack=attack;
-        this.defenderDefence=attack.getTarget().getDefence();
-        this.defenderSpeed=attack.getTarget().getSpeed();
-        damage=attack.getDamage()*(100-defenderDefence)/100;
-        if(Random.Range(0.0f,attack.getSpeed())<defenderSpeed){
+        this.targetDefence=attack.getTarget().getDefence();
+        this.targetSpeed=attack.getTarget().getSpeed();
+        damage=attack.getDamage()*(200- targetDefence) /200;
+        if(Random.Range(0.0f,attack.getSpeed())> targetSpeed) {
             result=InteractionEnum.Hit;
         }else{
             result=InteractionEnum.Miss;

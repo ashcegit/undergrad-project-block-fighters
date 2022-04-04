@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text.RegularExpressions;
 
 public class BlockProgrammerScript : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class BlockProgrammerScript : MonoBehaviour
     int maxMethodBlocks;
     BlockSave blockSave;
     StaminaText staminaText;
+    Regex methodNameRegex;
 
     void Awake(){
         methodBlockObjects=new List<GameObject>();
@@ -24,6 +26,7 @@ public class BlockProgrammerScript : MonoBehaviour
         maxMethodBlocks=4;
         blockSave=new BlockSave();
         staminaText = GetComponentInChildren<StaminaText>();
+        methodNameRegex = new Regex(@"^\w*(\w*||\d*)$");
         refreshBlockSelection();
     }   
 
@@ -117,6 +120,16 @@ public class BlockProgrammerScript : MonoBehaviour
         foreach(GameObject methodblockObject in methodBlockObjects) {
             if (methodblockObject.GetComponent<Block>().areInputFieldHandlersEmpty()) {
                 flag = true;
+            }
+        }
+        return flag;
+    }
+
+    public bool areMethodNamesLegal() {
+        bool flag = true;
+        foreach(GameObject methodBlockObject in methodBlockObjects) {
+            if (!methodNameRegex.IsMatch(methodBlockObject.GetComponent<Block>().methodName)) {
+                flag = false;
             }
         }
         return flag;

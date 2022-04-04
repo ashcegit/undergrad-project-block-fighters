@@ -68,7 +68,6 @@ public class Character
     public float getMaxHealth(){
         float negativeDiminishingReturns = 1f;
         float positiveDiminishingReturns = 1f;
-        float tempMaxHealth = baseMaxHealth;
         float multiplier=1f;
         foreach (AttributeModifier attributeModifier in healthModifiers) {
             float currentMultiplier = attributeModifier.getMultiplier();
@@ -82,12 +81,11 @@ public class Character
                 if (positiveDiminishingReturns < 0.005f) { positiveDiminishingReturns = 0.005f; }
             }
         }
-        return Mathf.Round(tempMaxHealth) * multiplier;
+        return Mathf.Round(baseMaxHealth * multiplier);
     }
     public float getAttack(){
         float negativeDiminishingReturns = 1f;
         float positiveDiminishingReturns = 1f;
-        float tempAttack = baseAttack;
         float multiplier=1f;
         foreach (AttributeModifier attributeModifier in attackModifiers) {
             float currentMultiplier = attributeModifier.getMultiplier();
@@ -101,7 +99,7 @@ public class Character
                 if (positiveDiminishingReturns < 0.005f) { positiveDiminishingReturns = 0.005f; }
             }
         }
-        return Mathf.Round(tempAttack) * multiplier;
+        return Mathf.Round(baseAttack * multiplier);
     }
     public float getDefence(){
         float negativeDiminishingReturns = 1f;
@@ -120,12 +118,15 @@ public class Character
                 if (positiveDiminishingReturns < 0.005f) { positiveDiminishingReturns = 0.005f; }
             }
         }
-        return Mathf.Round(tempDefence) * multiplier;
+        if(Mathf.Round(baseDefence * multiplier) > 200) {
+            return 200f;
+        } else {
+            return Mathf.Round(baseDefence * multiplier);
+        }
     }
     public float getSpeed(){
         float negativeDiminishingReturns = 1f;
         float positiveDiminishingReturns = 1f;
-        float tempSpeed=baseSpeed;
         float multiplier=1f;
         foreach(AttributeModifier attributeModifier in speedModifiers){
             float currentMultiplier=attributeModifier.getMultiplier();
@@ -139,7 +140,7 @@ public class Character
                 if (positiveDiminishingReturns < 0.005f) { positiveDiminishingReturns = 0.005f; }
             }
         }
-        return Mathf.Round(tempSpeed)*multiplier;
+        return Mathf.Round(baseSpeed*multiplier);
     }
     public int getStamina(){
         float negativeDiminishingReturns = 1f;

@@ -199,165 +199,78 @@ public class Main : MonoBehaviour
     IEnumerator playLoop(Character player,Character opponent){
         //plays out interaction between player and opponent
         //in order of action's priority
-
-        //cannot factor out repeated lines because
-        //IEnumerators cannot take parameters by reference
-
-        Block playerMethodBlock=gameScript.getPlayerMethod().GetComponent<Block>();
-        int playerStamina=player.getStamina();
-        int opponentStamina=opponent.getStamina();
-        int infLoopDetection = 0;
+       
         if(player.getSpeed()==opponent.getSpeed()){
             //toss up priority if character speeds are equal
             //(the chances of this are slim)
-            //if(UnityEngine.Random.Range(0,11)<5){
-                Terminal.log(TerminalLogType.Message, "Player Turn\n");
-                while (playerStamina > 0 && !gameScript.isGameOver()) {
-                    Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
-                    if (execution.Item2) {
-                        Debug.Log("!!!! END OF METHOD !!!!");
-                        break;
-                    }
-                    GameAction? playerGameAction = execution.Item1;
-                    if (playerGameAction != null) {
-                        infLoopDetection = 0;
-                        Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
-                        yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
-                        playerStamina--;
-                    } else {
-                        if (infLoopDetection > 1000) {
-                            Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
-                            break;    
-                        } else {
-                            infLoopDetection++;
-                        }
-                    }
-                }
-        //        Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
-        //        while (opponentStamina>0&&!gameScript.isGameOver()){
-        //            Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
-        //            if (execution.Item2) {
-        //                break;
-        //            } else {
-        //                GameAction? opponentGameAction = execution.Item1;
-        //                if (opponentGameAction != null && !gameScript.isGameOver()) {
-        //                    Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
-        //                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
-        //                    opponentStamina--;
-        //                }
-        //            }
-        //        }
-        //    }else{
-        //        Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
-        //        while (opponentStamina > 0 && !gameScript.isGameOver()) {
-        //            Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
-        //            if (execution.Item2) {
-        //                break;
-        //            } else {
-        //                GameAction? opponentGameAction = execution.Item1;
-        //                if (opponentGameAction != null && !gameScript.isGameOver()) {
-        //                    Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
-        //                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
-        //                    opponentStamina--;
-        //                }
-        //            }
-        //        }
-        //        Terminal.log(TerminalLogType.Message, "Player Turn\n");
-        //        while (playerStamina > 0 && !gameScript.isGameOver()) {
-        //            Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
-        //            if (execution.Item2) {
-        //                break;
-        //            }
-        //            GameAction? playerGameAction = execution.Item1;
-        //            if (playerGameAction != null) {
-        //                infLoopDetection = 0;
-        //                Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
-        //                yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
-        //                playerStamina--;
-        //            } else {
-        //                if (infLoopDetection > 1000) {
-        //                    Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
-        //                } else {
-        //                    infLoopDetection++;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}else if(player.getSpeed()<opponent.getSpeed()){
-        //    Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
-        //    while (opponentStamina > 0 && !gameScript.isGameOver()) {
-        //        Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
-        //        if (execution.Item2) {
-        //            break;
-        //        } else {
-        //            GameAction? opponentGameAction = execution.Item1;
-        //            if (opponentGameAction != null && !gameScript.isGameOver()) {
-        //                Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
-        //                yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
-        //                opponentStamina--;
-        //            }
-        //        }
-        //    }
-        //    Terminal.log(TerminalLogType.Message, "Player Turn\n");
-        //    while (playerStamina > 0 && !gameScript.isGameOver()) {
-        //        Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
-        //        if (execution.Item2) {
-        //            break;
-        //        }
-        //        GameAction? playerGameAction = execution.Item1;
-        //        if (playerGameAction != null) {
-        //            infLoopDetection = 0;
-        //            Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
-        //            yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
-        //            playerStamina--;
-        //        } else {
-        //            if (infLoopDetection > 1000) {
-        //                Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
-        //            } else {
-        //                infLoopDetection++;
-        //            }
-        //        }
-        //    }
-        //} else{
-        //    Terminal.log(TerminalLogType.Message, "Player Turn\n");
-        //    while (playerStamina > 0 && !gameScript.isGameOver()) {
-        //        Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
-        //        if (execution.Item2) {
-        //            break;
-        //        }
-        //        GameAction? playerGameAction = execution.Item1;
-        //        if (playerGameAction != null) {
-        //            infLoopDetection = 0;
-        //            Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
-        //            yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
-        //            playerStamina--;
-        //        } else {
-        //            if (infLoopDetection > 1000) {
-        //                Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
-        //            } else {
-        //                infLoopDetection++;
-        //            }
-        //        }
-        //    }
-        //    Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
-        //    while (opponentStamina > 0 && !gameScript.isGameOver()) {
-        //        Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
-        //        if (execution.Item2) {
-        //            break;
-        //        } else {
-        //            GameAction? opponentGameAction = execution.Item1;
-        //            if (opponentGameAction != null && !gameScript.isGameOver()) {
-        //                Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
-        //                yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
-        //                opponentStamina--;
-        //            }
-        //        }
-        //    }
+            if(UnityEngine.Random.Range(0,11)<5){
+                yield return StartCoroutine(playerInteraction(player));
+                yield return StartCoroutine(opponentInteraction(opponent));
+            } else {
+                yield return StartCoroutine(opponentInteraction(opponent));
+                yield return StartCoroutine(playerInteraction(player));
+            }
+        } else if (player.getSpeed() < opponent.getSpeed()) {
+            yield return StartCoroutine(opponentInteraction(opponent));
+            yield return StartCoroutine(playerInteraction(player));
+        } else {
+            yield return StartCoroutine(playerInteraction(player));
+            yield return StartCoroutine(opponentInteraction(opponent));
         }
         gameScript.clearPlayerBlockStack();
         gameScript.clearComputerBlockStack();
         gameScript.endTurn();
         loopDone=true;
+        yield return null;
+    }
+
+    IEnumerator playerInteraction(Character player) {
+        Block playerMethodBlock = gameScript.getPlayerMethod().GetComponent<Block>();
+        int playerStamina = player.getStamina();
+        int infLoopDetection = 0;
+
+        Terminal.log(TerminalLogType.Message, "Player Turn\n");
+        while (playerStamina > 0 && !gameScript.isGameOver()) {
+            Tuple<GameAction?, bool> execution = playerMethodBlock.executeCurrentBlock();
+            if (execution.Item2) {
+                break;
+            }
+            GameAction? playerGameAction = execution.Item1;
+            if (playerGameAction != null) {
+                infLoopDetection = 0;
+                Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
+                yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
+                playerStamina--;
+            } else {
+                if (infLoopDetection > 1000) {
+                    Terminal.log(TerminalLogType.Error, "Maximum loop amount reached, turn lost");
+                    break;
+                } else {
+                    infLoopDetection++;
+                }
+            }
+        }
+        yield return null;
+    }
+
+    IEnumerator opponentInteraction(Character opponent) {
+        int opponentStamina = opponent.getStamina();
+
+        Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
+        while (opponentStamina > 0 && !gameScript.isGameOver()) {
+            Tuple<GameAction?, bool> execution = gameScript.executeCurrentComputerPlayerBlock();
+            if (execution.Item2) {
+                break;
+            } else {
+                GameAction? opponentGameAction = execution.Item1;
+                if (opponentGameAction != null && !gameScript.isGameOver()) {
+                    Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
+                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
+                    opponentStamina--;
+                }
+            }
+        }
+        yield return null;
     }
 
     IEnumerator playInteractionAfterDelay(float seconds,Interaction interaction,Character character){
@@ -404,7 +317,7 @@ public class Main : MonoBehaviour
                                 //     (100*Mathf.Round(statusEffectInteraction.getMultiplier())-100f).ToString():
                                 //     (100*Mathf.Round(statusEffectInteraction.getMultiplier())).ToString()),
                                 //number of turns
-                                statusEffectInteraction.getTurns().ToString());
+                                statusEffectInteraction.getStatusEffect().getTurns().ToString());
                     gameScript.addModifier(statusEffectInteraction.getStatusEffect().getTarget(),statusEffectInteraction.getAttributeModifier());
                 }else{
                     Terminal.log(TerminalLogType.Action,

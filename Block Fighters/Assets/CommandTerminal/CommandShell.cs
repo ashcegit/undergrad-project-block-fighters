@@ -122,7 +122,7 @@ namespace CommandTerminal
         }
 
         public bool finishProgramming(string[] argStringArray) {
-            BlockProgrammerScript blockProgrammerScript=GameObject.FindGameObjectWithTag("BlockProgrammer")
+            BlockProgrammerScript blockProgrammerScript = GameObject.FindGameObjectWithTag("BlockProgrammer")
                                                                     .GetComponent<BlockProgrammerScript>();
             blockProgrammerScript.applyMethodNames();
             if (!blockProgrammerScript.enabled) {
@@ -143,7 +143,10 @@ namespace CommandTerminal
             } else if (blockProgrammerScript.areInputFieldHandlersEmpty()) {
                 IssueErrorMessage("Block inputs cannot be empty");
                 return false;
-            } else{
+            }else if (blockProgrammerScript.areMethodNamesLegal()) {
+                IssueErrorMessage("Method names should start with a letter and contain no special characters");
+                return false;
+            }else{
                 GameObject.FindGameObjectWithTag("Main").GetComponent<Main>().finishProgramming();
                 return true;
             }
@@ -266,7 +269,7 @@ namespace CommandTerminal
                 }
             }else{
                 commandWrapper.setIsValid(false);
-                IssueErrorMessage("Command must be invoked in the form command(parameter)");
+                IssueErrorMessage("Command must be invoked in the form \"command(parameter)\" and start with a letter");
                 return commandWrapper;
             }
         }
