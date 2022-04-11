@@ -96,7 +96,7 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                         if(currentBlockType==BlockType.Control){
                             if(currentlyDraggedObject.GetComponent<ControlFunction>().getName()=="Break Loop"){
                                 if(nearestBlockSpace.getParentBody().GetComponentInParent<ControlRepeatFunction>()!=null||
-                                    nearestBlockSpace.getParentBody().GetComponentInParent<ControlRepeatUntilFunction>()!=null||
+                                    nearestBlockSpace.getParentBody().GetComponentInParent<ControlWhileFunction>()!=null||
                                     nearestBlockSpace.getParentBody().GetComponentInParent<ControlRepeatForeverFunction>()!=null){
                                         addGhostBlockToBlockAtSiblingIndex(nearestBlockSpace.getParentBody(),nearestBlockSpace.getIndex());
                                         GameObject parentBlock=nearestBlockSpace.getParentBody().GetComponentInParent<Block>().gameObject;

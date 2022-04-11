@@ -61,7 +61,7 @@ public class Body : MonoBehaviour
         blockSpaces[0].setParentBody(gameObject);
 
         if (transform.childCount == 1&&transform.GetChild(0).gameObject.name!="GhostBlock") {
-            RectTransform rectTransform = transform.GetChild(0).Find("OuterArea").GetComponent<RectTransform>();
+            RectTransform rectTransform = transform.GetChild(0).Find("EndBlockSpaceAnchor").GetComponent<RectTransform>();
 
             Vector2 newPosition = new Vector2(rectTransform.position.x + rectTransform.sizeDelta.x / 2,
                                                     rectTransform.position.y + rectTransform.sizeDelta.y / 2);
@@ -72,7 +72,7 @@ public class Body : MonoBehaviour
         } else {
             for (int i = 1; i < transform.childCount; i++) {
                 if (transform.GetChild(i - 1).gameObject.name != "GhostBlock") {
-                    RectTransform rectTransform = transform.GetChild(i - 1).Find("OuterArea").GetComponent<RectTransform>();
+                    RectTransform rectTransform = transform.GetChild(i - 1).Find("EndBlockSpaceAnchor").GetComponent<RectTransform>();
 
                     Vector2 newPosition = new Vector2(rectTransform.position.x + rectTransform.sizeDelta.x / 2,
                                                             rectTransform.position.y + rectTransform.sizeDelta.y / 2);

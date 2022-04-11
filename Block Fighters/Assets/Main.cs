@@ -28,7 +28,7 @@ public class Main : MonoBehaviour
 
     private WinScript winScript;
 
-    private bool loopDone;
+    private bool ongoingInteraction;
     public bool levellingUp;
 
     private const int maxLevels=10;
@@ -70,7 +70,7 @@ public class Main : MonoBehaviour
 
         blockProgrammerScript.displayStamina(gameScript.getPlayer().getStamina());
 
-        loopDone=true;
+        ongoingInteraction=false;
         terminalScript.setState(TerminalState.Write);
         
         gameScript.enabled=false;
@@ -91,7 +91,7 @@ public class Main : MonoBehaviour
         terminalScript.initShell(gameScript);
         blockProgrammerScript.clearEnvironment();
         openProgramming();
-        loopDone=true;
+        ongoingInteraction=false;
     }
 
     void gameOver() {
@@ -142,7 +142,7 @@ public class Main : MonoBehaviour
             Terminal.log(TerminalLogType.Message, "Stamina increased by 2");
         }
         openProgramming();
-        loopDone=true;
+        ongoingInteraction=false;
     }
 
     public void openProgramming(){
@@ -175,20 +175,17 @@ public class Main : MonoBehaviour
     }
 
     void Update(){
-        if(gameScript.getCharactersLoaded()&&!gameScript.isGameOver()&&loopDone){
+        if(gameScript.getCharactersLoaded()&&!gameScript.isGameOver()&&!ongoingInteraction){
             StopAllCoroutines();
-            Character player=gameScript.getPlayer();
-            Character opponent=gameScript.getOpponent();
-
             if(!gameScript.getOpponentChosen()){
                 gameScript.initComputerPlayerBlockStack();
                 gameScript.setOpponentChosen(true);
                 terminalScript.setState(TerminalState.Write);
             }else if(gameScript.getPlayerChosen()){
-                loopDone=false;
+                ongoingInteraction=true;
                 terminalScript.setState(TerminalState.ReadOnly);
                 gameScript.getPlayerMethod().GetComponent<Block>().initBlockStack();
-                StartCoroutine(playLoop(player,opponent));
+                StartCoroutine(playRound());
             }
         }else if(gameScript.isGameOver()){
             StopAllCoroutines();
@@ -196,37 +193,37 @@ public class Main : MonoBehaviour
         }
     }
 
-    IEnumerator playLoop(Character player,Character opponent){
+    IEnumerator playRound(){
         //plays out interaction between player and opponent
-        //in order of action's priority
+        //in order of character speed
        
-        if(player.getSpeed()==opponent.getSpeed()){
+        if(gameScript.getPlayer().getSpeed()==gameScript.getOpponent().getSpeed()){
             //toss up priority if character speeds are equal
             //(the chances of this are slim)
             if(UnityEngine.Random.Range(0,11)<5){
-                yield return StartCoroutine(playerInteraction(player));
-                yield return StartCoroutine(opponentInteraction(opponent));
+                yield return StartCoroutine(playerInteraction());
+                yield return StartCoroutine(opponentInteraction());
             } else {
-                yield return StartCoroutine(opponentInteraction(opponent));
-                yield return StartCoroutine(playerInteraction(player));
+                yield return StartCoroutine(opponentInteraction());
+                yield return StartCoroutine(playerInteraction());
             }
-        } else if (player.getSpeed() < opponent.getSpeed()) {
-            yield return StartCoroutine(opponentInteraction(opponent));
-            yield return StartCoroutine(playerInteraction(player));
+        } else if (gameScript.getPlayer().getSpeed() < gameScript.getOpponent().getSpeed()) {
+            yield return StartCoroutine(opponentInteraction());
+            yield return StartCoroutine(playerInteraction());
         } else {
-            yield return StartCoroutine(playerInteraction(player));
-            yield return StartCoroutine(opponentInteraction(opponent));
+            yield return StartCoroutine(playerInteraction());
+            yield return StartCoroutine(opponentInteraction());
         }
         gameScript.clearPlayerBlockStack();
         gameScript.clearComputerBlockStack();
         gameScript.endTurn();
-        loopDone=true;
+        ongoingInteraction=false;
         yield return null;
     }
 
-    IEnumerator playerInteraction(Character player) {
+    IEnumerator playerInteraction() {
         Block playerMethodBlock = gameScript.getPlayerMethod().GetComponent<Block>();
-        int playerStamina = player.getStamina();
+        int playerStamina = gameScript.getPlayer().getStamina();
         int infLoopDetection = 0;
 
         Terminal.log(TerminalLogType.Message, "Player Turn\n");
@@ -239,7 +236,7 @@ public class Main : MonoBehaviour
             if (playerGameAction != null) {
                 infLoopDetection = 0;
                 Interaction playerInteraction = gameScript.getInteraction(playerGameAction);
-                yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, player));
+                yield return StartCoroutine(playInteractionAfterDelay(0.5f, playerInteraction, gameScript.getPlayer()));
                 playerStamina--;
             } else {
                 if (infLoopDetection > 1000) {
@@ -253,8 +250,8 @@ public class Main : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator opponentInteraction(Character opponent) {
-        int opponentStamina = opponent.getStamina();
+    IEnumerator opponentInteraction() {
+        int opponentStamina = gameScript.getOpponent().getStamina();
 
         Terminal.log(TerminalLogType.Message, "Opponent Turn\n");
         while (opponentStamina > 0 && !gameScript.isGameOver()) {
@@ -265,7 +262,7 @@ public class Main : MonoBehaviour
                 GameAction? opponentGameAction = execution.Item1;
                 if (opponentGameAction != null && !gameScript.isGameOver()) {
                     Interaction opponentInteraction = gameScript.getInteraction(opponentGameAction);
-                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, opponent));
+                    yield return StartCoroutine(playInteractionAfterDelay(0.5f, opponentInteraction, gameScript.getOpponent()));
                     opponentStamina--;
                 }
             }
@@ -346,7 +343,4 @@ public class Main : MonoBehaviour
         }
         yield return null;
     }
-    
-    IEnumerator waitTime(int seconds){yield return new WaitForSeconds(seconds);}
-    
 }

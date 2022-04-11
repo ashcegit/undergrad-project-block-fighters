@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 2144898828910238810}
   - component: {fileID: 8737291482389220309}
   m_Layer: 5
-  m_Name: Block Ins RepeatForever
+  m_Name: Block Control RepeatForever
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -335,7 +335,7 @@ GameObject:
   - component: {fileID: 2040799275156725866}
   - component: {fileID: 2040799275156725867}
   m_Layer: 5
-  m_Name: OuterArea
+  m_Name: EndBlockSpaceAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

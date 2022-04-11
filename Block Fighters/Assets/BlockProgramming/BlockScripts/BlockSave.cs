@@ -8,21 +8,23 @@ public class BlockSave
     List<SelectionBlock> lockedActionBlocks;
     List<SelectionBlock> lockedNonActionBlocks;
     List<string> defaultBlocks=new List<string>(){
-                                    "Block Method Starter",
-                                    "Block Action Attack Punch",
-                                    "Block Action Attack Kick",
-                                    "Block Action Status Effect Guard",
-                                    "Block Action Heal Plaster",
-                                    "Block Ins If",
-                                    "If/Else",
-                                    "Block Ins RepeatForever",
-                                    "Block Ins BreakLoop",
-                                    "Block Math Sum",
-                                    "Block Logic True",
-                                    "Block Logic False",
-                                    "Block Info Number",
-                                    "Block Character Player",
-                                    "Block Character Opponent"
+                                    "Method Starter",
+                                    "Punch",
+                                    "Kick",
+                                    "Guard",
+                                    "Plaster",
+                                    "If",
+                                    "RepeatForever",
+                                    "BreakLoop",
+                                    "Sum",
+                                    "Less Than",
+                                    "True",
+                                    "False",
+                                    "Number",
+                                    "Player Health",
+                                    "Opponent Health",
+                                    "Player",
+                                    "Opponent"
                                 };
     
     public BlockSave(){

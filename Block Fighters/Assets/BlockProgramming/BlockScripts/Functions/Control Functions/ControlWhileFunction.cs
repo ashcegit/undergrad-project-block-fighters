@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using CommandTerminal;
 
-public class ControlRepeatUntilFunction : ControlFunction
+public class ControlWhileFunction : ControlFunction
 {
-    private const string NAME="Repeat Until";
+    private const string NAME="While";
 
     public override string getName(){return NAME;}
 
@@ -19,11 +19,11 @@ public class ControlRepeatUntilFunction : ControlFunction
     public override int onRepeat(int pointer,ref List<Block> blockStack){
         Block inputBlock=gameObject.GetComponent<Block>().getSections()[0].getHeader().getInputFieldHandlers()[0].getInputBlock().GetComponent<Block>();
         LogicFunction logicFunction=inputBlock.GetComponent<LogicFunction>();
-        if(!logicFunction.function()){
-            Terminal.log(TerminalLogType.Control,"Repeat Until block not triggered");
+        if(logicFunction.function()){
+            Terminal.log(TerminalLogType.Control,"While block triggered");
             return loggedPointer;
         }else{
-            Terminal.log(TerminalLogType.Control, "Repeat Until block triggered");
+            Terminal.log(TerminalLogType.Control, "While not block triggered");
             return pointer;
         }
 

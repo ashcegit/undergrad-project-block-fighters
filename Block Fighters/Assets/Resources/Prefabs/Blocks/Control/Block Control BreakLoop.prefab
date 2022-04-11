@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 5201043975009893064}
   - component: {fileID: 5201043975009893067}
   m_Layer: 5
-  m_Name: OuterArea
+  m_Name: EndBlockSpaceAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -258,7 +258,7 @@ GameObject:
   - component: {fileID: 141762728710596592}
   - component: {fileID: 6402406512482241279}
   m_Layer: 5
-  m_Name: Block Ins BreakLoop
+  m_Name: Block Control BreakLoop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
