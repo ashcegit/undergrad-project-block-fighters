@@ -1,4 +1,0 @@
-@startuml
-enum GameStateEnum {
-}
-@enduml

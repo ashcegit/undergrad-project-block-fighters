@@ -1,9 +1,0 @@
-@startuml
-class Interaction {
-    + Interaction(target:Character)
-    + setResult(result:InteractionEnum) : void
-    + getResult() : InteractionEnum
-    + setTarget(target:Character) : void
-    + getTarget() : Character
-}
-@enduml

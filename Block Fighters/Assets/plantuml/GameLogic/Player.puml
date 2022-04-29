@@ -1,8 +1,0 @@
-@startuml
-class Player {
-    + Player(characterName:string, baseMaxHealth:float, baseAttack:float, baseDefence:float, baseSpeed:float)
-    + punch_and_kick() : List<GameAction>
-    + heal_and_defend() : List<GameAction>
-}
-Character <|-- Player
-@enduml

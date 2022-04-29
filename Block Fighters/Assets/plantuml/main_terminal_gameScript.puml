@@ -1,5 +1,0 @@
-@startuml
-!include .\\Main.puml
-!include .\\CommandTerminal\Terminal.puml
-!include .\\GameLogic\GameScript.puml
-@enduml
