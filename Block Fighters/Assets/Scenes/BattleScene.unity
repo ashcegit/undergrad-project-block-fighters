@@ -561,6 +561,7 @@ GameObject:
   - component: {fileID: 12003128}
   - component: {fileID: 12003131}
   - component: {fileID: 12003129}
+  - component: {fileID: 12003130}
   m_Layer: 5
   m_Name: While
   m_TagString: Untagged
@@ -602,6 +603,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabBlock: {fileID: 8199651976065086660, guid: 138d0ae360549e683ab9a341122742f8,
     type: 3}
+--- !u!114 &12003130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12003127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d35eb1e7f28ef424babe2b12e3b8c69b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  description: Repeatedly executes nested blocks if logical condition is fulfilled
 --- !u!114 &12003131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4980,7 +4994,7 @@ GameObject:
   - component: {fileID: 148668016}
   - component: {fileID: 148668015}
   m_Layer: 5
-  m_Name: Canvas Blocks Selection
+  m_Name: Blocks Selection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5080,7 +5094,7 @@ GameObject:
   - component: {fileID: 165572518}
   - component: {fileID: 165572517}
   m_Layer: 5
-  m_Name: Panel Method Starter
+  m_Name: Method Starter Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7316,7 +7330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35eb1e7f28ef424babe2b12e3b8c69b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Functions as a NOT OR gate<br><br>Takes two logical inputs
+  description: A NOR gate<br><br>Functions as a NOT and OR gate
 --- !u!114 &233486374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15087,7 +15101,7 @@ GameObject:
   - component: {fileID: 557532376}
   - component: {fileID: 557532375}
   m_Layer: 5
-  m_Name: Panel Maths
+  m_Name: Math Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17256,7 +17270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35eb1e7f28ef424babe2b12e3b8c69b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Functions as a NOT gate<br><br>Inverts a single logical input
+  description: A NOT gate
 --- !u!114 &631071825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17348,7 +17362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35eb1e7f28ef424babe2b12e3b8c69b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Functions as an exclusive NOT OR gate<br><br>Takes two logical inputs
+  description: A XNOR gate<br><br>Functions as a NOT and XOR gate
 --- !u!114 &633796120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19809,7 +19823,7 @@ GameObject:
   - component: {fileID: 765024640}
   - component: {fileID: 765024639}
   m_Layer: 5
-  m_Name: Panel Status Effects
+  m_Name: Status Effect Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23539,7 +23553,7 @@ GameObject:
   - component: {fileID: 920025072}
   - component: {fileID: 920025073}
   m_Layer: 5
-  m_Name: Button Clear Env
+  m_Name: Clear Environment Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24699,7 +24713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35eb1e7f28ef424babe2b12e3b8c69b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Functions as an exclusive OR gate<br><br>Takes two logical inputs
+  description: A XOR gate
 --- !u!114 &959028418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29114,7 +29128,7 @@ GameObject:
   - component: {fileID: 1106132698}
   - component: {fileID: 1106132697}
   m_Layer: 5
-  m_Name: Panel Heals
+  m_Name: Heal Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29892,7 +29906,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35eb1e7f28ef424babe2b12e3b8c69b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Breaks you out of a repeat loop
+  description: Breaks you out of a while or repeat loop
 --- !u!114 &1138189814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30622,7 +30636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35eb1e7f28ef424babe2b12e3b8c69b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Repeats a portion of blocks N amount of times
+  description: Repeats nested blocks a specified amount of times
 --- !u!114 &1162967994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36004,7 +36018,7 @@ GameObject:
   - component: {fileID: 1426899385}
   - component: {fileID: 1426899384}
   m_Layer: 5
-  m_Name: Panel Control
+  m_Name: Control Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36270,7 +36284,7 @@ GameObject:
   - component: {fileID: 1429868461}
   - component: {fileID: 1429868460}
   m_Layer: 5
-  m_Name: Panel Info
+  m_Name: Info Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39706,7 +39720,7 @@ GameObject:
   - component: {fileID: 1551268062}
   - component: {fileID: 1551268061}
   m_Layer: 5
-  m_Name: Panel Logic
+  m_Name: Logic Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40123,7 +40137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35eb1e7f28ef424babe2b12e3b8c69b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Functions as an OR gate<br><br>Takes two logical inputs
+  description: An OR gate
 --- !u!114 &1557707594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40344,7 +40358,7 @@ GameObject:
   - component: {fileID: 1563006651}
   - component: {fileID: 1563006650}
   m_Layer: 5
-  m_Name: Panel Attacks
+  m_Name: Attack Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49765,7 +49779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35eb1e7f28ef424babe2b12e3b8c69b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Functions as an AND gate<br><br>Takes two logical inputs
+  description: An AND gate
 --- !u!114 &1962750788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50394,7 +50408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35eb1e7f28ef424babe2b12e3b8c69b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Functions as a NOT AND gate<br><br>Takes two logical inputs
+  description: A NAND gate<br><br>Functions as a NOT and AND gate
 --- !u!114 &1991585883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51132,7 +51146,7 @@ GameObject:
   - component: {fileID: 2046128570}
   - component: {fileID: 2046128569}
   m_Layer: 5
-  m_Name: Canvas Programming Envs
+  m_Name: Programming Wrapper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
