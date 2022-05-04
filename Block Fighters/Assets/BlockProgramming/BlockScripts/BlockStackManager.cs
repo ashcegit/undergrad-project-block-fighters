@@ -56,11 +56,11 @@ public class BlockStackManager{
             Block currentBlock = blockStack[pointer] ;
             switch (currentBlock.blockType) {
                 case (BlockType.Action):
-                    pointer++;
                     GameScript gameScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>();
                     Character opponent = gameScript.getOpponent();
                     ActionFunction actionFunction = currentBlock.gameObject.GetComponent<ActionFunction>();
                     gameAction = actionFunction.function(opponent, false);
+                    pointer++;
                     break;
                 case (BlockType.Control):
                     ControlFunction controlFunction = currentBlock.gameObject.GetComponent<ControlFunction>();

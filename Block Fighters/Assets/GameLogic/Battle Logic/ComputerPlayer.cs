@@ -52,7 +52,7 @@ public class ComputerPlayer:MonoBehaviour
         //level 2
         presetMethods.Add(new List<MethodInfo> {
             this.GetType().GetMethod("knuckleSandwich"),
-            this.GetType().GetMethod("coffeeBreak"),
+            this.GetType().GetMethod("punches"),
             this.GetType().GetMethod("kicks"),
             this.GetType().GetMethod("guard")
         });
@@ -62,38 +62,38 @@ public class ComputerPlayer:MonoBehaviour
             this.GetType().GetMethod("coffeeBreak"),
             this.GetType().GetMethod("guard"),
             this.GetType().GetMethod("knuckleSandwich"),
-            this.GetType().GetMethod("poisonKicks")
+            this.GetType().GetMethod("coffeeBreak")
         });
 
         //level 4
         presetMethods.Add(new List<MethodInfo> {
             this.GetType().GetMethod("coffeeBreak"),
-            this.GetType().GetMethod("knuckleSandwich"),
-            this.GetType().GetMethod("wardCombo"),
+            this.GetType().GetMethod("punches"),
+            this.GetType().GetMethod("guard"),
             this.GetType().GetMethod("poisonKicks")
         });
 
         //level 5
         presetMethods.Add(new List<MethodInfo> {
-            this.GetType().GetMethod("laserPunches"),
+            this.GetType().GetMethod("coffeeBreak"),
             this.GetType().GetMethod("wardCombo"),
-            this.GetType().GetMethod("knuckleSandwich"),
+            this.GetType().GetMethod("guard"),
             this.GetType().GetMethod("poisonKicks")
         });
 
         //level 6
         presetMethods.Add(new List<MethodInfo> {
-            this.GetType().GetMethod("lightningKicks"),
-            this.GetType().GetMethod("shieldCombo"),
-            this.GetType().GetMethod("knuckleSandwich"),
-            this.GetType().GetMethod("laserPunches")
+            this.GetType().GetMethod("coffeeBreak"),
+            this.GetType().GetMethod("wardCombo"),
+            this.GetType().GetMethod("guard"),
+            this.GetType().GetMethod("lightningKicks")
         });
 
         //level 7
         presetMethods.Add(new List<MethodInfo> {
             this.GetType().GetMethod("lightningKicks"),
-            this.GetType().GetMethod("shieldCombo"),
-            this.GetType().GetMethod("freezingMedicine"),
+            this.GetType().GetMethod("wardCombo"),
+            this.GetType().GetMethod("coffeeBreak"),
             this.GetType().GetMethod("laserPunches")
         });
 
@@ -101,16 +101,16 @@ public class ComputerPlayer:MonoBehaviour
         presetMethods.Add(new List<MethodInfo> {
             this.GetType().GetMethod("lightningKicks"),
             this.GetType().GetMethod("shieldCombo"),
-            this.GetType().GetMethod("freezingMedicine"),
-            this.GetType().GetMethod("coffeeCatapult")
+            this.GetType().GetMethod("coffeeBreak"),
+            this.GetType().GetMethod("laserPunches")
         });
 
         //level 9
         presetMethods.Add(new List<MethodInfo> {
             this.GetType().GetMethod("lightningKicks"),
             this.GetType().GetMethod("shieldCombo"),
-            this.GetType().GetMethod("freezingMedicine"),
-            this.GetType().GetMethod("coffeeCatapult")
+            this.GetType().GetMethod("coffeeBreak"),
+            this.GetType().GetMethod("freezingMedicide")
         });
 
         //level 10
@@ -342,7 +342,7 @@ public class ComputerPlayer:MonoBehaviour
                     GameScript gameScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>();
                     Character opponent = gameScript.getOpponent();
                     ActionFunction actionFunction = currentBlock.gameObject.GetComponent<ActionFunction>();
-                    gameAction = actionFunction.function(opponent, false);
+                    gameAction = actionFunction.function(opponent, true);
                     break;
                 case (BlockType.Control):
                     ControlFunction controlFunction = currentBlock.gameObject.GetComponent<ControlFunction>();

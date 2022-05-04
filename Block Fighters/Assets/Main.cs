@@ -9,16 +9,10 @@ public class Main : MonoBehaviour
 {
     private GameObject blockProgrammer;
     private BlockProgrammerScript blockProgrammerScript;
-    private List<Block> methodBlocks;
 
     private GameScript gameScript;
 
-    private GameObject playerMethod;
-    private GameObject opponentMethod;
-
     private List<int> lastPlayerStatIncrease;
-
-    private List<int> lastOpponentStatIncrease;
 
     private Terminal terminalScript;
 
@@ -31,7 +25,7 @@ public class Main : MonoBehaviour
     private bool ongoingInteraction;
     public bool levellingUp;
 
-    private const int maxLevels=10;
+    private const int maxLevels=9;
 
     private string terminalWelcomeMessage1 = "Welcome to Block Fighters! Each round you will make the methods for a class of fighter";
     private string terminalWelcomeMessage2 = "Here you can program methods that your character will use to fight 10 battles";
@@ -288,7 +282,7 @@ public class Main : MonoBehaviour
                                         instigator.getCharacterName(),
                                         attackInteraction.getAttack().getName(),
                                         Mathf.Round(attackInteraction.getDamage()).ToString());
-                    gameScript.dealDamage(attackInteraction.getAttack().getTarget(),attackInteraction.getDamage());
+                    StartCoroutine(gameScript.dealDamage(attackInteraction.getAttack().getTarget(),attackInteraction.getDamage()));
                 }else{
                     Terminal.log("{0}'s attack '{1}' misses!\n",
                                         instigator.getCharacterName(),

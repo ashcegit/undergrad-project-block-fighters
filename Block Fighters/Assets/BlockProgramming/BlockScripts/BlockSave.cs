@@ -26,6 +26,7 @@ public class BlockSave
                                     "Player",
                                     "Opponent"
                                 };
+    const bool unlockAll = false;
     
     public BlockSave(){
         availableBlocks=new List<SelectionBlock>();
@@ -34,7 +35,7 @@ public class BlockSave
         GameObject selectionContent=GameObject.FindGameObjectWithTag("SelectionContent");
         SelectionBlock[] selectionBlocks=selectionContent.GetComponentsInChildren<SelectionBlock>();
         foreach(SelectionBlock selectionBlock in selectionBlocks){
-            if(!(defaultBlocks.Contains(selectionBlock.gameObject.name))){
+            if(!(unlockAll||defaultBlocks.Contains(selectionBlock.gameObject.name))){
                 if (selectionBlock.prefabBlock.name.Contains("Action")) {
                     lockedActionBlocks.Add(selectionBlock);
                 } else {

@@ -16,7 +16,9 @@ public class AttackInteraction:Interaction
         this.targetDefence=attack.getTarget().getDefence();
         this.targetSpeed=attack.getTarget().getSpeed();
         damage=attack.getDamage()*(200- targetDefence) /200;
-        if(Random.Range(0.0f,attack.getSpeed())> targetSpeed) {
+        Debug.Log("Attack Speed: " + Random.Range(attack.getSpeed()/2, 3*attack.getSpeed()));
+        Debug.Log("Target Speed: " + targetSpeed);
+        if (Random.Range(attack.getSpeed() / 2, 3 * attack.getSpeed()) >targetSpeed) {
             result=InteractionEnum.Hit;
         }else{
             result=InteractionEnum.Miss;

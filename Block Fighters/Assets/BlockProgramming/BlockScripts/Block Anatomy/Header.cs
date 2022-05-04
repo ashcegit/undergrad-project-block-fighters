@@ -89,32 +89,33 @@ public class Header : MonoBehaviour
                     return gameObject.GetComponent<RectTransform>().sizeDelta;
                 }
             }
-            float width=15f;
-            float height=40f;
+            float width=25f;
+            float height=10f;
             float heightDelta=0f;
-            if(inputFieldHandlers.Count(inputFieldHandler=>inputFieldHandler.getInputBlock()!=null)>0){
-                width+=GameObject.Find("Text").GetComponent<RectTransform>().sizeDelta.x;
-                foreach(InputFieldHandler inputFieldHandler in inputFieldHandlers){
-                    inputFieldHandler.updateInputSpacePosition();
-                    GameObject? inputBlock=inputFieldHandler.getInputBlock();
-                    if(inputBlock!=null){
-                        Vector2 inputBlockSize=inputBlock.GetComponent<Block>().getSections()[0].getHeader().updateBlockLayouts();
-                        width+=inputBlockSize.x;
-                        width+=10f;
-                        if(inputBlockSize.y>heightDelta){
-                            heightDelta=inputBlockSize.y;
-                        }
-                    }else{
-                        width+=inputFieldHandler.gameObject.GetComponent<RectTransform>().sizeDelta.x;
-                        if(initialSizeDelta.y>heightDelta){
-                            heightDelta=initialSizeDelta.y;
-                        }
+            foreach (Transform headerChild in transform) {
+                if (headerChild.gameObject.GetComponent<Block>() != null) {
+                    Vector2 blockSize = headerChild.GetComponent<Block>().getSections()[0].getHeader().updateBlockLayouts();
+                    width += blockSize.x;
+                    if (blockSize.y > heightDelta) {
+                        heightDelta = initialSizeDelta.y;
                     }
+                    width += 10f;
+                } else if (headerChild.gameObject.GetComponent<InputFieldHandler>() != null) {
+                    if (headerChild.gameObject.active) {
+                        headerChild.gameObject.GetComponent<InputFieldHandler>().updateInputSpacePosition();
+                        width += headerChild.GetComponent<RectTransform>().sizeDelta.x;
+                    }
+                } else {
+                    width += headerChild.GetComponent<RectTransform>().sizeDelta.x;
+                    width += 10f;
                 }
-                height+=heightDelta;
-            }else{
-                width=initialSizeDelta.x;
-                height=initialSizeDelta.y;
+            }
+            height += heightDelta;
+            if (heightDelta < initialSizeDelta.y) {
+                height = initialSizeDelta.y;
+            }
+            if (width < initialSizeDelta.x) {
+                width = initialSizeDelta.x;
             }
             sizeVector=new Vector2(width,height);
             rectTransform.sizeDelta=sizeVector;

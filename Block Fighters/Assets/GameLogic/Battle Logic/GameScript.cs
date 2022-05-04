@@ -42,17 +42,17 @@ public class GameScript : MonoBehaviour
 
         player=new Character("Player",
                           100f,
-                          15f,
-                          45f,
-                          60f,
+                          20f,
+                          25f,
+                          20f,
                           5);
         playerLoaded=true;
 
         opponent=new Character("Opponent",
                               100f,
                               15f,
-                              45f,
-                              60f,
+                              25f,
+                              20f,
                               5);
         opponentLoaded=true;
         
@@ -181,8 +181,8 @@ public class GameScript : MonoBehaviour
         playerLoaded=false;
         opponentLoaded=false;
 
-        List<int> playerStatIncreases = new List<int> { 100, 30, 30, 30 };
-        List<int> opponentStatIncreases = new List<int>{ 100, 30, 30, 30 };
+        List<int> playerStatIncreases = new List<int> { 100, 20, 20, 20 };
+        List<int> opponentStatIncreases = new List<int>{ 100, 20, 20, 20 };
 
         HashSet<int> uniqueRandomIndices = new HashSet<int>();
 
@@ -262,16 +262,16 @@ public class GameScript : MonoBehaviour
 
         player = new Character("Player",
                           100f,
-                          15f,
-                          45f,
-                          60f,
+                          20f,
+                          25f,
+                          20f,
                           5);
 
         opponent = new Character("Opponent",
                               100f,
                               15f,
-                              45f,
-                              60f,
+                              25f,
+                              20f,
                               5);
 
         opponentChosen = false;

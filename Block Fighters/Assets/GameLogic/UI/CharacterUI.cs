@@ -4,20 +4,24 @@ using UnityEngine;
 
 public class CharacterUI : MonoBehaviour
 {
-    GameObject player;
+    GameObject playerImage;
+    GameObject playerShadow;
     GameObject playerHudObject;
     Hud playerHud;
-    GameObject opponent;
+    GameObject opponentImage;
+    GameObject opponentShadow;
     GameObject opponentHudObject;
     Hud opponentHud;
 
     void Awake(){
-        player=transform.Find("Player").gameObject;
-        playerHudObject=transform.Find("Player HUD").gameObject;
+        playerImage=transform.Find("Player").gameObject.transform.Find("Player Image").gameObject;
+        playerShadow = transform.Find("Player").gameObject.transform.Find("Player Shadow").gameObject;
+        playerHudObject =transform.Find("Player HUD").gameObject;
         playerHud=playerHudObject.GetComponent<Hud>();
         
-        opponent=transform.Find("Opponent").gameObject;
-        opponentHudObject=transform.Find("Opponent HUD").gameObject;
+        opponentImage=transform.Find("Opponent").gameObject.transform.Find("Opponent Image").gameObject;
+        opponentShadow = transform.Find("Opponent").gameObject.transform.Find("Opponent Shadow").gameObject;
+        opponentHudObject = transform.Find("Opponent HUD").gameObject;
         opponentHud=opponentHudObject.GetComponent<Hud>();
     }
 
@@ -50,7 +54,7 @@ public class CharacterUI : MonoBehaviour
     }
 
     public IEnumerator shakePlayer(){
-        yield return StartCoroutine(shakeObject(player,0.5f,5f));
+        yield return StartCoroutine(shakeCharacter(playerImage,playerShadow,0.5f,5f));
     }
 
     public IEnumerator shakePlayerHealth(){
@@ -62,8 +66,7 @@ public class CharacterUI : MonoBehaviour
     }
 
     public IEnumerator shakeOpponent(){
-        Debug.Log("Shake opponent coroutine started");
-        yield return StartCoroutine(shakeObject(opponent,0.5f,5f));
+        yield return StartCoroutine(shakeCharacter(opponentImage, opponentShadow, 0.5f, 5f));
     }
 
     public IEnumerator shakeOpponentHealth(){
@@ -72,6 +75,24 @@ public class CharacterUI : MonoBehaviour
 
     public IEnumerator shakeOpponentMaxHealth(){
         yield return StartCoroutine(opponentHud.shakeMaxHealth());
+    }
+
+    private IEnumerator shakeCharacter(GameObject image,
+                                    GameObject shadow,
+                                    float shakeTime,
+                                    float shakeDistance) {
+        Vector3 initialImagePosition = image.GetComponent<RectTransform>().position;
+        Vector3 initialShadowPosition = shadow.GetComponent<RectTransform>().position;
+        float elapsedShakeTime = 0f;
+        while (elapsedShakeTime < shakeTime) {
+            elapsedShakeTime += Time.deltaTime;
+            image.GetComponent<RectTransform>().position = initialImagePosition + Random.insideUnitSphere * shakeDistance;
+            shadow.GetComponent<RectTransform>().position = initialShadowPosition + Random.insideUnitSphere * shakeDistance;
+            yield return null;
+        }
+        image.GetComponent<RectTransform>().position = initialImagePosition;
+        shadow.GetComponent<RectTransform>().position = initialShadowPosition;
+        yield return null;
     }
 
     private IEnumerator shakeObject(GameObject gameObject,

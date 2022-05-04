@@ -157,17 +157,15 @@ public class BlockProgrammerScript : MonoBehaviour
             RectTransform rectTransform=panelTransform.GetComponent<RectTransform>();
             Vector2 heightVector=new Vector2();
             foreach(Transform blockTransform in panelTransform.transform){
-                if(blockTransform.gameObject.activeSelf){
-                    heightVector.y+=blockTransform.GetComponent<RectTransform>().sizeDelta.y;
+                if (blockTransform.gameObject.activeSelf) {
+                    heightVector.y += blockTransform.GetComponent<RectTransform>().sizeDelta.y+5f;
                 }
-                heightVector.y+=5f;
             }
             heightVector.x=rectTransform.sizeDelta.x;
-            if(panelTransform.gameObject.name=="Panel Info") {
-                heightVector.y += 100f;
-            } else {
-                heightVector.y += 2f;
+            if (panelTransform.gameObject.name == "Info Blocks") {
+                heightVector.y += 50f;
             }
+            heightVector.y += 30f;
             panelTransform.GetComponent<RectTransform>().sizeDelta=heightVector;
         }
     }

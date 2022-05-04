@@ -40,6 +40,7 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
     }
 
     public void OnPointerDown(PointerEventData data){
+        //Sets the currently dragged object on mouse down
         GameObject draggedExistingBlock=raycaster.getObjectOfTypeAtPosition<Block>((Vector2)data.position);
         GameObject draggedSelectionBlock=raycaster.getObjectOfTypeAtPosition<SelectionBlock>((Vector2)data.position);
         if(draggedExistingBlock!=null){
@@ -60,6 +61,9 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
     }
 
     public void OnDrag(PointerEventData data){
+        //Covers all cases involved with dragging a block
+        //including moving all blocks associated with it
+        //and highlighting legal places to drop it
         if(currentlyDraggedObject!=null){
             BlockType currentBlockType=currentlyDraggedObject.GetComponent<Block>().getBlockType();
             if(currentlyDraggedObject.transform.parent.gameObject!=environment){
@@ -162,13 +166,9 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                         while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
                             parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
                         }
-                        parentBlock.GetComponent<Block>().setSpacesActive(true);
-                        parentBlock.GetComponent<Block>().updateBlockLayouts();
-                        parentBlock.GetComponent<Block>().updateSpacePositions();
+                        blockUpdate(parentBlock);
                     }else{
-                        currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
-                        currentlyDraggedObject.GetComponent<Block>().updateBlockLayouts();
-                        currentlyDraggedObject.GetComponent<Block>().updateSpacePositions();
+                        blockUpdate(currentlyDraggedObject);
                     }
                 }else if(currentBlockType!=BlockType.Method){
                     if(highlightActive){
@@ -178,15 +178,11 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
                         while(parentBlock.transform.parent.GetComponentInParent<Block>()!=null){
                             parentBlock=parentBlock.transform.parent.GetComponentInParent<Block>().gameObject;
                         }
-                        parentBlock.GetComponent<Block>().setSpacesActive(true);
-                        parentBlock.GetComponent<Block>().updateBlockLayouts();
-                        parentBlock.GetComponent<Block>().updateSpacePositions();
-                    }else{
-                        currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
-                        currentlyDraggedObject.GetComponent<Block>().updateBlockLayouts();
-                        currentlyDraggedObject.GetComponent<Block>().updateSpacePositions();
+                        blockUpdate(parentBlock);
+                    } else {
+                        blockUpdate(currentlyDraggedObject);
                     }
-                }else{
+                } else{
                     currentlyDraggedObject.GetComponent<Block>().setSpacesActive(true);
                     //currentlyDraggedObject.GetComponent<Block>().updateBlockLayouts();
                     currentlyDraggedObject.GetComponent<Block>().updateSpacePositions();
@@ -196,6 +192,13 @@ public class DragAndDrop : MonoBehaviour,IPointerDownHandler,IDragHandler,IPoint
             nearestInputSpace=null;
             currentlyDraggedObject=null;
         }
+    }
+
+    public void blockUpdate(GameObject gameObject) {
+        Block block = gameObject.GetComponent<Block>();
+        block.setSpacesActive(true);
+        block.updateBlockLayouts();
+        block.updateSpacePositions();
     }
 
     public void addGhostBlockToBlockAtSiblingIndex(GameObject blockObject,int siblingIndex){

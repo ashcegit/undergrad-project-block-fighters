@@ -22,10 +22,6 @@ namespace CommandTerminal
 
         Font ConsoleFont;
         string InputCaret        = ">";
-        bool showGUIButtons;
-        bool RightAlignButtons;
-
-        float InputContrast;
 
         Color BackgroundColour  = Color.black;
         Color ForegroundColour  = Color.white;

@@ -74,7 +74,7 @@ public class Body : MonoBehaviour
                 if (transform.GetChild(i - 1).gameObject.name != "GhostBlock") {
                     RectTransform rectTransform = transform.GetChild(i - 1).Find("EndBlockSpaceAnchor").GetComponent<RectTransform>();
 
-                    Vector2 newPosition = new Vector2(rectTransform.position.x + rectTransform.sizeDelta.x / 2,
+                    Vector2 newPosition = new Vector2(rectTransform.position.x + rectTransform.sizeDelta.x / 3,
                                                             rectTransform.position.y + rectTransform.sizeDelta.y / 2);
 
                     blockSpaces[i].setPosition(newPosition);
@@ -83,7 +83,7 @@ public class Body : MonoBehaviour
                     transform.GetChild(i - 1).GetComponent<Block>().updateSpacePositions();
                 }
             }
-        }        
+        }
     }
 
     public void setBlockSpacesActive(bool active){
@@ -102,6 +102,9 @@ public class Body : MonoBehaviour
         RectTransform rectTransform=GetComponent<RectTransform>();
         float width=initialSizeDelta.x;
         float height;
+
+        //starting height=0 if this block is a method block or
+        //this is the penultimate block in the most immediate stack
         if(GetComponentInParent<Block>().getBlockType()==BlockType.Method||
             transform.parent.parent.childCount>2&&
             transform.parent.GetSiblingIndex()<transform.parent.parent.childCount-2){

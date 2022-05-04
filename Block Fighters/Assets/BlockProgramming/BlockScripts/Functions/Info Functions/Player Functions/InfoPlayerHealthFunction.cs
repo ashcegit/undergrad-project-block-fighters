@@ -7,7 +7,7 @@ public class InfoPlayerHealthFunction : InfoFunction
 {
     public override float function() {
         GameScript gameScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameScript>();
-        float result = gameScript.getPlayer().getAttack();
+        float result = gameScript.getPlayer().getHealth();
         Terminal.log(TerminalLogType.Header, "Player Health block returns {0}", result);
         return result;
     }

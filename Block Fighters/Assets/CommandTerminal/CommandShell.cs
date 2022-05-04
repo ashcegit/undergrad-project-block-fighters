@@ -243,7 +243,6 @@ namespace CommandTerminal
             commandText=commandText.ToUpper();
             CommandWrapper commandWrapper=new CommandWrapper();
             commandWrapper.setIsGameAction(false);
-            Debug.Log(commandText);
             if(commandRegex.IsMatch(commandText)){
                 Tuple<string,string[]> parsedCommand=parseCommandText(commandText);
                 string commandName=parsedCommand.Item1;
