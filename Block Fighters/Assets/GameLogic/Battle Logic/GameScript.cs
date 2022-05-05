@@ -11,13 +11,11 @@ public class GameScript : MonoBehaviour
     private GameObject playerMethod;
     private bool playerLoaded;
     private bool playerChosen;
-    private bool playerWon;
 
     private Character opponent;
     private ComputerPlayer computerPlayer;
     private bool opponentLoaded;
     private bool opponentChosen;
-    private bool opponentWon;
 
     private int levelCounter;
 
@@ -42,7 +40,7 @@ public class GameScript : MonoBehaviour
 
         player=new Character("Player",
                           100f,
-                          20f,
+                          15f,
                           25f,
                           20f,
                           5);
@@ -50,7 +48,7 @@ public class GameScript : MonoBehaviour
 
         opponent=new Character("Opponent",
                               100f,
-                              15f,
+                              10f,
                               25f,
                               20f,
                               5);
@@ -257,19 +255,24 @@ public class GameScript : MonoBehaviour
         return new Tuple<List<int>, List<int>>(  playerStatIncreases, opponentStatIncreases ) ;
     }
 
+    public void updateHuds() {
+        characterUI.updatePlayerHealth(player.getHealth(), player.getMaxHealth());
+        characterUI.updateOpponentHealth(opponent.getHealth(), opponent.getMaxHealth());
+    }
+
     public void resetGame() {
         levelCounter = 0;
 
         player = new Character("Player",
                           100f,
-                          20f,
+                          15f,
                           25f,
                           20f,
                           5);
 
         opponent = new Character("Opponent",
                               100f,
-                              15f,
+                              10f,
                               25f,
                               20f,
                               5);

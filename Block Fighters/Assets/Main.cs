@@ -77,6 +77,8 @@ public class Main : MonoBehaviour
     
     public void resetGame(){
         enabled=false;
+        gameOverScript.enabled = false;
+        gameOverScript.gameObject.SetActive(false);
         winScript.enabled = false;
         winScript.gameObject.SetActive(false);
         terminalScript.gameObject.SetActive(true);
@@ -163,6 +165,8 @@ public class Main : MonoBehaviour
 
         gameScript.updatePlayerHealth();
         gameScript.updateOpponentHealth();
+
+        gameScript.updateHuds();
 
         gameScript.enabled=true;
         enabled=true;

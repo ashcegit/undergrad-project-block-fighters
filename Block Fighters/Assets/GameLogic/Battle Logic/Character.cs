@@ -65,6 +65,9 @@ public class Character
         if(health<0f){return 0f;}
         else{return health;}
     }
+
+    //kept identical get methods the same in case I wanted
+    //wanted to fine tune the rate of diminishing returns
     public float getMaxHealth(){
         float negativeDiminishingReturns = 1f;
         float positiveDiminishingReturns = 1f;
