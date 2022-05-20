@@ -65,6 +65,7 @@ public class BlockStackManager{
                 case (BlockType.Control):
                     ControlFunction controlFunction = currentBlock.gameObject.GetComponent<ControlFunction>();
                     pointer = controlFunction.function(pointer, ref blockStack);
+                    pointer++;
                     break;
                 case (BlockType.EndOfSection):
                     Block startBlock = currentBlock.getStartBlock();
